@@ -1,0 +1,23 @@
+@namespace url(http://www.w3.org/1999/xhtml);
+
+@-moz-document domain("youtube.com") {
+  /* Embed Fixes */
+  video { 
+    left: 0px !important; 
+    vertical-align: middle; 
+    top: 0px !important; 
+    width: 100% !important; 
+    height: 100% !important;
+  }
+  #body-container { overflow: hidden !important;}
+  #player-api { margin: 0px !important;}
+	.html5-progress-bar { width: 100% !important;}
+  
+  
+  /* Button Placement */
+	.ytp-button.ytp-button-fullscreen-exit, .ytp-button.ytp-button-fullscreen-enter{ float: none !important; }
+	#settings_button {float: left !important;}
+	.ytp-volume-hover-area { margin-right: 10px; }
+	.html5-player-chrome { padding-left: calc(50% - 100px); }
+	.ytp-menu-container {	left: calc(50% - 50px); max-width: 300px;}
+}
