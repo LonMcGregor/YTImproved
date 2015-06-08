@@ -7,7 +7,7 @@
 // ==/UserScript==
 
 var ELEMENTS_WATCH   = [
-   "watch7-hidden-extras",  "watch-discussion", "watch7-preview", "watch-dislike", "watch-like", "watch7-sidebar", 
+   "watch7-hidden-extras",  "watch-discussion", "watch7-preview", "watch-dislike", "watch-like", "watch7-sidebar" 
 ];
 var ELEMENTS_SEARCH  = [
     "player", "search-secondary-col-contents"  
