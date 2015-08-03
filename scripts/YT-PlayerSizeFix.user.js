@@ -10,10 +10,20 @@
 function o(s){
   console.log(s);
 }
-function deletePlaceholder(){
-  var e = document.getElementById("placeholder-player");
-  e.parentNode.removeChild(e);
-}
+
+var waitForFinalEvent = (function () { //brahn on stackoverflow
+  var timers = {};
+  return function (callback, ms, uniqueId) {
+    if (!uniqueId) {
+      uniqueId = "Don't call this twice without a uniqueId";
+    }
+    if (timers[uniqueId]) {
+      clearTimeout (timers[uniqueId]);
+    }
+    timers[uniqueId] = setTimeout(callback, ms);
+  };
+})();
+
 function setPlayerApi(){
   o("Player Size: Player Set "+window.innerWidth+"x"+window.innerHeight);
   var e = document.getElementById("player-api").style;
@@ -47,9 +57,11 @@ function setSizes(){
 }
 function init(){
   window.onresize = function (e) {
-    setSizes();
+    waitForFinalEvent( function(){
+      setSizes();
+    }, 20, "resizeme");
+    
   };
-  deletePlaceholder();
   setSizes();
 }
 init();

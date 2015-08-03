@@ -7,7 +7,8 @@
 // ==/UserScript==
 
 var ELEMENTS_WATCH   = [
-   "watch7-hidden-extras",  "watch-discussion", "watch7-preview", "watch-dislike", "watch-like", "watch7-sidebar" 
+  "watch7-hidden-extras",  "watch-discussion", "watch7-preview", "watch-dislike", "watch-like", "watch7-sidebar",
+  "placeholder-player"
 ];
 var ELEMENTS_SEARCH  = [
     "player", "search-secondary-col-contents"  
@@ -22,13 +23,12 @@ var ELEMENTS_GLOBAL = [
 ];
 
 function isChannel(url){
-  return (url.contains('user') || url.contains('channel'));
+  return (url.contains('user') || url.contains('channel') || url.contains('playlist') );
 }
 function isSearch(url){
   return url.contains('search');
 }
 function isWatch(url){
-  //the chances of a url id number containing the string 'user' is extremely low. right?
   return url.contains('watch');
 }
 function deleteElements(array){
