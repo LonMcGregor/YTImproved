@@ -21,17 +21,17 @@ function newUrl(old){
 }
 
 function redirect(){
-  o("script running for "+getUrl());
+  o("Age Redirect: Run for URL "+newUrl(getUrl()));
   window.location.href = newUrl(getUrl());
 }
 
 function check(){
-  o("script checking");
+  o("Age Redirect: Check URL "+getUrl());
   if (document.getElementById("watch7-player-age-gate-content"))
     return true;
   return false;
 }
 
-o("script fired");
-  if (check())
-    redirect();
+if (check()) {
+  redirect();
+}

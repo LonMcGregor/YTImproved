@@ -10,38 +10,46 @@
 function o(s){
   console.log(s);
 }
-function setPlayer(){
-  o("setting player size");
-  var e = document.getElementById("player").style;
-  e.width = ""+window.innerWidth+"px";
-  e.marginBottom = "10px";
-  e.marginTop = "0px";
-  e.maxWidth = "none";
+function deletePlaceholder(){
+  var e = document.getElementById("placeholder-player");
+  e.parentNode.removeChild(e);
 }
-function setAPI(){
-  o("setting player-api size");
+function setPlayerApi(){
+  o("Player Size: Player Set "+window.innerWidth+"x"+window.innerHeight);
   var e = document.getElementById("player-api").style;
-  e.float = "none";
-  e.margin = "auto" ;
   e.width = ""+window.innerWidth+"px";
-  e.height = ""+window.innerHeight +"px";
-  e.overflow = "hidden";
+  e.height = ""+window.innerHeight+"px";
 }
-function setContent(){
-  o("setting content size");
-  var e = document.getElementById("content").style;
-  e.height = ""+window.innerHeight +"px";
+function setControls(){
+  o("Player Size: Video Controls Set");
+  var e = document.getElementsByClassName('ytp-chrome-bottom')[0].style;
+  e.width = "100%";
+  e.left = "0px";
+}
+function setPlayer(){
+  o("Player Size: Player Positioned");
+  var e = document.getElementById("player").style;
+  e.position = "absolute";
+  e.top = "0px";
+  e.left = "0px";
+}
+function setVideo(){
+  o("Player Size: Video Size Set "+window.innerWidth+"x"+window.innerHeight);
+  var e = document.getElementsByTagName("video")[0].style;
+  e.width = ""+window.innerWidth+"px";
+  e.height = ""+window.innerHeight+"px";
 }
 function setSizes(){
+  setPlayerApi();
+  setControls();
   setPlayer();
-  setAPI();  
-  setContent();
+  setVideo();
 }
 function init(){
-  o("playerwidth script started");
   window.onresize = function (e) {
     setSizes();
   };
+  deletePlaceholder();
   setSizes();
 }
 init();
