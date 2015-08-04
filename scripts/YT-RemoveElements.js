@@ -6,6 +6,9 @@
 // @grant       none
 // ==/UserScript==
 
+function contains(haystack, needle){
+	return (haystack.indexOf(needle) > -1);
+}
 var ELEMENTS_WATCH   = [
   "watch7-hidden-extras",  "watch-discussion", "watch7-preview", "watch-dislike", "watch-like", "watch7-sidebar",
   "placeholder-player"
@@ -23,23 +26,27 @@ var ELEMENTS_GLOBAL = [
 ];
 
 function isChannel(url){
-  return (url.contains('user') || url.contains('channel') || url.contains('playlist') );
+  return (contains(url, 'user') || contains(url, 'channel') || contains(url, 'playlist') );
 }
 function isSearch(url){
-  return url.contains('search');
+  return contains(url, 'search');
 }
 function isWatch(url){
-  return url.contains('watch');
+  return contains(url, 'watch');
 }
 function deleteElements(array){
   for(var i = 0; i < array.length; i++){
-    console.log("Deleting element #"+array[i]);
-    document.getElementById(array[i]).parentElement.removeChild(document.getElementById(array[i]));
+	  try {
+		var el = document.getElementById(array[i]);
+		el.parentElement.removeChild(el);
+	  } catch (Exception) {
+		  //Element doesn't exist or was already deleted
+	  }
     //as Mark Henderson puts it, 'Javascript won't let an element commit suicide, but it does permit infanticide'
   }
 }
 
-function run(){
+function runElementDelete(){
   if(isChannel(window.location.href)||isSearch(window.location.href)||isWatch(window.location.href))
     deleteElements(ELEMENTS_GLOBAL);
   if (isChannel(window.location.href))
