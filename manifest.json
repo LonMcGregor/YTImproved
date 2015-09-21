@@ -1,0 +1,18 @@
+{
+	"application": {
+		"gecko": {
+			"id": "ytimproved@lonmcgregor"
+		}
+	},
+	"manifest_version": 2,
+	"name": "YT Improved",
+	"version": "1.0",
+	
+	"content_scripts": [
+	  {
+		"matches": ["*://*.youtube.com/*"],
+		"js": ["scripts/main.js"],
+		"css": ["css/main.css"]
+	  }
+	]
+}
