@@ -7,6 +7,8 @@
 // @grant       none
 // ==/UserScript==
 
+//Player Pages
+
 function contains(haystack, needle){
 	return (haystack.indexOf(needle) > -1);
 }
@@ -61,6 +63,7 @@ function initSizing(){
 }
 
 
+//Delete elements
 
 var ELEMENTS_WATCH   = [
   "watch7-hidden-extras",  "watch-discussion", "watch7-preview", "watch-dislike", "watch-like", "watch7-sidebar",
@@ -111,6 +114,8 @@ function runElementDelete(){
 }
 
 
+//redirection [age limits no login]
+
 function getUrl(){
   return window.location.href.substr(32,11);
 }
@@ -130,6 +135,7 @@ function checkForRedir(){
 }
 
 
+//live thumbs
 
 function initThumbs(){
   var thumbs = document.getElementsByClassName('yt-lockup-thumbnail');
