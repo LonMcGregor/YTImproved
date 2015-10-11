@@ -146,15 +146,17 @@ function initThumbs(){
 
 function changeThumb(thumb){
   var button = makeButton(thumb);
-  $(thumb).append(button);
+  thumb.appendChild(button);
 }
 
 function makeButton(container){
-  var button = $('<button style="float: left;position: relative;top: -20px;background: black;color: white;">&gt;</button>');
-  $(button).click(function (){
-    $(this.parentElement).html(makeIframe(container));
-  });
-  return button;
+	var button = document.createElement("button");
+	button.style = "float: left;position: relative;top: -20px;background: black;color: white;";
+	button.innerHTML = "&gt;";
+	button.onclick = function (){
+		button.parentElement.innerHTML = makeIframe(container);
+	};
+	return button;
 }
  
 function getUrl(container){
@@ -163,9 +165,51 @@ function getUrl(container){
 }
 
 function makeIframe(container) {
-  return $('<iframe src="'+getUrl(container)+'"></iframe>');
+  var iframe = document.createElement("iframe");
+  iframe.src = getUrl(container);
+  return iframe;
 }
 
+//rss feed link
+function addRSSFeed(){
+	if(isChannel(window.location.href)){
+		addFeedElementToHead(createFeedURL(extractChannelIDFromChannelUrl(window.location.href)));
+	} else if(isWatch){
+		addFeedElementToHead(createFeedURL(getChannelIDFromPlayer()));
+	}
+}
+
+function createFeedURL(channelID){
+	if(channelID.substr(0,2)==="UC" && channelID.length == 24 ){
+		return 'https://www.youtube.com/feeds/videos.xml?channel_id='+channelID;
+	}else{
+		return 'https://www.youtube.com/feeds/videos.xml?user='+channelID;
+	}
+}
+function addFeedElementToHead(feedURL){
+	var link = document.createElement('a');
+	link.setAttribute("href", feedURL);
+	link.innerHTML = "RSS Feed: Uploads";
+	link.setAttribute("class", "yt-uix-button-content"); 
+	document.getElementById('watch7-user-header').appendChild(link);
+}
+
+function extractChannelIDFromChannelUrl(channelURL){
+	return channelURL.split("/")[4];
+}
+
+function getChannelIDFromPlayer(){
+	var metaDataTags = document.getElementsByTagName('meta'); 
+	for (i=0; i<metaDataTags.length; i++) { 
+		if (metaDataTags[i].getAttribute("itemprop") == "channelId") { 
+			return metaDataTags[i].getAttribute("content"); 
+		} 
+	} 
+	return "";
+}
+
+
+//init
 
 debugger;
 if (checkForRedir()) {
@@ -174,4 +218,5 @@ if (checkForRedir()) {
 runElementDelete();
 initThumbs();
 initSizing();
+addRSSFeed();
 
