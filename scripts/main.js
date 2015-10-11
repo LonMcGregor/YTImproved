@@ -47,10 +47,12 @@ function setVideo(){
   e.height = ""+window.innerHeight+"px";
 }
 function setSizes(){
-  setPlayerApi();
-  setControls();
-  setPlayer();
-  setVideo();
+	if(isWatch(window.location.href)){
+		setPlayerApi();
+		setControls();
+		setPlayer();
+		setVideo();
+	}
 }
 function initSizing(){
   window.onresize = function (e) {
@@ -154,7 +156,7 @@ function makeButton(container){
 	button.style = "float: left;position: relative;top: -20px;background: black;color: white;";
 	button.innerHTML = "&gt;";
 	button.onclick = function (){
-		button.parentElement.innerHTML = makeIframe(container);
+		button.parentElement.innerHTML = makeIframe(container).outerHTML;
 	};
 	return button;
 }
@@ -167,15 +169,21 @@ function getUrl(container){
 function makeIframe(container) {
   var iframe = document.createElement("iframe");
   iframe.src = getUrl(container);
+  iframe.height = "100%";
+  iframe.width = "100%";
   return iframe;
 }
 
 //rss feed link
 function addRSSFeed(){
 	if(isChannel(window.location.href)){
-		addFeedElementToHead(createFeedURL(extractChannelIDFromChannelUrl(window.location.href)));
-	} else if(isWatch){
-		addFeedElementToHead(createFeedURL(getChannelIDFromPlayer()));
+		var channelId = extractChannelIDFromChannelUrl(window.location.href);
+		var feedURL = createFeedURL(channelId)
+		addFeedElementToChannel(feedURL);
+	} else if(isWatch(window.location.href)){
+		var channelId = getChannelIDFromPlayer();
+		var feedURL = createFeedURL(channelId)
+		addFeedElementToPlayer(feedURL);
 	}
 }
 
@@ -186,12 +194,20 @@ function createFeedURL(channelID){
 		return 'https://www.youtube.com/feeds/videos.xml?user='+channelID;
 	}
 }
-function addFeedElementToHead(feedURL){
+function addFeedElementToPlayer(feedURL){
+	var link = createFeedElement(feedURL);
+	document.getElementById('watch7-user-header').appendChild(link);
+}
+function addFeedElementToChannel(feedURL){
+	var link = createFeedElement(feedURL);
+	document.getElementById('c4-primary-header-contents').appendChild(link);
+}
+function createFeedElement(feedURL){
 	var link = document.createElement('a');
 	link.setAttribute("href", feedURL);
 	link.innerHTML = "RSS Feed: Uploads";
-	link.setAttribute("class", "yt-uix-button-content"); 
-	document.getElementById('watch7-user-header').appendChild(link);
+	link.setAttribute("class", "yt-uix-button-content");
+	return link;
 }
 
 function extractChannelIDFromChannelUrl(channelURL){
@@ -210,8 +226,6 @@ function getChannelIDFromPlayer(){
 
 
 //init
-
-debugger;
 if (checkForRedir()) {
   redirect();
 }
@@ -219,4 +233,3 @@ runElementDelete();
 initThumbs();
 initSizing();
 addRSSFeed();
-
