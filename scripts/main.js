@@ -224,6 +224,35 @@ function getChannelIDFromPlayer(){
 	return "";
 }
 
+//force 1080p, from http://www.autohdforyoutube.com/
+function onYouTubePlayerReady(player) {
+	playbackSet = false;
+	extPlayer = player;
+	extPlayer.addEventListener("onStateChange", function(newState){
+		if(newState == 3 && !playbackSet){
+			updateQuality();
+		}
+		if(newState == -1){
+			playbackSet = false;
+		}
+	});
+	updateQuality();
+};
+
+function updateQuality(){
+	var aq = extPlayer.getAvailableQualityLevels();
+	var q = (aq.indexOf(quality) == -1) ? aq[0] : quality;
+	extPlayer.setPlaybackQuality(q);
+	playbackSet = true;
+};
+
+function initHDQuality(){
+	var quality = "hd1080";
+	var scriptText = "var quality = '" + quality + "'; " + onYouTubePlayerReady.toString() + "; " + updateQuality.toString();
+	var s = document.createElement("script");
+	s.textContent = scriptText;
+	document.documentElement.appendChild(s);
+}
 
 //init
 if (checkForRedir()) {
@@ -233,3 +262,6 @@ runElementDelete();
 initThumbs();
 initSizing();
 addRSSFeed();
+if(isWatch(window.location.href)){
+	initHDQuality();
+}
