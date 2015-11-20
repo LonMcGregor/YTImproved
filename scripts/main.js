@@ -118,22 +118,38 @@ function runElementDelete(){
 
 //redirection [age limits no login]
 
-function getUrl(){
+function getVideoIDUrl(){
   return window.location.href.substr(32,11);
 }
 
-function newUrl(old){
+function newAgeUrl(old){
   return "https://www.youtube.com/embed/"+old+"?autoplay=1";
 }
 
-function redirect(){
-  window.location.href = newUrl(getUrl());
+function redirectAge(){
+  window.location.href = newAgeUrl(getVideoIDUrl());
 }
 
-function checkForRedir(){
+function checkForAgeRedir(){
   if (document.getElementById("watch7-player-age-gate-content"))
     return true;
   return false;
+}
+
+//redirection description links
+
+function getRedirectUrl(url){
+	var notoken = url.split("&redir_token")[0];
+	var encodedurl = notoken.split("/redirect?q=")[1];
+	return decodeURIComponent(encodedurl);
+}
+
+function doRedirectUrl(){
+	window.location.href = getRedirectUrl(window.location.href);
+}
+
+function checkForUrlRedirect(){
+	return window.location.href.contains("redirect?q")
 }
 
 
@@ -255,8 +271,11 @@ function initHDQuality(){
 }
 
 //init
-if (checkForRedir()) {
-  redirect();
+if (checkForAgeRedir()) {
+  redirectAge();
+}
+if(checkForUrlRedirect()){
+	doRedirectUrl();
 }
 runElementDelete();
 initThumbs();
