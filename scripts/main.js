@@ -149,7 +149,7 @@ function doRedirectUrl(){
 }
 
 function checkForUrlRedirect(){
-	return window.location.href.contains("redirect?q")
+	return contains(window.location.href, "redirect?q");
 }
 
 
