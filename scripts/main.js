@@ -156,6 +156,7 @@ function checkForUrlRedirect(){
 //live thumbs
 
 function initThumbs(){
+	debugger;
   var thumbs = document.getElementsByClassName('yt-lockup-thumbnail');
   for(var i = 0; i < thumbs.length; i++){
     changeThumb(thumbs[i]);
@@ -169,7 +170,11 @@ function changeThumb(thumb){
 
 function makeButton(container){
 	var button = document.createElement("button");
-	button.style = "float: left;position: relative;top: -20px;background: black;color: white;";
+	button.style.float = "left";
+	button.style.position = "relative";
+	button.style.top = "-20px;";
+	button.style.background = "black";
+	button.style.color = "white";
 	button.innerHTML = "&gt;";
 	button.onclick = function (){
 		button.parentElement.innerHTML = makeIframe(container).outerHTML;
