@@ -270,6 +270,22 @@ function initHDQuality(){
 	document.documentElement.appendChild(s);
 }
 
+
+//borrowed from https://github.com/klemens/ff-youtube-all-html5/
+// disbale spf by disposing the spf object
+// inspired by YePpHa's YouTubeCenter (https://github.com/YePpHa/YouTubeCenter)
+function handleSPF(){
+	var scriptText = 'if(typeof window.spf != "undefined"){\
+			window.spf.dispose();\
+		}';
+	var s = document.createElement('script');
+	s.textContent = scriptText;
+	document.documentElement.appendChild(s);
+}
+
+
+
+
 //init
 if (checkForAgeRedir()) {
   redirectAge();
@@ -284,3 +300,4 @@ addRSSFeed();
 if(isWatch(window.location.href)){
 	initHDQuality();
 }
+handleSPF();
