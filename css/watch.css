@@ -1,3 +1,4 @@
+/* metadata box */
 #watch7-headline { 
 	font-size: 32px; 
 	width: 900px;
@@ -30,6 +31,8 @@
 #body-container {
 	padding-bottom: 0px;
 }
+
+/* playlist box */
 #player-playlist {
 	position: fixed;
 	right: 0px !important;
@@ -47,6 +50,7 @@
 	opacity: 1;
 }
 
+/* small pages */
 @media(max-width: 900px){
 	#watch7-headline { 
 	  font-size: normal; 
