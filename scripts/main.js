@@ -148,7 +148,7 @@ PageCleaner.prototype = {
 	ytutils: new YTUtils(),
 	
 	ELEMENTS_WATCH: [
-	  "watch7-hidden-extras",  "watch-discussion", "watch7-preview", "watch-dislike", "watch-like", "watch7-sidebar",
+	  "watch7-hidden-extras",  "watch-discussion", "watch7-preview", "watch-dislike", "watch-like", "watch7-sidebar","masthead-positioner",
 	  "placeholder-player"
 	],
 	
@@ -159,7 +159,7 @@ PageCleaner.prototype = {
 	ELEMENTS_CHANNEL: [],
 	
 	ELEMENTS_GLOBAL: [
-	  "early-body", "a11y-announcements-container","guide", "header", "history-iframe","masthead-positioner", 
+	  "early-body", "a11y-announcements-container","guide", "history-iframe",/* */
 	  "masthead-positioner-height-offset", "footer-container","feed-privacy-lb", "hidden-component-template-wrapper",
 	  "alerts"
 	],

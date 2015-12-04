@@ -2,9 +2,8 @@
 #appbar-guide-button, #footer-container, #watch-discussion,
 #watch7-sidebar, #share-services-container, .cookie-alert,
 #alerts, #masthead-positioner-height-offset,
-#masthead-search button.yt-uix-button.yt-uix-button-size-default.yt-uix-button-default.search-btn-component.search-button,
 .yt-masthead-user-icon, #yt-masthead-signin, #yt-masthead #logo,
- #masthead-positioner, .yt-uix-button-subscribe-branded,
+ .yt-uix-button-subscribe-branded,
  #watch-like:before, #watch-dislike:before, .yt-uix-clickcard-card,
  .ytp-button.ytp-size-toggle-large, .ytp-button.ytp-button-watch-later {
 	 display: none !important; 
