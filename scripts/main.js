@@ -98,46 +98,42 @@ function PlayerSizer(){}
 PlayerSizer.prototype = {
 	utils: new Utils(),
 	ytutils: new YTUtils(),
-	
-	setPlayerApi: function(){
-	  let e = document.getElementById("player-api").style;
-	  e.width = ""+window.innerWidth+"px";
-	  e.height = ""+window.innerHeight+"px";
-	},
-	
+		
 	setControls: function(){
-	  let e = document.getElementsByClassName('ytp-chrome-bottom')[0].style;
-	  e.width = "100%";
-	  e.left = "0px";
-	},
-	
-	setPlayer: function(){
-	  let e = document.getElementById("player").style;
-	  e.position = "absolute";
-	  e.top = "0px";
-	  e.left = "0px";
+	  let controls = document.getElementsByClassName('ytp-chrome-bottom')[0].style;
+	  controls.position = "fixed";
+	  controls.bottom = "0px";
+	  controls.left = "0px";
+	  controls.width = ""+window.innerWidth+"px";
+	  let gradient = document.getElementsByClassName('ytp-gradient-bottom')[0].style;
+	  gradient.position = "fixed";
+	  gradient.bottom = "0px";
+	  gradient.left = "0px";
+	  gradient.width = ""+window.innerWidth+"px";
 	},
 	
 	setVideo: function(){
-	  let e = document.getElementsByTagName("video")[0].style;
-	  e.width = ""+window.innerWidth+"px";
-	  e.height = ""+window.innerHeight+"px";
+	  let video = document.getElementsByTagName("video")[0].style;
+	  video.width = ""+window.innerWidth+"px";
+	  video.height = ""+window.innerHeight+"px";
+	  video.position = "fixed";
+	  video.top = "0px";
+	  video.left = "0px";
+	  video.backgroundColor = "black";
 	},
 	
 	setSizes: function(){
 		if(this.ytutils.isWatch()){
-			this.setPlayerApi();
 			this.setControls();
-			this.setPlayer();
 			this.setVideo();
 		}
 	},
 	
 	initSizing: function(){
 	  window.onresize = function (e) {
-		utils.waitForFinalEvent( function(){
-		  this.setSizes();
-		}, 200, "resizeme");
+		util.waitForFinalEvent( function(){
+		  sizer.setSizes();
+		}, 80, "resizeme");
 		
 	  };
 	  this.setSizes();
