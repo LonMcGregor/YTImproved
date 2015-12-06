@@ -99,44 +99,71 @@ PlayerSizer.prototype = {
 	utils: new Utils(),
 	ytutils: new YTUtils(),
 		
-	setControls: function(){
-	  let controls = document.getElementsByClassName('ytp-chrome-bottom')[0].style;
-	  controls.position = "fixed";
-	  controls.bottom = "0px";
-	  controls.left = "0px";
-	  controls.width = ""+window.innerWidth+"px";
-	  let gradient = document.getElementsByClassName('ytp-gradient-bottom')[0].style;
-	  gradient.position = "fixed";
-	  gradient.bottom = "0px";
-	  gradient.left = "0px";
-	  gradient.width = ""+window.innerWidth+"px";
+	setWidths: function(){
+		let controls = document.getElementsByClassName('ytp-chrome-bottom')[0].style;
+		let gradient = document.getElementsByClassName('ytp-gradient-bottom')[0].style;
+		let arr = [controls, gradient];
+
+		for(let i = 0; i < arr.length; i++){
+			arr[i].width = ""+window.innerWidth+"px";
+			arr[i].position = "fixed";
+			arr[i].bottom = "0px";
+			arr[i].left = "0px";
+		}
+	},
+	//.ytp-storyboard, .ytp-tooltip
+	
+	setWidthsAndHeights: function(){
+		let video = document.getElementsByTagName("video")[0].style;
+		let playerBox = document.getElementById('player-api').style;
+		let videoContent = document.getElementsByClassName('html5-video-content')[0].style;
+		let playerContent = document.getElementsByClassName('ytp-player-content')[0].style;
+		let arr = [video, playerBox, videoContent, playerContent];
+		
+		for(let i = 0; i < arr.length; i++){
+			arr[i].width = ""+window.innerWidth+"px";
+			arr[i].height = ""+window.innerHeight+"px";
+			arr[i].position = "fixed";
+			arr[i].top = "0px";
+			arr[i].left = "0px";
+		}
+		video.backgroundColor = "black";
+		playerBox.marginLeft = "0px";
 	},
 	
-	setVideo: function(){
-	  let video = document.getElementsByTagName("video")[0].style;
-	  video.width = ""+window.innerWidth+"px";
-	  video.height = ""+window.innerHeight+"px";
-	  video.position = "fixed";
-	  video.top = "0px";
-	  video.left = "0px";
-	  video.backgroundColor = "black";
-	},
+//	setStoryBoard: function(){
+//		let framePreview = document.getElementsByClassName('.ytp-storyboard-framepreview')[0].style;
+//		framePreview.width = ""+window.innerWidth+"px";
+//		framePreview.height = ""+window.innerHeight+"px";
+//		framePreview.position = "fixed";
+//		framePreview.top = "0px";
+//		framePreview.left = "0px";
+//	},
 	
 	setSizes: function(){
 		if(this.ytutils.isWatch()){
-			this.setControls();
-			this.setVideo();
+			this.setWidths();
+			this.setWidthsAndHeights();
+			this.setStoryBoard();
 		}
 	},
 	
 	initSizing: function(){
-	  window.onresize = function (e) {
-		util.waitForFinalEvent( function(){
-		  sizer.setSizes();
-		}, 80, "resizeme");
-		
-	  };
-	  this.setSizes();
+		window.onresize = function (e) {
+			util.waitForFinalEvent( function(){
+			  sizer.setSizes();
+			}, 80, "resizeme");
+		};
+//		var muto = new MutationObserver(function(mutations) {
+//			mutations.forEach(function(mutation) {
+//				if(mutation.type=="attributes" && mutation.attributeName=="style"){
+//					sizer.setStoryBoard();
+//				}
+//			});    
+//		});
+//		mutoconf = {attributes: true, childList: false, characterData: false};
+//		muto.observe(document.getElementsByClassName('ytp-storyboard-framepreview')[0], mutoconf);
+		this.setSizes();
 	},
 }
 var sizer = new PlayerSizer();
