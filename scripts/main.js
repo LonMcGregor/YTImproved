@@ -144,7 +144,7 @@ PlayerSizer.prototype = {
 		if(this.ytutils.isWatch()){
 			this.setWidths();
 			this.setWidthsAndHeights();
-			this.setStoryBoard();
+//			this.setStoryBoard();
 		}
 	},
 	
