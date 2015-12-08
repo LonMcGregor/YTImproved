@@ -348,27 +348,7 @@ function QualityForcer(){}
 QualityForcer.prototype = {
 	HD: "hd1080",
 	
-	SCRIPT_CONTENT: "\
-	function onYouTubePlayerReady(player){\
-		playbackSet = false;\
-		extPlayer = player;\
-		extPlayer.addEventListener('onStateChange', function(newState){\
-			if(newState == 3 && !playbackSet){\
-				updateQuality();\
-			}\
-			if(newState == -1){\
-				playbackSet = false;\
-			}\
-		});\
-		updateQuality();\
-	}\
-\
-	function updateQuality(){\
-		var aq = extPlayer.getAvailableQualityLevels();\
-		var q = (aq.indexOf(quality) == -1) ? aq[0] : quality;\
-		extPlayer.setPlaybackQuality(q);\
-		playbackSet = true;\
-	}",
+	SCRIPT_CONTENT: "function onYouTubePlayerReady(player){playbackSet=false;extPlayer=player;extPlayer.addEventListener('onStateChange',function(newState){if(newState===3&&!playbackSet){updateQuality();}if(newState===-1){playbackSet=false;}});updateQuality();}function updateQuality(){var aq=extPlayer.getAvailableQualityLevels();var q=(aq.indexOf(quality)===-1)?aq[0]:quality;extPlayer.setPlaybackQuality(q);playbackSet=true;}",
 
 	initHDQuality: function(){
 		let quality = this.HD;
@@ -386,9 +366,7 @@ var quality = new QualityForcer();
 function SPFHandler(){}
 SPFHandler.prototype = {
 	handleSPF: function(){
-		let scriptText = 'if(typeof window.spf != "undefined"){\
-				window.spf.dispose();\
-			}';
+		let scriptText = 'if(typeof window.spf!="undefined"){window.spf.dispose();}';
 		let s = document.createElement('script');
 		s.textContent = scriptText;
 		document.documentElement.appendChild(s);
