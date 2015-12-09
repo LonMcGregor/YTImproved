@@ -45,11 +45,14 @@ function YTUtils(){}
 YTUtils.prototype = {
 	utils: new Utils(),
 	
+	CHANNEL_TITLE: 'branded-page-header-title-link',
+	EMBED_URL: "https://www.youtube.com/embed/",
+	EMBED_PARAMS: "?autoplay=1",
+	
 	isChannel: function(url){
 		url = url ? url : window.location.href;
 		return (this.utils.contains(url, 'user') || 
-		this.utils.contains(url, 'channel') || 
-		this.utils.contains(url, 'playlist') );
+		this.utils.contains(url, 'channel'));
 	},
 	
 	isSearch: function(url){
@@ -62,6 +65,11 @@ YTUtils.prototype = {
 		return this.utils.contains(url, 'watch');
 	},
 	
+	isListing: function(url){
+		url = url ? url : window.location.href;
+		return this.utils.contains(url, 'playlist');
+	},
+	
 	getVideoIDUrl: function(url){
 		url = url ? url : window.location.href;
 		return url.substr(32,11);
@@ -69,13 +77,21 @@ YTUtils.prototype = {
 
 	newEmbeddedUrl: function(videoID){
 		videoID = videoID ? videoID : this.getVideoIDUrl();
-		return "https://www.youtube.com/embed/"+
-		    videoID+"?autoplay=1";
+		return this.EMBED_URL+
+		    videoID+this.EMBED_PARAMS;
 	},
 	
 	extractChannelIDFromChannelUrl: function(channelURL){
 		channelURL = channelURL ? channelURL : window.location.href;
 		return channelURL.split("/")[4];
+	},
+	
+	getChannelIDFromChannelTitle: function(){
+		let channelTitle = document.getElementsByClassName(this.CHANNEL_TITLE)[0];
+		if(typeof channelTitle != "undefined"){
+			return this.extractChannelIDFromChannelUrl(channelTitle.href);
+		}
+		return "";
 	},
 
 	getChannelIDFromPlayer: function(){
@@ -195,7 +211,7 @@ PageCleaner.prototype = {
 		if(this.ytutils.isChannel()||this.ytutils.isSearch()||this.ytutils.isWatch()){
 			this.utils.deleteElements(this.ELEMENTS_GLOBAL);
 		}
-		if (this.ytutils.isChannel()){
+		if (this.ytutils.isChannel()||this.ytutils.isListing()){
 			this.utils.deleteElements(this.ELEMENTS_CHANNEL);
 		}else if(this.ytutils.isSearch()){
 			this.utils.deleteElements(this.ELEMENTS_SEARCH);
@@ -302,8 +318,8 @@ RSSFeedLinker.prototype = {
 	BUTTON_CLASS: "yt-uix-button-content",
 	
 	addRSSFeed: function(){
-		if(this.ytutils.isChannel()){
-			let channelId = this.ytutils.extractChannelIDFromChannelUrl();
+		if(this.ytutils.isChannel()||this.ytutils.isListing()){
+			let channelId = this.ytutils.getChannelIDFromChannelTitle();
 			let feedURL = this.createFeedURL(channelId)
 			this.addFeedElementToChannel(feedURL);
 		} else if(this.ytutils.isWatch()){
