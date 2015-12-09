@@ -1,4 +1,12 @@
-A Repo that contains various scripts and styles to improve youtube.
-Cuts out the crap like "suggestions" and "comments", and with a dark theme makes everything about the video.
-For people who get subscriptions through RSS / other direct feeds.
-No search bar, because you could easily just add it as a custom search engine.
+#YTImproved WebExtension
+
+###A web extension to improve use of youtube, designed with the discerning not-logged-in user in mind.
+
+Includes:
+
+* Dark Theme
+* Full-Screen Player
+* Auto-HD selection
+* RSS subscription button
+* Hide nonessential elements on player pages
+* Hover-to-view descriptions and playlists
