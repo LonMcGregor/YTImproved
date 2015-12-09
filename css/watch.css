@@ -39,22 +39,22 @@
 }
 
 /* playlist box */
-#player-playlist {
-	position: fixed;
+#watch-appbar-playlist {
+	z-index: 5 !important;
+	position: fixed !important;
+    transition: all ease-in 0.2s !important;
+	left: inherit !important;
+	right: -480px !important;
+	width: 500px;
+	top: 0px !important;
+	opacity: 0 !important;
+}
+
+#watch-appbar-playlist:hover {
 	right: 0px !important;
+	opacity: 1 !important;
 }
-#player-playlist .watch-playlist {
-	z-index: 1000;
-	position: absolute;
-  transition: all ease-in 0.2s;
-	left: calc(100% - 0px) !important;
-	right: -10px;
-	opacity: 0;
-}
-#player-playlist .watch-playlist:hover {
-	left: calc(100% - 300px) !important;
-	opacity: 1;
-}
+
 
 /* small pages */
 @media(max-width: 900px){
@@ -75,9 +75,9 @@
 		font-size: x-small;
 	}
 	#watch7-headline { 
-	  font-size: small; 
-	  width: 100%;
-  }
+	    font-size: small; 
+	    width: 100%;
+    }
 	#watch7-container .yt-card {
 		width: 100%;
 	}
