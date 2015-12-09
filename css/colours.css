@@ -5,4 +5,4 @@ body, #page, #watch-header, #watch-header, .yt-card, #action-panel-details, inpu
 #eow-title, #watch-description, #watch7-user-header .yt-user-info a, input, .yt-uix-button-content, .yt-uix-button-menu .yt-uix-button-menu-item, .channel-header .branded-page-header-title .branded-page-header-title-link, .yt-lockup-title a, .yt-lockup:hover a, .yt-lockup:hover .yt-lockup-meta a, .yt-lockup:hover .yt-lockup-description a, .pl-video:hover .pl-video-title-link,
  #masthead-positioner * { color: #DDDDDD !important; }
 
-#watch8-action-buttons, .yt-card .yt-uix-tabs, .yt-card .yt-uix-button-expander, #masthead-positioner * { 	border: 0px !important; }
+#watch8-action-buttons, .yt-card .yt-uix-tabs, .yt-card .yt-uix-button-expander { 	border: 0px !important; }
