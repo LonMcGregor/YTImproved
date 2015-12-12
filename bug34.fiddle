@@ -1,0 +1,58 @@
+<div class="yt-uix-button">
+<span>Content</span>
+</div>
+
+@keyframes bganimin {
+  from {
+    left: 100%;
+  }
+  to {
+    left: 0%;
+  }
+}
+@keyframes bganimout {
+  from {
+    right: 0%;
+  }
+  to {
+    right: 100%;
+  }
+}
+
+.yt-uix-button {
+  width: 100px;
+  font-family: Segoe UI, sans-serif;
+  height: 50px;
+  overflow: hidden;
+  background: black;
+  color: white;
+  cursor: pointer;
+}
+
+.yt-uix-button span {
+  display: block;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  position: relative;
+  right: 0%;
+  top: -100%;
+}
+
+.yt-uix-button:before{
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: red;
+  position: relative;
+  right: 100%;
+  top: 0%;
+  content: ".";
+  color: transparent;
+  animation: bganimout 0.2s ease-out;
+}
+.yt-uix-button:hover:before{
+  background: red;
+  right: 0%;
+  animation: bganimin 0.2s ease-in;
+}
