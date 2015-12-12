@@ -26,11 +26,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.125"
-     inkscape:cx="1607.4276"
-     inkscape:cy="-1616.1912"
+     inkscape:zoom="0.35355339"
+     inkscape:cx="1453.4967"
+     inkscape:cy="509.05119"
      inkscape:document-units="px"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="layer6"
      showgrid="false"
      borderlayer="true"
      units="px"
@@ -56,7 +56,8 @@
      id="layer3"
      inkscape:label="Channel"
      transform="translate(0,-2746.772)"
-     style="display:inline">
+     style="display:none"
+     sodipodi:insensitive="true">
     <rect
        style="display:inline;opacity:1;fill:#1a1a1a;fill-opacity:1;stroke:#ff0000;stroke-width:0;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4665-6"
@@ -67,12 +68,12 @@
     <image
        sodipodi:absref="C:\Users\lonm\Documents\GitHub\YTImproved\demoThumb.jpg"
        xlink:href="demoThumb.jpg"
-       width="207.13095"
-       height="116.51118"
-       preserveAspectRatio="none"
-       id="image4714"
+       y="3798.0398"
        x="262.73886"
-       y="3798.0398" />
+       id="image4714"
+       preserveAspectRatio="none"
+       height="116.51118"
+       width="207.13095" />
     <rect
        style="display:inline;opacity:1;fill:#ffffff;fill-opacity:1;stroke:#ff0000;stroke-width:0;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4446-7"
@@ -404,12 +405,12 @@
     <image
        sodipodi:absref="C:\Users\lonm\Documents\GitHub\YTImproved\demoThumb.jpg"
        xlink:href="demoThumb.jpg"
-       y="3798.0398"
-       x="552.65265"
-       id="image4717"
-       preserveAspectRatio="none"
+       width="207.13095"
        height="116.51118"
-       width="207.13095" />
+       preserveAspectRatio="none"
+       id="image4717"
+       x="552.65265"
+       y="3798.0398" />
     <text
        sodipodi:linespacing="125%"
        id="text4889"
@@ -457,12 +458,12 @@
     <image
        sodipodi:absref="C:\Users\lonm\Documents\GitHub\YTImproved\demoThumb.jpg"
        xlink:href="demoThumb.jpg"
-       width="207.13095"
-       height="116.51118"
-       preserveAspectRatio="none"
-       id="image4719"
+       y="3798.0398"
        x="825.59589"
-       y="3798.0398" />
+       id="image4719"
+       preserveAspectRatio="none"
+       height="116.51118"
+       width="207.13095" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:32px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -532,12 +533,12 @@
     <image
        sodipodi:absref="C:\Users\lonm\Documents\GitHub\YTImproved\demoThumb.jpg"
        xlink:href="demoThumb.jpg"
-       width="207.13095"
-       height="116.51118"
-       preserveAspectRatio="none"
-       id="image4723"
+       y="3798.0398"
        x="1375.725"
-       y="3798.0398" />
+       id="image4723"
+       preserveAspectRatio="none"
+       height="116.51118"
+       width="207.13095" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:32px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -574,12 +575,12 @@
     <image
        sodipodi:absref="C:\Users\lonm\Documents\GitHub\YTImproved\demoThumb.jpg"
        xlink:href="demoThumb.jpg"
-       y="3798.0398"
-       x="1095.7107"
-       id="image4721"
-       preserveAspectRatio="none"
+       width="207.13095"
        height="116.51118"
-       width="207.13095" />
+       preserveAspectRatio="none"
+       id="image4721"
+       x="1095.7107"
+       y="3798.0398" />
     <rect
        style="opacity:1;fill:#4d4d4d;fill-opacity:1;stroke:#ff0000;stroke-width:0;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4955"
@@ -649,12 +650,12 @@
     <image
        sodipodi:absref="C:\Users\lonm\Documents\GitHub\YTImproved\demoThumb.jpg"
        xlink:href="demoThumb.jpg"
-       y="5251.9297"
-       x="297.61865"
-       id="image4753"
-       preserveAspectRatio="none"
+       width="207.13095"
        height="116.51118"
-       width="207.13095" />
+       preserveAspectRatio="none"
+       id="image4753"
+       x="297.61865"
+       y="5251.9297" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:33.53881454px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -1010,12 +1011,12 @@
     <image
        sodipodi:absref="C:\Users\lonm\Documents\GitHub\YTImproved\demoThumb.jpg"
        xlink:href="demoThumb.jpg"
-       y="4682.04"
-       x="309.61865"
-       id="image4733"
-       preserveAspectRatio="none"
+       width="207.13095"
        height="116.51118"
-       width="207.13095" />
+       preserveAspectRatio="none"
+       id="image4733"
+       x="309.61865"
+       y="4682.04" />
     <text
        sodipodi:linespacing="125%"
        id="text5211"
@@ -1063,12 +1064,12 @@
     <image
        sodipodi:absref="C:\Users\lonm\Documents\GitHub\YTImproved\demoThumb.jpg"
        xlink:href="demoThumb.jpg"
-       width="207.13095"
-       height="116.51118"
-       preserveAspectRatio="none"
-       id="image4735"
+       y="4682.04"
        x="561.34869"
-       y="4682.04" />
+       id="image4735"
+       preserveAspectRatio="none"
+       height="116.51118"
+       width="207.13095" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:32px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -1116,12 +1117,12 @@
     <image
        sodipodi:absref="C:\Users\lonm\Documents\GitHub\YTImproved\demoThumb.jpg"
        xlink:href="demoThumb.jpg"
-       y="4682.04"
-       x="831.4635"
-       id="image4737"
-       preserveAspectRatio="none"
+       width="207.13095"
        height="116.51118"
-       width="207.13095" />
+       preserveAspectRatio="none"
+       id="image4737"
+       x="831.4635"
+       y="4682.04" />
     <text
        sodipodi:linespacing="125%"
        id="text5247"
@@ -1169,12 +1170,12 @@
     <image
        sodipodi:absref="C:\Users\lonm\Documents\GitHub\YTImproved\demoThumb.jpg"
        xlink:href="demoThumb.jpg"
-       y="4682.04"
-       x="1115.7205"
-       id="image4739"
-       preserveAspectRatio="none"
+       width="207.13095"
        height="116.51118"
-       width="207.13095" />
+       preserveAspectRatio="none"
+       id="image4739"
+       x="1115.7205"
+       y="4682.04" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:32px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -1222,12 +1223,12 @@
     <image
        sodipodi:absref="C:\Users\lonm\Documents\GitHub\YTImproved\demoThumb.jpg"
        xlink:href="demoThumb.jpg"
-       width="207.13095"
-       height="116.51118"
-       preserveAspectRatio="none"
-       id="image4741"
+       y="4682.04"
        x="1366.0363"
-       y="4682.04" />
+       id="image4741"
+       preserveAspectRatio="none"
+       height="116.51118"
+       width="207.13095" />
     <text
        sodipodi:linespacing="125%"
        id="text5283"
@@ -1275,12 +1276,12 @@
     <image
        sodipodi:absref="C:\Users\lonm\Documents\GitHub\YTImproved\demoThumb.jpg"
        xlink:href="demoThumb.jpg"
-       width="207.13095"
-       height="116.51118"
-       preserveAspectRatio="none"
-       id="image4743"
+       y="4889.9297"
        x="309.61865"
-       y="4889.9297" />
+       id="image4743"
+       preserveAspectRatio="none"
+       height="116.51118"
+       width="207.13095" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:32px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -1328,12 +1329,12 @@
     <image
        sodipodi:absref="C:\Users\lonm\Documents\GitHub\YTImproved\demoThumb.jpg"
        xlink:href="demoThumb.jpg"
-       y="4889.9297"
-       x="561.34869"
-       id="image4745"
-       preserveAspectRatio="none"
+       width="207.13095"
        height="116.51118"
-       width="207.13095" />
+       preserveAspectRatio="none"
+       id="image4745"
+       x="561.34869"
+       y="4889.9297" />
     <text
        sodipodi:linespacing="125%"
        id="text5319"
@@ -1381,12 +1382,12 @@
     <image
        sodipodi:absref="C:\Users\lonm\Documents\GitHub\YTImproved\demoThumb.jpg"
        xlink:href="demoThumb.jpg"
-       width="207.13095"
-       height="116.51118"
-       preserveAspectRatio="none"
-       id="image4747"
+       y="4889.9297"
        x="831.4635"
-       y="4889.9297" />
+       id="image4747"
+       preserveAspectRatio="none"
+       height="116.51118"
+       width="207.13095" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:32px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -1434,12 +1435,12 @@
     <image
        sodipodi:absref="C:\Users\lonm\Documents\GitHub\YTImproved\demoThumb.jpg"
        xlink:href="demoThumb.jpg"
-       width="207.13095"
-       height="116.51118"
-       preserveAspectRatio="none"
-       id="image4749"
+       y="4889.9297"
        x="1115.7205"
-       y="4889.9297" />
+       id="image4749"
+       preserveAspectRatio="none"
+       height="116.51118"
+       width="207.13095" />
     <text
        sodipodi:linespacing="125%"
        id="text5355"
@@ -1487,12 +1488,12 @@
     <image
        sodipodi:absref="C:\Users\lonm\Documents\GitHub\YTImproved\demoThumb.jpg"
        xlink:href="demoThumb.jpg"
-       y="4889.9297"
-       x="1366.0363"
-       id="image4751"
-       preserveAspectRatio="none"
+       width="207.13095"
        height="116.51118"
-       width="207.13095" />
+       preserveAspectRatio="none"
+       id="image4751"
+       x="1366.0363"
+       y="4889.9297" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:32px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -1529,12 +1530,12 @@
     <image
        sodipodi:absref="C:\Users\lonm\Documents\GitHub\YTImproved\demoThumb.jpg"
        xlink:href="demoThumb.jpg"
-       width="207.13095"
-       height="116.51118"
-       preserveAspectRatio="none"
-       id="image4755"
+       y="5438.9297"
        x="297.61865"
-       y="5438.9297" />
+       id="image4755"
+       preserveAspectRatio="none"
+       height="116.51118"
+       width="207.13095" />
     <text
        sodipodi:linespacing="125%"
        id="text5387"
@@ -1615,12 +1616,12 @@
     <image
        sodipodi:absref="C:\Users\lonm\Documents\GitHub\YTImproved\demoThumb.jpg"
        xlink:href="demoThumb.jpg"
-       y="5621.9297"
-       x="297.61865"
-       id="image4757"
-       preserveAspectRatio="none"
+       width="207.13095"
        height="116.51118"
-       width="207.13095" />
+       preserveAspectRatio="none"
+       id="image4757"
+       x="297.61865"
+       y="5621.9297" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:33.53881454px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -1928,36 +1929,27 @@
     <image
        sodipodi:absref="C:\Users\lonm\Documents\GitHub\YTImproved\demoThumb.jpg"
        xlink:href="demoThumb.jpg"
-       width="529.41382"
-       height="297.79529"
-       preserveAspectRatio="none"
-       id="image4677"
+       y="3323.998"
        x="263.44598"
-       y="3323.998" />
-    <image
-       sodipodi:absref="C:\Users\lonm\Documents\GitHub\YTImproved\demoThumb.jpg"
-       xlink:href="demoThumb.jpg"
-       y="4121.895"
-       x="264.15305"
-       id="image4725"
+       id="image4677"
        preserveAspectRatio="none"
-       height="116.51118"
-       width="207.13095" />
+       height="297.79529"
+       width="529.41382" />
     <image
        sodipodi:absref="C:\Users\lonm\Documents\GitHub\YTImproved\demoThumb.jpg"
        xlink:href="demoThumb.jpg"
        width="207.13095"
        height="116.51118"
        preserveAspectRatio="none"
-       id="image4727"
+       id="image4725"
        x="264.15305"
-       y="4318.4707" />
+       y="4121.895" />
     <image
        sodipodi:absref="C:\Users\lonm\Documents\GitHub\YTImproved\demoThumb.jpg"
        xlink:href="demoThumb.jpg"
        y="4318.4707"
-       x="942.97559"
-       id="image4729"
+       x="264.15305"
+       id="image4727"
        preserveAspectRatio="none"
        height="116.51118"
        width="207.13095" />
@@ -1967,9 +1959,18 @@
        width="207.13095"
        height="116.51118"
        preserveAspectRatio="none"
-       id="image4731"
+       id="image4729"
        x="942.97559"
-       y="4106.3389" />
+       y="4318.4707" />
+    <image
+       sodipodi:absref="C:\Users\lonm\Documents\GitHub\YTImproved\demoThumb.jpg"
+       xlink:href="demoThumb.jpg"
+       y="4106.3389"
+       x="942.97559"
+       id="image4731"
+       preserveAspectRatio="none"
+       height="116.51118"
+       width="207.13095" />
   </g>
   <g
      inkscape:groupmode="layer"
@@ -2536,18 +2537,9 @@
     <image
        sodipodi:absref="C:\Users\lonm\Documents\GitHub\YTImproved\demoThumb.jpg"
        xlink:href="demoThumb.jpg"
-       width="247.93652"
-       height="139.46431"
-       preserveAspectRatio="none"
+       y="3153.022"
+       x="359.00003"
        id="image4699"
-       x="359.00003"
-       y="3153.022" />
-    <image
-       sodipodi:absref="C:\Users\lonm\Documents\GitHub\YTImproved\demoThumb.jpg"
-       xlink:href="demoThumb.jpg"
-       y="3353.022"
-       x="359.00003"
-       id="image4702"
        preserveAspectRatio="none"
        height="139.46431"
        width="247.93652" />
@@ -2557,26 +2549,34 @@
        width="247.93652"
        height="139.46431"
        preserveAspectRatio="none"
-       id="image4704"
+       id="image4702"
        x="359.00003"
-       y="3564.022" />
+       y="3353.022" />
+    <image
+       sodipodi:absref="C:\Users\lonm\Documents\GitHub\YTImproved\demoThumb.jpg"
+       xlink:href="demoThumb.jpg"
+       y="3564.022"
+       x="359.00003"
+       id="image4704"
+       preserveAspectRatio="none"
+       height="139.46431"
+       width="247.93652" />
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer6"
      inkscape:label="Player"
-     style="display:none;opacity:1"
-     transform="translate(0,-2746.772)"
-     sodipodi:insensitive="true">
+     style="display:inline;opacity:1"
+     transform="translate(0,-2746.772)">
     <image
        sodipodi:absref="C:\Users\lonm\Documents\GitHub\YTImproved\demoThumb.jpg"
        xlink:href="demoThumb.jpg"
-       width="1920.0001"
-       height="1080.0001"
-       preserveAspectRatio="none"
-       id="image4688"
+       y="2746.772"
        x="0"
-       y="2746.772" />
+       id="image4688"
+       preserveAspectRatio="none"
+       height="1080.0001"
+       width="1920.0001" />
     <g
        id="g4255"
        style="opacity:0.58899997">
@@ -2609,80 +2609,80 @@
        style="opacity:1;fill:#000000;fill-opacity:1;stroke:#ff0000;stroke-width:0;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4260"
        width="821.42859"
-       height="232.85712"
-       x="70"
+       height="259.85712"
+       x="-12.024391"
        y="2889.6292" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:57.64085007px;line-height:125%;font-family:'Segoe UI';-inkscape-font-specification:'Segoe UI';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="89.317368"
+       x="7.2929759"
        y="2949.4124"
        id="text4262"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4264"
-         x="89.317368"
+         x="7.2929759"
          y="2949.4124">Video Title</tspan></text>
     <rect
        style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#ff0000;stroke-width:0;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4266"
        width="53.65448"
        height="53.65448"
-       x="91.418808"
+       x="9.3944168"
        y="2991.4055" />
     <text
        sodipodi:linespacing="125%"
        id="text4268"
        y="3014.7354"
-       x="168.43889"
+       x="86.414497"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:30.09353638px;line-height:125%;font-family:'Segoe UI';-inkscape-font-specification:'Segoe UI';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        xml:space="preserve"><tspan
          y="3014.7354"
-         x="168.43889"
+         x="86.414497"
          id="tspan4270"
          sodipodi:role="line">Channel Title's channel</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:30.09353638px;line-height:125%;font-family:'Segoe UI';-inkscape-font-specification:'Segoe UI';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="169.44905"
+       x="87.42466"
        y="3044.0298"
        id="text4272"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4274"
-         x="169.44905"
+         x="87.42466"
          y="3044.0298">Subs ###</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text4276"
        y="3044.0298"
-       x="307.83997"
+       x="225.81557"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:30.09353638px;line-height:125%;font-family:'Segoe UI';-inkscape-font-specification:'Segoe UI';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        xml:space="preserve"><tspan
          y="3044.0298"
-         x="307.83997"
+         x="225.81557"
          id="tspan4278"
          sodipodi:role="line">RSS Feed: Uploads</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:30.09353638px;line-height:125%;font-family:'Segoe UI';-inkscape-font-specification:'Segoe UI';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="742.01038"
+       x="659.98596"
        y="3011.8782"
        id="text4280"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4282"
-         x="742.01038"
+         x="659.98596"
          y="3011.8782">Views ###</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text4284"
        y="3093.3066"
-       x="696.29608"
+       x="614.27167"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:30.09353638px;line-height:125%;font-family:'Segoe UI';-inkscape-font-specification:'Segoe UI';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        xml:space="preserve"><tspan
          y="3093.3066"
-         x="696.29608"
+         x="614.27167"
          id="tspan4286"
          sodipodi:role="line">Likes | Dislikes</tspan></text>
     <rect
@@ -2690,29 +2690,29 @@
        id="rect4288"
        width="75.714287"
        height="5.7142859"
-       x="702.85712"
+       x="620.8327"
        y="3017.4861" />
     <rect
        style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#ff0000;stroke-width:0;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4290"
        width="95.714287"
        height="7.1428571"
-       x="783.57141"
+       x="701.547"
        y="3016.772" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:30.09353638px;line-height:125%;font-family:'Segoe UI';-inkscape-font-specification:'Segoe UI';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="94.153191"
+       x="12.128799"
        y="3093.3066"
        id="text4292"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4294"
-         x="94.153191"
+         x="12.128799"
          y="3093.3066">Add | Share | More</tspan></text>
     <rect
        y="3144.6292"
-       x="70"
+       x="-12.024391"
        height="360.71429"
        width="821.42859"
        id="rect4296"
@@ -2721,111 +2721,111 @@
        sodipodi:linespacing="125%"
        id="text4298"
        y="3176.7969"
-       x="92.476242"
+       x="10.451851"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.22929192px;line-height:125%;font-family:'Segoe UI';-inkscape-font-specification:'Segoe UI';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        xml:space="preserve"><tspan
          y="3176.7969"
-         x="92.476242"
+         x="10.451851"
          id="tspan4300"
          sodipodi:role="line">Published date month year</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.22929192px;line-height:125%;font-family:'Segoe UI';-inkscape-font-specification:'Segoe UI';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="82.476242"
+       x="0.45185044"
        y="3207.5112"
        id="text4302"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4304"
-         x="82.476242"
+         x="0.45185044"
          y="3207.5112">As an integral part of the Move2Perform software, the Y Balance Test is a </tspan><tspan
          sodipodi:role="line"
-         x="82.476242"
+         x="0.45185044"
          y="3236.5479"
          id="tspan4306">thoroughly researched, yet easy way to test a person's risk for injury as </tspan><tspan
          sodipodi:role="line"
-         x="82.476242"
+         x="0.45185044"
          y="3265.5845"
          id="tspan4308">well as demonstrate functional symmetry. The Y Balance Test Protocol </tspan><tspan
          sodipodi:role="line"
-         x="82.476242"
+         x="0.45185044"
          y="3294.6211"
          id="tspan4310">was developed through years of research in lower extremity injury </tspan><tspan
          sodipodi:role="line"
-         x="82.476242"
+         x="0.45185044"
          y="3323.6577"
          id="tspan4312">prevention using the Star Excursion Balance Test. This new device and </tspan><tspan
          sodipodi:role="line"
-         x="82.476242"
+         x="0.45185044"
          y="3352.6943"
          id="tspan4314">protocol is highly accurate and can be used for measuring pre and post </tspan><tspan
          sodipodi:role="line"
-         x="82.476242"
+         x="0.45185044"
          y="3381.731"
          id="tspan4316">rehabilitation performance, improvement after performance enhancement pro.</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.22929192px;line-height:125%;font-family:'Segoe UI';-inkscape-font-specification:'Segoe UI';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="87.476242"
+       x="5.4518504"
        y="3421.0825"
        id="text4318"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4320"
-         x="87.476242"
+         x="5.4518504"
          y="3421.0825">Category           Category</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text4322"
        y="3448.2253"
-       x="88.190529"
+       x="6.1661372"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.22929192px;line-height:125%;font-family:'Segoe UI';-inkscape-font-specification:'Segoe UI';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        xml:space="preserve"><tspan
          y="3448.2253"
-         x="88.190529"
+         x="6.1661372"
          id="tspan4324"
          sodipodi:role="line">License               Creative Commons</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.22929192px;line-height:125%;font-family:'Segoe UI';-inkscape-font-specification:'Segoe UI';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="329.61911"
+       x="247.59471"
        y="3493.9397"
        id="text4326"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4328"
-         x="329.61911"
+         x="247.59471"
          y="3493.9397">Show more | less</tspan></text>
     <rect
        style="opacity:1;fill:#999999;fill-opacity:1;stroke:#ff0000;stroke-width:0;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4330"
        width="17.857143"
        height="348.57144"
-       x="867.85712"
+       x="785.8327"
        y="3151.0576" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 869.28572,3164.629 8.57142,-10 5.71429,12.8572"
+       d="m 787.26133,3164.629 8.57142,-10 5.71429,12.8572"
        id="path4332"
        inkscape:connector-curvature="0" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 870.71429,3482.4862 6.42857,14.2857 5,-12.1429"
+       d="m 788.6899,3482.4862 6.42857,14.2857 5,-12.1429"
        id="path4334"
        inkscape:connector-curvature="0" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 871.42857,3321.7719 12.14286,-0.7143"
+       d="m 789.40418,3321.7719 12.14286,-0.7143"
        id="path4336"
        inkscape:connector-curvature="0" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 872.85714,3327.4862 7.85715,0.7143"
+       d="m 790.83275,3327.4862 7.85715,0.7143"
        id="path4338"
        inkscape:connector-curvature="0" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 872.14286,3334.629 8.57143,0"
+       d="m 790.11847,3334.629 8.57143,0"
        id="path4340"
        inkscape:connector-curvature="0" />
     <rect
@@ -3119,6 +3119,25 @@
          x="1598.8418"
          id="tspan4444"
          sodipodi:role="line">Loop | shuffle</tspan></text>
+    <path
+       style="fill:#800000;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m -53.740115,3480.2896 90.509668,0 0,-29.6985 53.033008,39.598 -62.814875,49.7012 10.157403,-37.908 -92.299418,0 z"
+       id="path4669"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccc" />
+    <path
+       sodipodi:nodetypes="cccccccc"
+       inkscape:connector-curvature="0"
+       id="path4671"
+       d="m 1969.9621,3428.1918 -90.5097,0 0,29.6985 -53.033,-39.598 62.8149,-49.7012 -10.1574,37.908 92.2994,0 z"
+       style="fill:#800000;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <rect
+       y="3062.6292"
+       x="-12.024394"
+       height="52.857098"
+       width="821.42859"
+       id="rect4673"
+       style="opacity:1;fill:#000000;fill-opacity:1;stroke:#ff0000;stroke-width:0;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
   </g>
   <g
      inkscape:groupmode="layer"
