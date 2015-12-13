@@ -130,11 +130,63 @@ PlayerSizer.prototype = {
 	//.ytp-storyboard, .ytp-tooltip
 	
 	setWidthsAndHeights: function(){
-		let video = document.getElementsByTagName("video")[0].style;
-		let playerBox = document.getElementById('player-api').style;
-		let videoContent = document.getElementsByClassName('html5-video-content')[0].style;
-		let playerContent = document.getElementsByClassName('ytp-player-content')[0].style;
-		let arr = [video, playerBox, videoContent, playerContent];
+		
+		/* #page
+			#player
+				#player-mole-container
+					#player_api
+						#movie_player
+							.html5-video-container
+								video
+							.html5-video-content
+								[[annotations modules]]
+							.ytp-gradient-top
+							.ytp-chrome-top
+								[[only used for embeds? title, cards etc.]]
+							.ytp-cards-button
+							.ytp-webgl-spherical-control
+								[[3d videos]]
+							.video-ads
+								[[popup ads]]
+							.ytp-iv-player-content
+								[[annotations branding]]
+							.ytp-upnext
+							.html5-endscreen
+							.ytp-subtitles-player-content
+							.ytp-thumbnail-overlay
+							.ytp-spinner
+							.ytp-bezel [[paused icon]]
+							div [[no classes]]
+								.ytp-tooltip-bg
+								.ytp-tooltip-text-wrapper
+								[[timeline tooltip]]
+							.ytp-storyboard
+								[[on-mouse-down storyboard]]
+							.ytp-storyboard-framepreview
+								[[on-trackbar-drag frame preview]]
+							.ytp-remote
+								[[details remote connection / screencasts?]]
+							.ytp-mini-progress-bar-container [[?]]
+							.ytp-cards-teaser [[cards]]
+							.ytp-playlist-menu
+							.ytp-related-menu
+							.ytp-share-panel
+							.ytp-multicam-menu
+							.iv-drawer
+							.ytp-settings-menu
+							.ytp-gradient-bottom
+							.ytp-chrome-bottom
+		*/
+		let player = document.getElementById("player");
+		let playerMoleContainer = document.getElementById("player-mole-container");
+		let playerAPI = document.getElementById('player-api');
+		let moviePlayer = document.getElementById("movie_player").style;
+			let videoContainer = document.getElementsByClassName('html5-video-container')[0].style;
+				let video = document.getElementsByTagName("video")[0].style;
+			let videoContent = document.getElementsByClassName('html5-video-content')[0].style;
+			let playerContent = document.getElementsByClassName('ytp-iv-player-content')[0].style;
+		let arr = [player, playerMoleContainer, playerAPI.style, moviePlayer, videoContainer, video, videoContent, playerContent];
+		
 		
 		for(let i = 0; i < arr.length; i++){
 			arr[i].width = ""+window.innerWidth+"px";
@@ -144,18 +196,10 @@ PlayerSizer.prototype = {
 			arr[i].left = "0px";
 		}
 		video.backgroundColor = "black";
-		playerBox.marginLeft = "0px";
+		playerAPI.marginLeft = "0px";
+		playerAPI.className = "";
 	},
-	
-//	setStoryBoard: function(){
-//		let framePreview = document.getElementsByClassName('.ytp-storyboard-framepreview')[0].style;
-//		framePreview.width = ""+window.innerWidth+"px";
-//		framePreview.height = ""+window.innerHeight+"px";
-//		framePreview.position = "fixed";
-//		framePreview.top = "0px";
-//		framePreview.left = "0px";
-//	},
-	
+		
 	setSizes: function(){
 		if(this.ytutils.isWatch()){
 			this.setWidths();
@@ -170,15 +214,6 @@ PlayerSizer.prototype = {
 			  sizer.setSizes();
 			}, 80, "resizeme");
 		};
-//		var muto = new MutationObserver(function(mutations) {
-//			mutations.forEach(function(mutation) {
-//				if(mutation.type=="attributes" && mutation.attributeName=="style"){
-//					sizer.setStoryBoard();
-//				}
-//			});    
-//		});
-//		mutoconf = {attributes: true, childList: false, characterData: false};
-//		muto.observe(document.getElementsByClassName('ytp-storyboard-framepreview')[0], mutoconf);
 		this.setSizes();
 	},
 }
