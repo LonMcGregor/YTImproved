@@ -300,10 +300,17 @@ LiveThumnailer.prototype = {
 	THUMB_CLASS: 'yt-lockup-thumbnail',
 	
 	initThumbs: function(){
-	  let thumbs = document.getElementsByClassName(this.THUMB_CLASS);
-	  for(let i = 0; i < thumbs.length; i++){
-		this.changeThumb(thumbs[i]);
-	  }
+		let thumbs = document.getElementsByClassName(this.THUMB_CLASS);
+		for(let i = 0; i < thumbs.length; i++){
+			if(this.isActuallyAThumbnail(thumbs[i])){
+				this.changeThumb(thumbs[i]);
+			}
+		}
+	},
+	
+	isActuallyAThumbnail: function(thumb){
+		let linkURL = thumb.getElementsByTagName('a')[0].href;
+		return this.ytutils.isWatch(linkURL);
 	},
 
 	changeThumb: function(thumb){
