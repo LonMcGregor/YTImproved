@@ -114,107 +114,40 @@ function PlayerSizer(){}
 PlayerSizer.prototype = {
 	utils: new Utils(),
 	ytutils: new YTUtils(),
-		
-	setWidths: function(){
-		let controls = document.getElementsByClassName('ytp-chrome-bottom')[0].style;
-		let gradient = document.getElementsByClassName('ytp-gradient-bottom')[0].style;
-		let arr = [controls, gradient];
-
-		for(let i = 0; i < arr.length; i++){
-			arr[i].width = ""+window.innerWidth+"px";
-			arr[i].position = "fixed";
-			arr[i].bottom = "0px";
-			arr[i].left = "0px";
-		}
-	},
-	//.ytp-storyboard, .ytp-tooltip
 	
-	setWidthsAndHeights: function(){
-		
-		/* #page
-			#player
-				#player-mole-container
-					#player_api
-						#movie_player
-							.html5-video-container
-								video
-							.html5-video-content
-								[[annotations modules]]
-							.ytp-gradient-top
-							.ytp-chrome-top
-								[[only used for embeds? title, cards etc.]]
-							.ytp-cards-button
-							.ytp-webgl-spherical-control
-								[[3d videos]]
-							.video-ads
-								[[popup ads]]
-							.ytp-iv-player-content
-								[[annotations branding]]
-							.ytp-upnext
-							.html5-endscreen
-							.ytp-subtitles-player-content
-							.ytp-thumbnail-overlay
-							.ytp-spinner
-							.ytp-bezel [[paused icon]]
-							div [[no classes]]
-								.ytp-tooltip-bg
-								.ytp-tooltip-text-wrapper
-								[[timeline tooltip]]
-							.ytp-storyboard
-								[[on-mouse-down storyboard]]
-							.ytp-storyboard-framepreview
-								[[on-trackbar-drag frame preview]]
-							.ytp-remote
-								[[details remote connection / screencasts?]]
-							.ytp-mini-progress-bar-container [[?]]
-							.ytp-cards-teaser [[cards]]
-							.ytp-playlist-menu
-							.ytp-related-menu
-							.ytp-share-panel
-							.ytp-multicam-menu
-							.iv-drawer
-							.ytp-settings-menu
-							.ytp-gradient-bottom
-							.ytp-chrome-bottom
-		*/
-		let player = document.getElementById("player");
-		let playerMoleContainer = document.getElementById("player-mole-container");
-		let playerAPI = document.getElementById('player-api');
-		let moviePlayer = document.getElementById("movie_player").style;
-			let videoContainer = document.getElementsByClassName('html5-video-container')[0].style;
-				let video = document.getElementsByTagName("video")[0].style;
-			let videoContent = document.getElementsByClassName('html5-video-content')[0].style;
-			let playerContent = document.getElementsByClassName('ytp-iv-player-content')[0].style;
-		let arr = [player, playerMoleContainer, playerAPI.style, moviePlayer, videoContainer, video, videoContent, playerContent];
-		
-		
-		for(let i = 0; i < arr.length; i++){
-			arr[i].width = ""+window.innerWidth+"px";
-			arr[i].height = ""+window.innerHeight+"px";
-			arr[i].position = "fixed";
-			arr[i].top = "0px";
-			arr[i].left = "0px";
-		}
-		video.backgroundColor = "black";
-		playerAPI.marginLeft = "0px";
-		playerAPI.className = "";
+	EXTRA_EMBED_PARAMS: "&disablekb=1&enablejsapi=1&modestbranding=1&origin=http://youtube.com",
+	//do list and listtype
+	//see https://developers.google.com/youtube/player_parameters#Parameters
+	//can use loop! for #38
+	
+	replacePlayerWithEmbedded: function(){
+		let embeddedURL = ytutils.newEmbeddedUrl();
+		embeddedURL += this.EXTRA_EMBED_PARAMS;
+		let iframe = document.createElement('iframe');
+		iframe.src = embeddedURL;
+		iframe.id = "player";
+		iframe.frameborder = "0";
+		let playerDiv = document.getElementById("player");
+		playerDiv.outerHTML = iframe.outerHTML;
 	},
 		
-	setSizes: function(){
-		if(this.ytutils.isWatch()){
-			this.setWidths();
-			this.setWidthsAndHeights();
-//			this.setStoryBoard();
-		}
+	setSize: function(){
+		let player = document.getElementById("player").style;
+		player.position = "fixed";
+		player.width = ""+window.innerWidth+"px";
+		player.height = ""+window.innerHeight+"px";
+		player.top = "0px";
+		player.left = "0px";
 	},
 	
 	initSizing: function(){
+		this.replacePlayerWithEmbedded();
 		window.onresize = function (e) {
 			util.waitForFinalEvent( function(){
-			  sizer.setSizes();
+			  sizer.setSize();
 			}, 80, "resizeme");
 		};
-		this.setSizes();
+		this.setSize();
 	},
 }
 var sizer = new PlayerSizer();
@@ -402,6 +335,8 @@ var rssfeeder = new RSSFeedLinker();
 
 
 //force 1080p, from http://www.autohdforyoutube.com/
+//alt: highres, hd1080, hd720, large, medium and small
+//player.setPlaybackQuality(suggestedQuality:String):Void
 function QualityForcer(){}
 QualityForcer.prototype = {
 	HD: "hd1080",

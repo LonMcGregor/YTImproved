@@ -34,19 +34,10 @@
 	overflow-x: hidden;
 }
 
-#body-container {
-	padding-bottom: 0px;
+#player {
+	margin: 0px 0px !important;
 }
 
-/* Storyboard */
-.ytp-storyboard-framepreview {
-	width: 100%;
-	height: 100%;
-}
-.ytp-storyboard-framepreview-img {
-    width: 100% !important;
-    height: 100% !important;
-}
 
 /* playlist box */
 #watch-appbar-playlist {
