@@ -114,7 +114,50 @@ function PlayerManager(){}
 PlayerManager.prototype = {
 	utils: new Utils(),
 	ytutils: new YTUtils(),
-		
+	
+	PLAYER_CONTAINER: "player-playlist",
+	PAGE_NAME: "page",
+	
+	preservePlaylist: function (){
+		let playlist = document.getElementById(this.PLAYER_CONTAINER);
+		document.getElementById(this.PAGE_NAME).appendChild(playlist);
+	},
+	
+	insertAPIHandoff: function(){
+		let tag = document.createElement('script');
+		tag.textContent = 'var player;\
+		function onYouTubePlayerCreatedSetQuality(event) {\
+				event.target.setPlaybackQuality("hd1080");\
+		} \
+		function onYouTubePlayerAPIReady() {\
+			player = new YT.Player("player", {\
+				videoId: "'+ytutils.getVideoIDUrl()+'",\
+				playerVars: {\
+					autoplay: 1,\
+					modestbranding: 1,\
+				},\
+				events:{\
+					"onReady": onYouTubePlayerCreatedSetQuality\
+				},\
+			});\
+		}'; 
+		let firstScriptTag = document.getElementsByTagName('script')[0];
+		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+	},
+	
+	insertAPI: function(){
+		let tag = document.createElement('script');
+		tag.src = "https://www.youtube.com/player_api";
+		let firstScriptTag = document.getElementsByTagName('script')[0];
+		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+	},
+	
+	playerReplacer: function(){
+		this.preservePlaylist();
+		this.insertAPIHandoff();
+		this.insertAPI();
+	},
+	
 	setSize: function(){
 		let player = document.getElementById("player").style;
 		player.position = "fixed";
@@ -323,43 +366,10 @@ SPFHandler.prototype = {
 }
 var spfhandler = new SPFHandler();
 
-function preservePlaylist(){
-	var playlist = document.getElementById("player-playlist");
-	document.getElementById("page").appendChild(playlist);
-}
-
-function playerReplacer(){
-	preservePlaylist();
-	//params from page: playlist, time params as count, time params as #h#m#s
-	var tag = document.createElement('script');
-	tag.textContent = 'var player;\
-	function onYouTubePlayerCreatedSetQuality(event) {\
-			event.target.setPlaybackQuality("hd1080");\
-	} \
-	function onYouTubePlayerAPIReady() {\
-		player = new YT.Player("player", {\
-			videoId: "'+ytutils.getVideoIDUrl()+'",\
-			playerVars: {\
-				autoplay: 1,\
-				modestbranding: 1,\
-			},\
-			events:{\
-				"onReady": onYouTubePlayerCreatedSetQuality\
-			},\
-		});\
-	}'; 
-	var firstScriptTag = document.getElementsByTagName('script')[0];
-	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-	
-	var tag = document.createElement('script');
-	tag.src = "https://www.youtube.com/player_api";
-	var firstScriptTag = document.getElementsByTagName('script')[0];
-	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-}
 
 redirector.checkForBarrierRedirect();
 if(ytutils.isWatch()){
-	playerReplacer();
+	playerman.playerReplacer();
 	playerman.initManagement();
 }
 pagecleaner.runElementDelete();
