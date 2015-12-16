@@ -38,6 +38,10 @@
 	margin: 0px 0px !important;
 }
 
+#page.watch .content-alignment {
+    max-width: none;
+}
+
 
 /* playlist box */
 #watch-appbar-playlist {

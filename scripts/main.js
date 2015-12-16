@@ -127,7 +127,7 @@ PlayerManager.prototype = {
 	initManagement: function(){
 		window.onresize = function (e) {
 			util.waitForFinalEvent( function(){
-			  sizer.setSize();
+			  playerman.setSize();
 			}, 80, "resizeme");
 		};
 		this.setSize();
@@ -328,7 +328,6 @@ function playerReplacer(){
 	var tag = document.createElement('script');
 	tag.textContent = 'var player;\
 	function onYouTubePlayerCreatedSetQuality(event) {\
-			console.log("thing");\
 			event.target.setPlaybackQuality("hd1080");\
 	} \
 	function onYouTubePlayerAPIReady() {\
@@ -337,7 +336,6 @@ function playerReplacer(){
 			playerVars: {\
 				autoplay: 1,\
 				modestbranding: 1,\
-				disablekb: 0,\
 			},\
 			events:{\
 				"onReady": onYouTubePlayerCreatedSetQuality\
