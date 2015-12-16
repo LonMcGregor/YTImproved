@@ -51,23 +51,23 @@ YTUtils.prototype = {
 	
 	isChannel: function(url){
 		url = url ? url : window.location.href;
-		return (this.utils.contains(url, 'user') || 
-		this.utils.contains(url, 'channel'));
+		return (this.utils.contains(url, '/user/') || 
+		this.utils.contains(url, '/channel/'));
 	},
 	
 	isSearch: function(url){
 		url = url ? url : window.location.href;
-		return this.utils.contains(url, 'search');
+		return this.utils.contains(url, '/results');
 	},
 	
 	isWatch: function(url){
 		url = url ? url : window.location.href;
-		return this.utils.contains(url, 'watch');
+		return this.utils.contains(url, '/watch');
 	},
 	
 	isListing: function(url){
 		url = url ? url : window.location.href;
-		return this.utils.contains(url, 'playlist');
+		return this.utils.contains(url, '/playlist');
 	},
 	
 	getVideoIDUrl: function(url){
@@ -143,7 +143,7 @@ PageCleaner.prototype = {
 	
 	ELEMENTS_WATCH: [
 	  "watch7-hidden-extras",  "watch-discussion", "watch7-preview", "watch-dislike", "watch-like", "watch7-sidebar","masthead-positioner",
-	  "placeholder-player", "player-mole-container"
+	  "placeholder-player"
 	],
 	
 	ELEMENTS_SEARCH: [
@@ -323,7 +323,13 @@ SPFHandler.prototype = {
 }
 var spfhandler = new SPFHandler();
 
+function preservePlaylist(){
+	var playlist = document.getElementById("player-playlist");
+	document.getElementById("page").appendChild(playlist);
+}
+
 function playerReplacer(){
+	preservePlaylist();
 	//params from page: playlist, time params as count, time params as #h#m#s
 	var tag = document.createElement('script');
 	tag.textContent = 'var player;\
