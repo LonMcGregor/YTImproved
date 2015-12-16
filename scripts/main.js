@@ -367,11 +367,11 @@ SPFHandler.prototype = {
 var spfhandler = new SPFHandler();
 
 
-redirector.checkForBarrierRedirect();
 if(ytutils.isWatch()){
 	playerman.playerReplacer();
 	playerman.initManagement();
 }
+redirector.checkForBarrierRedirect();
 pagecleaner.runElementDelete();
 rssfeeder.addRSSFeed();
 thumbs.initThumbs();
