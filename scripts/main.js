@@ -51,23 +51,23 @@ YTUtils.prototype = {
 	
 	isChannel: function(url){
 		url = url ? url : window.location.href;
-		return (this.utils.contains(url, 'user') || 
-		this.utils.contains(url, 'channel'));
+		return (this.utils.contains(url, '/user/') || 
+		this.utils.contains(url, '/channel/'));
 	},
 	
 	isSearch: function(url){
 		url = url ? url : window.location.href;
-		return this.utils.contains(url, 'search');
+		return this.utils.contains(url, '/results');
 	},
 	
 	isWatch: function(url){
 		url = url ? url : window.location.href;
-		return this.utils.contains(url, 'watch');
+		return this.utils.contains(url, '/watch');
 	},
 	
 	isListing: function(url){
 		url = url ? url : window.location.href;
-		return this.utils.contains(url, 'playlist');
+		return this.utils.contains(url, '/playlist');
 	},
 	
 	getVideoIDUrl: function(url){
@@ -110,114 +110,73 @@ YTUtils.prototype = {
 var ytutils = new YTUtils();
 
 
-function PlayerSizer(){}
-PlayerSizer.prototype = {
+function PlayerManager(){}
+PlayerManager.prototype = {
 	utils: new Utils(),
 	ytutils: new YTUtils(),
-		
-	setWidths: function(){
-		let controls = document.getElementsByClassName('ytp-chrome-bottom')[0].style;
-		let gradient = document.getElementsByClassName('ytp-gradient-bottom')[0].style;
-		let arr = [controls, gradient];
-
-		for(let i = 0; i < arr.length; i++){
-			arr[i].width = ""+window.innerWidth+"px";
-			arr[i].position = "fixed";
-			arr[i].bottom = "0px";
-			arr[i].left = "0px";
-		}
-	},
-	//.ytp-storyboard, .ytp-tooltip
 	
-	setWidthsAndHeights: function(){
-		
-		/* #page
-			#player
-				#player-mole-container
-					#player_api
-						#movie_player
-							.html5-video-container
-								video
-							.html5-video-content
-								[[annotations modules]]
-							.ytp-gradient-top
-							.ytp-chrome-top
-								[[only used for embeds? title, cards etc.]]
-							.ytp-cards-button
-							.ytp-webgl-spherical-control
-								[[3d videos]]
-							.video-ads
-								[[popup ads]]
-							.ytp-iv-player-content
-								[[annotations branding]]
-							.ytp-upnext
-							.html5-endscreen
-							.ytp-subtitles-player-content
-							.ytp-thumbnail-overlay
-							.ytp-spinner
-							.ytp-bezel [[paused icon]]
-							div [[no classes]]
-								.ytp-tooltip-bg
-								.ytp-tooltip-text-wrapper
-								[[timeline tooltip]]
-							.ytp-storyboard
-								[[on-mouse-down storyboard]]
-							.ytp-storyboard-framepreview
-								[[on-trackbar-drag frame preview]]
-							.ytp-remote
-								[[details remote connection / screencasts?]]
-							.ytp-mini-progress-bar-container [[?]]
-							.ytp-cards-teaser [[cards]]
-							.ytp-playlist-menu
-							.ytp-related-menu
-							.ytp-share-panel
-							.ytp-multicam-menu
-							.iv-drawer
-							.ytp-settings-menu
-							.ytp-gradient-bottom
-							.ytp-chrome-bottom
-		*/
-		let player = document.getElementById("player");
-		let playerMoleContainer = document.getElementById("player-mole-container");
-		let playerAPI = document.getElementById('player-api');
-		let moviePlayer = document.getElementById("movie_player").style;
-			let videoContainer = document.getElementsByClassName('html5-video-container')[0].style;
-				let video = document.getElementsByTagName("video")[0].style;
-			let videoContent = document.getElementsByClassName('html5-video-content')[0].style;
-			let playerContent = document.getElementsByClassName('ytp-iv-player-content')[0].style;
-		let arr = [player, playerMoleContainer, playerAPI.style, moviePlayer, videoContainer, video, videoContent, playerContent];
-		
-		
-		for(let i = 0; i < arr.length; i++){
-			arr[i].width = ""+window.innerWidth+"px";
-			arr[i].height = ""+window.innerHeight+"px";
-			arr[i].position = "fixed";
-			arr[i].top = "0px";
-			arr[i].left = "0px";
-		}
-		video.backgroundColor = "black";
-		playerAPI.marginLeft = "0px";
-		playerAPI.className = "";
-	},
-		
-	setSizes: function(){
-		if(this.ytutils.isWatch()){
-			this.setWidths();
-			this.setWidthsAndHeights();
-//			this.setStoryBoard();
-		}
+	PLAYER_CONTAINER: "player-playlist",
+	PAGE_NAME: "page",
+	
+	preservePlaylist: function (){
+		let playlist = document.getElementById(this.PLAYER_CONTAINER);
+		document.getElementById(this.PAGE_NAME).appendChild(playlist);
 	},
 	
-	initSizing: function(){
+	insertAPIHandoff: function(){
+		let tag = document.createElement('script');
+		tag.textContent = 'var player;\
+		function onYouTubePlayerCreatedSetQuality(event) {\
+				event.target.setPlaybackQuality("hd1080");\
+		} \
+		function onYouTubePlayerAPIReady() {\
+			player = new YT.Player("player", {\
+				videoId: "'+ytutils.getVideoIDUrl()+'",\
+				playerVars: {\
+					autoplay: 1,\
+					modestbranding: 1,\
+				},\
+				events:{\
+					"onReady": onYouTubePlayerCreatedSetQuality\
+				},\
+			});\
+		}'; 
+		let firstScriptTag = document.getElementsByTagName('script')[0];
+		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+	},
+	
+	insertAPI: function(){
+		let tag = document.createElement('script');
+		tag.src = "https://www.youtube.com/player_api";
+		let firstScriptTag = document.getElementsByTagName('script')[0];
+		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+	},
+	
+	playerReplacer: function(){
+		this.preservePlaylist();
+		this.insertAPIHandoff();
+		this.insertAPI();
+	},
+	
+	setSize: function(){
+		let player = document.getElementById("player").style;
+		player.position = "fixed";
+		player.width = ""+window.innerWidth+"px";
+		player.height = ""+window.innerHeight+"px";
+		player.top = "0px";
+		player.left = "0px";
+	},
+	
+	initManagement: function(){
 		window.onresize = function (e) {
 			util.waitForFinalEvent( function(){
-			  sizer.setSizes();
+			  playerman.setSize();
 			}, 80, "resizeme");
 		};
-		this.setSizes();
+		this.setSize();
 	},
 }
-var sizer = new PlayerSizer();
+var playerman = new PlayerManager();
 
 
 function PageCleaner(){}
@@ -263,7 +222,6 @@ Redirector.prototype = {
 	util: new Utils(),
 	ytutils: new YTUtils(),
 	
-	AGE_GATE: "watch7-player-age-gate-content",
 	REDIR_TOK: "&redir_token",
 	REDIR_URL: "/redirect?q=",
 	
@@ -271,12 +229,6 @@ Redirector.prototype = {
 		window.location.href = newLocation;
 	},
 	
-	checkForAgeRedirect: function(){
-		if(typeof document.getElementById(this.AGE_GATE) == "undefined"){
-			this.doRedirect(this.ytutils.newEmbeddedUrl(this.ytutils.getVideoIDUrl()));
-		}
-	},
-
 	getBarrierUrl: function(url){
 		url = url ? url : window.location.href;
 		let notoken = url.split(this.REDIR_TOK)[0];
@@ -401,24 +353,6 @@ RSSFeedLinker.prototype = {
 var rssfeeder = new RSSFeedLinker();
 
 
-//force 1080p, from http://www.autohdforyoutube.com/
-function QualityForcer(){}
-QualityForcer.prototype = {
-	HD: "hd1080",
-	
-	SCRIPT_CONTENT: "function onYouTubePlayerReady(player){playbackSet=false;extPlayer=player;extPlayer.addEventListener('onStateChange',function(newState){if(newState===3&&!playbackSet){updateQuality();}if(newState===-1){playbackSet=false;}});updateQuality();}function updateQuality(){var aq=extPlayer.getAvailableQualityLevels();var q=(aq.indexOf(quality)===-1)?aq[0]:quality;extPlayer.setPlaybackQuality(q);playbackSet=true;}",
-
-	initHDQuality: function(){
-		let quality = this.HD;
-		let scriptText = "var quality = '" + quality + "';" + this.SCRIPT_CONTENT;
-		let s = document.createElement("script");
-		s.textContent = scriptText;
-		document.documentElement.appendChild(s);
-	},
-}
-var quality = new QualityForcer();
-
-
 //borrowed from https://github.com/klemens/ff-youtube-all-html5/
 //which was inspired by YePpHa's YouTubeCenter (https://github.com/YePpHa/YouTubeCenter)
 function SPFHandler(){}
@@ -433,13 +367,12 @@ SPFHandler.prototype = {
 var spfhandler = new SPFHandler();
 
 
-redirector.checkForBarrierRedirect();
-redirector.checkForAgeRedirect();
-pagecleaner.runElementDelete();
-thumbs.initThumbs();
-sizer.initSizing();
-rssfeeder.addRSSFeed();
 if(ytutils.isWatch()){
-	quality.initHDQuality();
+	playerman.playerReplacer();
+	playerman.initManagement();
 }
+redirector.checkForBarrierRedirect();
+pagecleaner.runElementDelete();
+rssfeeder.addRSSFeed();
+thumbs.initThumbs();
 spfhandler.handleSPF();
