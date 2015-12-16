@@ -143,7 +143,7 @@ PageCleaner.prototype = {
 	
 	ELEMENTS_WATCH: [
 	  "watch7-hidden-extras",  "watch-discussion", "watch7-preview", "watch-dislike", "watch-like", "watch7-sidebar","masthead-positioner",
-	  "placeholder-player"
+	  "placeholder-player", "player-mole-container"
 	],
 	
 	ELEMENTS_SEARCH: [
@@ -354,11 +354,11 @@ function playerReplacer(){
 }
 
 redirector.checkForBarrierRedirect();
-pagecleaner.runElementDelete();
-thumbs.initThumbs();
-rssfeeder.addRSSFeed();
 if(ytutils.isWatch()){
 	playerReplacer();
 	playerman.initManagement();
 }
+pagecleaner.runElementDelete();
+rssfeeder.addRSSFeed();
+thumbs.initThumbs();
 spfhandler.handleSPF();
