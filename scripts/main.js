@@ -110,26 +110,10 @@ YTUtils.prototype = {
 var ytutils = new YTUtils();
 
 
-function PlayerSizer(){}
-PlayerSizer.prototype = {
+function PlayerManager(){}
+PlayerManager.prototype = {
 	utils: new Utils(),
 	ytutils: new YTUtils(),
-	
-	EXTRA_EMBED_PARAMS: "&disablekb=1&enablejsapi=1&modestbranding=1&origin=http://youtube.com",
-	//do list and listtype
-	//see https://developers.google.com/youtube/player_parameters#Parameters
-	//can use loop! for #38
-	
-	replacePlayerWithEmbedded: function(){
-		let embeddedURL = ytutils.newEmbeddedUrl();
-		embeddedURL += this.EXTRA_EMBED_PARAMS;
-		let iframe = document.createElement('iframe');
-		iframe.src = embeddedURL;
-		iframe.id = "player";
-		iframe.frameborder = "0";
-		let playerDiv = document.getElementById("player");
-		playerDiv.outerHTML = iframe.outerHTML;
-	},
 		
 	setSize: function(){
 		let player = document.getElementById("player").style;
@@ -140,8 +124,7 @@ PlayerSizer.prototype = {
 		player.left = "0px";
 	},
 	
-	initSizing: function(){
-		this.replacePlayerWithEmbedded();
+	initManagement: function(){
 		window.onresize = function (e) {
 			util.waitForFinalEvent( function(){
 			  sizer.setSize();
@@ -150,7 +133,7 @@ PlayerSizer.prototype = {
 		this.setSize();
 	},
 }
-var sizer = new PlayerSizer();
+var playerman = new PlayerManager();
 
 
 function PageCleaner(){}
@@ -196,7 +179,6 @@ Redirector.prototype = {
 	util: new Utils(),
 	ytutils: new YTUtils(),
 	
-	AGE_GATE: "watch7-player-age-gate-content",
 	REDIR_TOK: "&redir_token",
 	REDIR_URL: "/redirect?q=",
 	
@@ -204,12 +186,6 @@ Redirector.prototype = {
 		window.location.href = newLocation;
 	},
 	
-	checkForAgeRedirect: function(){
-		if(typeof document.getElementById(this.AGE_GATE) == "undefined"){
-			this.doRedirect(this.ytutils.newEmbeddedUrl(this.ytutils.getVideoIDUrl()));
-		}
-	},
-
 	getBarrierUrl: function(url){
 		url = url ? url : window.location.href;
 		let notoken = url.split(this.REDIR_TOK)[0];
@@ -334,26 +310,6 @@ RSSFeedLinker.prototype = {
 var rssfeeder = new RSSFeedLinker();
 
 
-//force 1080p, from http://www.autohdforyoutube.com/
-//alt: highres, hd1080, hd720, large, medium and small
-//player.setPlaybackQuality(suggestedQuality:String):Void
-function QualityForcer(){}
-QualityForcer.prototype = {
-	HD: "hd1080",
-	
-	SCRIPT_CONTENT: "function onYouTubePlayerReady(player){playbackSet=false;extPlayer=player;extPlayer.addEventListener('onStateChange',function(newState){if(newState===3&&!playbackSet){updateQuality();}if(newState===-1){playbackSet=false;}});updateQuality();}function updateQuality(){var aq=extPlayer.getAvailableQualityLevels();var q=(aq.indexOf(quality)===-1)?aq[0]:quality;extPlayer.setPlaybackQuality(q);playbackSet=true;}",
-
-	initHDQuality: function(){
-		let quality = this.HD;
-		let scriptText = "var quality = '" + quality + "';" + this.SCRIPT_CONTENT;
-		let s = document.createElement("script");
-		s.textContent = scriptText;
-		document.documentElement.appendChild(s);
-	},
-}
-var quality = new QualityForcer();
-
-
 //borrowed from https://github.com/klemens/ff-youtube-all-html5/
 //which was inspired by YePpHa's YouTubeCenter (https://github.com/YePpHa/YouTubeCenter)
 function SPFHandler(){}
@@ -367,14 +323,42 @@ SPFHandler.prototype = {
 }
 var spfhandler = new SPFHandler();
 
+function playerReplacer(){
+	//params from page: playlist, time params as count, time params as #h#m#s
+	var tag = document.createElement('script');
+	tag.textContent = 'var player;\
+	function onYouTubePlayerCreatedSetQuality(event) {\
+			console.log("thing");\
+			event.target.setPlaybackQuality("hd1080");\
+	} \
+	function onYouTubePlayerAPIReady() {\
+		player = new YT.Player("player", {\
+			videoId: "'+ytutils.getVideoIDUrl()+'",\
+			playerVars: {\
+				autoplay: 1,\
+				modestbranding: 1,\
+				disablekb: 0,\
+			},\
+			events:{\
+				"onReady": onYouTubePlayerCreatedSetQuality\
+			},\
+		});\
+	}'; 
+	var firstScriptTag = document.getElementsByTagName('script')[0];
+	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+	
+	var tag = document.createElement('script');
+	tag.src = "https://www.youtube.com/player_api";
+	var firstScriptTag = document.getElementsByTagName('script')[0];
+	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+}
 
 redirector.checkForBarrierRedirect();
-redirector.checkForAgeRedirect();
 pagecleaner.runElementDelete();
 thumbs.initThumbs();
-sizer.initSizing();
 rssfeeder.addRSSFeed();
 if(ytutils.isWatch()){
-	quality.initHDQuality();
+	playerReplacer();
+	playerman.initManagement();
 }
 spfhandler.handleSPF();

@@ -5,14 +5,14 @@
 }
 	
 #watch7-container {
-  position: absolute;
-  transition: all ease-in 0.2s;
-  top: 20px !important;
-  left: 10px !important;
-  opacity: 0;
-  z-index: 999 !important;
-  max-height: 500px;
-  width: 720px;
+	position: absolute;
+	transition: all ease-in 0.2s;
+	top: 20px !important;
+	left: 10px !important;
+	opacity: 0;
+	z-index: 999 !important;
+	max-height: 500px;
+	width: 720px;
 }
 
 #watch7-content {
@@ -25,7 +25,7 @@
 
 #watch7-container:hover {
 	top: 0px;
-  opacity: 1;
+	opacity: 1;
 }
 
 #page.watch #action-panel-details {
@@ -60,9 +60,9 @@
 /* small pages */
 @media(max-width: 900px){
 	#watch7-headline { 
-	  font-size: normal; 
-	  width: 500px;
-  }
+		font-size: normal; 
+		width: 500px;
+	}
 	#watch7-container .yt-card {
 		width: 500px;
 	}
