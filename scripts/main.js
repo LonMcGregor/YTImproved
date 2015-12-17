@@ -71,6 +71,12 @@ YTUtils.prototype = {
 			   this.utils.contains(url, '&list=');
 	},
 	
+	isWatchWithTime: function(url){
+		url = url ? url : window.location.href;
+		return this.utils.contains(url, '/watch') &&
+			   this.utils.contains(url, '&t=');
+	},
+	
 	isListing: function(url){
 		url = url ? url : window.location.href;
 		return this.utils.contains(url, '/playlist');
@@ -120,6 +126,48 @@ YTUtils.prototype = {
 		}
 		return "";
 	},
+	
+	getTimeFromUrl: function(url){
+		url = url ? url : window.location.href;
+		let fulltime = url.substr(url.indexOf('t=')+2);
+		if(fulltime.indexOf('&') != -1){
+			fulltime = fulltime.substr(0, fulltime.indexOf('&'));
+		}
+		let time = 0;
+		let readableTime = false;
+		if(fulltime.indexOf("h") != -1){
+			let hrs = fulltime.substr(0, fulltime.indexOf("h"));
+			hrs++;
+			hrs--;
+			time += (hrs * 3600);
+		}
+		if(fulltime.indexOf("m") != -1){
+			let mins = fulltime.substr(fulltime.indexOf("m")-2, fulltime.indexOf("m"));
+			mins++;
+			mins--;
+			if(isNaN(mins)){
+				let mins = fulltime.substr(fulltime.indexOf("m")-1, fulltime.indexOf("m"));
+				mins++;
+				mins--;
+			}
+			time += (mins * 60);
+		}
+		if(fulltime.indexOf("s") != -1){
+			let secs = fulltime.substr(fulltime.indexOf("s")-2, fulltime.indexOf("s"));
+			secs++;
+			secs--;
+			if(isNaN(sec)){
+				let secs = fulltime.substr(fulltime.indexOf("m")-1, fulltime.indexOf("m"));
+				secs++;
+				secs--;
+			}
+			time += (secs * 60);
+			return time;
+		}
+		fulltime++;
+		fulltime--;
+		return fulltime;
+	},
 }
 var ytutils = new YTUtils();
 
@@ -158,11 +206,16 @@ PlayerManager.prototype = {
 					this.ytutils.getPlaylistFromUrl() + 
 					'",';
 		}
+		if (this.ytutils.isWatchWithTime()){
+			script += 'start: ' + this.ytutils.getTimeFromUrl();
+		}
 		script += '},\
 				events:{\
-					"onReady": onYouTubePlayerCreatedSetQuality,\
-					"onStateChange": onYouTubePlayerStateChange\
-				},\
+					"onReady": onYouTubePlayerCreatedSetQuality,';
+		if (this.ytutils.isWatchWithList()){
+			script += '"onStateChange": onYouTubePlayerStateChange';
+		}
+		script += '},\
 			});\
 		}';
 		tag.textContent = script;
