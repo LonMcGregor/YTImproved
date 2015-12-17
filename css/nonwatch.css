@@ -1,0 +1,37 @@
+#masthead-positioner {
+    position: relative !important;
+    padding-bottom: 10px;
+}
+
+#yt-masthead-container {
+	border-bottom-color: transparent !important;
+	padding-bottom: 0px !important;
+}	
+#masthead-search button, #masthead-search div {
+	border-color: #2D2D2D;
+}
+
+#yt-masthead .yt-masthead-logo-container {
+    width: 90px !important;
+}
+
+#yt-masthead {
+	width: 800px;
+}
+
+.guide-pinned.show-guide .guide-pinning-enabled #page {
+	padding-left: 0px !important; 
+}
+
+#results .yt-lockup{
+	width: 700px;
+	margin: 0 auto;
+}
+
+#body-container {
+	padding-bottom: 0px !important;
+}
+
+#page {
+	padding-bottom: 10px;
+}

@@ -14,7 +14,7 @@
 	"content_scripts": [
 	  {
 		"matches": ["*://*.youtube.com/*"],
-		"css": ["css/hidden.css", "css/colours.css", "css/watch.css", "css/masthead.css"],
+		"css": ["css/hidden.css", "css/colours.css", "css/watch.css", "css/nonwatch.css"],
 		"js": ["scripts/main.js"]
 	  }
 	]
