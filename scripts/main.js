@@ -26,17 +26,21 @@ yti.Utils = {
 	
 	deleteElements: function(array){
 		for(let i = 0; i < array.length; i++){
-			try {
-				this.deleteElementById(array[i]);
-			} catch (Exception) {
-				//Element doesn't exist or was already deleted
-			}
+			this.deleteElementById(array[i]);
 		}
 	},
 	
 	deleteElementById: function(id){
-		let el = document.getElementById(id);
-		el.parentElement.removeChild(el);
+		try{
+			let el = document.getElementById(id);
+			el.parentElement.removeChild(el);
+		} catch (Exception) {
+			//Element doesn't exist or was already deleted
+		}
+	},
+	
+	getUrl: function(){
+		return window.location.href;
 	},
 }
 
@@ -47,29 +51,32 @@ yti.YTUtils = {
 	EMBED_PARAMS: "?autoplay=1",
 	
 	isChannel: function(url){
-		url = url ? url : window.location.href;
+		url = url ? url : yti.Utils.getUrl();
 		return (yti.Utils.contains(url, '/user/') || 
 		yti.Utils.contains(url, '/channel/'));
 	},
 	
 	isSearch: function(url){
-		url = url ? url : window.location.href;
+		url = url ? url : yti.Utils.getUrl();
 		return yti.Utils.contains(url, '/results');
 	},
 	
 	isWatch: function(url){
-		url = url ? url : window.location.href;
+		url = url ? url : yti.Utils.getUrl();
 		return yti.Utils.contains(url, '/watch');
 	},
 	
 	isListing: function(url){
-		url = url ? url : window.location.href;
+		url = url ? url : yti.Utils.getUrl();
 		return yti.Utils.contains(url, '/playlist');
 	},
 	
 	getVideoIDUrl: function(url){
-		url = url ? url : window.location.href;
-		return url.substr(32,11);
+		url = url ? url : yti.Utils.getUrl();
+		if(url.indexOf("v=") == -1){
+			return "";
+		}
+		return url.substr(url.indexOf("v=")+2,11);
 	},
 
 	newEmbeddedUrl: function(videoID){
@@ -79,7 +86,7 @@ yti.YTUtils = {
 	},
 	
 	extractChannelIDFromChannelUrl: function(channelURL){
-		channelURL = channelURL ? channelURL : window.location.href;
+		channelURL = channelURL ? channelURL : yti.Utils.getUrl();
 		return channelURL.split("/")[4];
 	},
 	
@@ -208,18 +215,18 @@ yti.Redirector = {
 	REDIR_URL: "/redirect?q=",
 	
 	doRedirect: function(newLocation){
-		window.location.href = newLocation;
+		yti.Utils.getUrl() = newLocation;
 	},
 	
 	getBarrierUrl: function(url){
-		url = url ? url : window.location.href;
+		url = url ? url : yti.Utils.getUrl();
 		let notoken = url.split(this.REDIR_TOK)[0];
 		let encodedurl = notoken.split(this.REDIR_URL)[1];
 		return decodeURIComponent(encodedurl);
 	},
 
 	checkForBarrierRedirect: function(){
-		if(yti.Utils.contains(window.location.href, this.REDIR_URL)){
+		if(yti.Utils.contains(yti.Utils.getUrl(), this.REDIR_URL)){
 			this.doRedirect(this.getBarrierUrl());
 		}
 	},
