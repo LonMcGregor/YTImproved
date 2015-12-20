@@ -5,8 +5,9 @@ See https://github.com/LonMcGregor/YTImproved/
 */
 "use strict";
 
-function Utils(){}
-Utils.prototype = {
+var yti = yti || {};
+
+yti.Utils = {
 	contains: function(haystack, needle) {
 		return (haystack.indexOf(needle) > -1);
 	},
@@ -25,54 +26,57 @@ Utils.prototype = {
 	
 	deleteElements: function(array){
 		for(let i = 0; i < array.length; i++){
-			try {
-				this.deleteElementById(array[i]);
-			} catch (Exception) {
-				//Element doesn't exist or was already deleted
-			}
+			this.deleteElementById(array[i]);
 		}
 	},
 	
 	deleteElementById: function(id){
-		let el = document.getElementById(id);
-		el.parentElement.removeChild(el);
+		try{
+			let el = document.getElementById(id);
+			el.parentElement.removeChild(el);
+		} catch (Exception) {
+			//Element doesn't exist or was already deleted
+		}
+	},
+	
+	getUrl: function(){
+		return window.location.href;
 	},
 }
-var util = new Utils();
 
 
-function YTUtils(){}
-YTUtils.prototype = {
-	utils: new Utils(),
-	
+yti.YTUtils = {	
 	CHANNEL_TITLE: 'branded-page-header-title-link',
 	EMBED_URL: "https://www.youtube.com/embed/",
 	EMBED_PARAMS: "?autoplay=1",
 	
 	isChannel: function(url){
-		url = url ? url : window.location.href;
-		return (this.utils.contains(url, '/user/') || 
-		this.utils.contains(url, '/channel/'));
+		url = url ? url : yti.Utils.getUrl();
+		return (yti.Utils.contains(url, '/user/') || 
+		yti.Utils.contains(url, '/channel/'));
 	},
 	
 	isSearch: function(url){
-		url = url ? url : window.location.href;
-		return this.utils.contains(url, '/results');
+		url = url ? url : yti.Utils.getUrl();
+		return yti.Utils.contains(url, '/results');
 	},
 	
 	isWatch: function(url){
-		url = url ? url : window.location.href;
-		return this.utils.contains(url, '/watch');
+		url = url ? url : yti.Utils.getUrl();
+		return yti.Utils.contains(url, '/watch');
 	},
 	
 	isListing: function(url){
-		url = url ? url : window.location.href;
-		return this.utils.contains(url, '/playlist');
+		url = url ? url : yti.Utils.getUrl();
+		return yti.Utils.contains(url, '/playlist');
 	},
 	
 	getVideoIDUrl: function(url){
-		url = url ? url : window.location.href;
-		return url.substr(32,11);
+		url = url ? url : yti.Utils.getUrl();
+		if(url.indexOf("v=") == -1){
+			return "";
+		}
+		return url.substr(url.indexOf("v=")+2,11);
 	},
 
 	newEmbeddedUrl: function(videoID){
@@ -82,7 +86,7 @@ YTUtils.prototype = {
 	},
 	
 	extractChannelIDFromChannelUrl: function(channelURL){
-		channelURL = channelURL ? channelURL : window.location.href;
+		channelURL = channelURL ? channelURL : yti.Utils.getUrl();
 		return channelURL.split("/")[4];
 	},
 	
@@ -107,14 +111,9 @@ YTUtils.prototype = {
 		return "";
 	},
 }
-var ytutils = new YTUtils();
 
 
-function PlayerManager(){}
-PlayerManager.prototype = {
-	utils: new Utils(),
-	ytutils: new YTUtils(),
-	
+yti.PlayerManager = {
 	PLAYER_CONTAINER: "player-playlist",
 	PAGE_NAME: "page",
 	
@@ -131,7 +130,7 @@ PlayerManager.prototype = {
 		} \
 		function onYouTubePlayerAPIReady() {\
 			player = new YT.Player("player", {\
-				videoId: "'+ytutils.getVideoIDUrl()+'",\
+				videoId: "'+yti.YTUtils.getVideoIDUrl()+'",\
 				playerVars: {\
 					autoplay: 1,\
 					modestbranding: 1,\
@@ -152,7 +151,7 @@ PlayerManager.prototype = {
 		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 	},
 	
-	playerReplacer: function(){
+	replacePlayer: function(){
 		this.preservePlaylist();
 		this.insertAPIHandoff();
 		this.insertAPI();
@@ -167,7 +166,7 @@ PlayerManager.prototype = {
 		player.left = "0px";
 	},
 	
-	initManagement: function(){
+	initSizeManagement: function(){
 		window.onresize = function (e) {
 			util.waitForFinalEvent( function(){
 			  playerman.setSize();
@@ -176,14 +175,9 @@ PlayerManager.prototype = {
 		this.setSize();
 	},
 }
-var playerman = new PlayerManager();
 
 
-function PageCleaner(){}
-PageCleaner.prototype = {
-	utils: new Utils(),
-	ytutils: new YTUtils(),
-	
+yti.PageCleaner = {
 	ELEMENTS_WATCH: [
 	  "watch7-hidden-extras",  "watch-discussion", "watch7-preview", "watch-dislike", "watch-like", "watch7-sidebar","masthead-positioner",
 	  "placeholder-player"
@@ -202,53 +196,44 @@ PageCleaner.prototype = {
 	],
 	
 	runElementDelete: function(){
-		if(this.ytutils.isChannel()||this.ytutils.isSearch()||this.ytutils.isWatch()){
-			this.utils.deleteElements(this.ELEMENTS_GLOBAL);
+		if(yti.YTUtils.isChannel()||yti.YTUtils.isSearch()||yti.YTUtils.isWatch()){
+			yti.Utils.deleteElements(this.ELEMENTS_GLOBAL);
 		}
-		if (this.ytutils.isChannel()||this.ytutils.isListing()){
-			this.utils.deleteElements(this.ELEMENTS_CHANNEL);
-		}else if(this.ytutils.isSearch()){
-			this.utils.deleteElements(this.ELEMENTS_SEARCH);
-		}else if(this.ytutils.isWatch()){
-			this.utils.deleteElements(this.ELEMENTS_WATCH);
+		if (yti.YTUtils.isChannel()||yti.YTUtils.isListing()){
+			yti.Utils.deleteElements(this.ELEMENTS_CHANNEL);
+		}else if(yti.YTUtils.isSearch()){
+			yti.Utils.deleteElements(this.ELEMENTS_SEARCH);
+		}else if(yti.YTUtils.isWatch()){
+			yti.Utils.deleteElements(this.ELEMENTS_WATCH);
 		}
 	},
 }
-var pagecleaner = new PageCleaner();
 
 
-function Redirector(){}
-Redirector.prototype = {
-	util: new Utils(),
-	ytutils: new YTUtils(),
-	
+yti.Redirector = {
 	REDIR_TOK: "&redir_token",
 	REDIR_URL: "/redirect?q=",
 	
 	doRedirect: function(newLocation){
-		window.location.href = newLocation;
+		yti.Utils.getUrl() = newLocation;
 	},
 	
 	getBarrierUrl: function(url){
-		url = url ? url : window.location.href;
+		url = url ? url : yti.Utils.getUrl();
 		let notoken = url.split(this.REDIR_TOK)[0];
 		let encodedurl = notoken.split(this.REDIR_URL)[1];
 		return decodeURIComponent(encodedurl);
 	},
 
 	checkForBarrierRedirect: function(){
-		if(this.util.contains(window.location.href, this.REDIR_URL)){
+		if(yti.Utils.contains(yti.Utils.getUrl(), this.REDIR_URL)){
 			this.doRedirect(this.getBarrierUrl());
 		}
 	},
 }
-var redirector = new Redirector();
 
 
-function LiveThumnailer(){}
-LiveThumnailer.prototype = {
-	ytutils: new YTUtils(),
-	
+yti.LiveThumnailer = {	
 	THUMB_CLASS: 'yt-lockup-thumbnail',
 	
 	initThumbs: function(){
@@ -262,7 +247,7 @@ LiveThumnailer.prototype = {
 	
 	isActuallyAThumbnail: function(thumb){
 		let linkURL = thumb.getElementsByTagName('a')[0].href;
-		return this.ytutils.isWatch(linkURL);
+		return yti.YTUtils.isWatch(linkURL);
 	},
 
 	changeThumb: function(thumb){
@@ -287,7 +272,7 @@ LiveThumnailer.prototype = {
 	 
 	getUrl: function(container){
 	  let bigUrl = container.getElementsByTagName('a')[0].href;
-	  return this.ytutils.newEmbeddedUrl(this.ytutils.getVideoIDUrl(bigUrl));
+	  return yti.YTUtils.newEmbeddedUrl(yti.YTUtils.getVideoIDUrl(bigUrl));
 	},
 
 	makeIframe: function(container) {
@@ -298,13 +283,9 @@ LiveThumnailer.prototype = {
 	  return iframe;
 	},
 }
-var thumbs = new LiveThumnailer();
 
 
-function RSSFeedLinker(){}
-RSSFeedLinker.prototype = {
-	ytutils: new YTUtils(),
-	
+yti.RSSFeedLinker = {	
 	XML_CHANNEL: 'https://www.youtube.com/feeds/videos.xml?channel_id=',
 	XML_LEGACY_USER: 'https://www.youtube.com/feeds/videos.xml?user=',
 	PLAYER_HEADER: 'watch7-user-header',
@@ -312,12 +293,12 @@ RSSFeedLinker.prototype = {
 	BUTTON_CLASS: "yt-uix-button-content",
 	
 	addRSSFeed: function(){
-		if(this.ytutils.isChannel()||this.ytutils.isListing()){
-			let channelId = this.ytutils.getChannelIDFromChannelTitle();
+		if(yti.YTUtils.isChannel()||yti.YTUtils.isListing()){
+			let channelId = yti.YTUtils.getChannelIDFromChannelTitle();
 			let feedURL = this.createFeedURL(channelId)
 			this.addFeedElementToChannel(feedURL);
-		} else if(this.ytutils.isWatch()){
-			let channelId = this.ytutils.getChannelIDFromPlayer();
+		} else if(yti.YTUtils.isWatch()){
+			let channelId = yti.YTUtils.getChannelIDFromPlayer();
 			let feedURL = this.createFeedURL(channelId)
 			this.addFeedElementToPlayer(feedURL);
 		}
@@ -350,29 +331,24 @@ RSSFeedLinker.prototype = {
 	},
 
 }
-var rssfeeder = new RSSFeedLinker();
 
 
-//borrowed from https://github.com/klemens/ff-youtube-all-html5/
-//which was inspired by YePpHa's YouTubeCenter (https://github.com/YePpHa/YouTubeCenter)
-function SPFHandler(){}
-SPFHandler.prototype = {
+yti.SPFHandler = {
 	handleSPF: function(){
 		let scriptText = 'if(typeof window.spf!="undefined"){window.spf.dispose();}';
 		let s = document.createElement('script');
 		s.textContent = scriptText;
 		document.documentElement.appendChild(s);
 	},
-}
-var spfhandler = new SPFHandler();
+};
 
 
-if(ytutils.isWatch()){
-	playerman.playerReplacer();
-	playerman.initManagement();
+if(yti.YTUtils.isWatch()){
+	yti.PlayerManager.replacePlayer();
+	yti.PlayerManager.initSizeManagement();
 }
-redirector.checkForBarrierRedirect();
-pagecleaner.runElementDelete();
-rssfeeder.addRSSFeed();
-thumbs.initThumbs();
-spfhandler.handleSPF();
+yti.Redirector.checkForBarrierRedirect();
+yti.PageCleaner.runElementDelete();
+yti.RSSFeedLinker.addRSSFeed();
+yti.LiveThumnailer.initThumbs();
+yti.SPFHandler.handleSPF();
