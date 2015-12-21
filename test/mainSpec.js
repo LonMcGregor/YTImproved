@@ -409,3 +409,12 @@ describe("yti.PlayerManager", function(){
 		});
 	});	
 });
+
+describe("SPFHandler", function(){
+	it("adds a script to the page that disposes the spf", function(){
+		spyOn(yti.Utils, "addScriptToPage");
+		yti.SPFHandler.handleSPF();
+		var thescript = 'if(typeof window.spf!="undefined"){window.spf.dispose();}';
+		expect(yti.Utils.addScriptToPage).toHaveBeenCalledWith(thescript);
+	});
+});

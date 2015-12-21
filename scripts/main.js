@@ -172,8 +172,8 @@ yti.PlayerManager = {
 		player.left = "0px";
 	},
 	
-	initSizeManagement: function(){
-		window.onresize = function (e) {
+	initSizeManagement: function(w){
+		w.onresize = function (e) {
 			util.waitForFinalEvent( function(){
 			  playerman.setSize();
 			}, 80, "resizeme");
@@ -341,17 +341,14 @@ yti.RSSFeedLinker = {
 
 yti.SPFHandler = {
 	handleSPF: function(){
-		let scriptText = 'if(typeof window.spf!="undefined"){window.spf.dispose();}';
-		let s = document.createElement('script');
-		s.textContent = scriptText;
-		document.documentElement.appendChild(s);
+		yti.Utils.addScriptToPage('if(typeof window.spf!="undefined"){window.spf.dispose();}');
 	},
 };
 
 
 if(yti.YTUtils.isWatch()){
 	yti.PlayerManager.replacePlayer();
-	yti.PlayerManager.initSizeManagement();
+	yti.PlayerManager.initSizeManagement(window);
 }
 yti.Redirector.checkForBarrierRedirect();
 yti.PageCleaner.runElementDelete();
