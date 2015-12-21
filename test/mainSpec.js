@@ -1,3 +1,13 @@
+var user = "https://www.youtube.com/user/kurtjmac";
+var channel = "https://www.youtube.com/channel/UC1Un5592U9mFx5n6j2HyXow";
+var userid = "kurtjmac";
+var channelid = "UC1Un5592U9mFx5n6j2HyXow";
+var watch = "https://www.youtube.com/watch?v=BPCUWebOick";
+var videoID = "BPCUWebOick";
+var embeddedVideo = "https://www.youtube.com/embed/BPCUWebOick?autoplay=1";
+var search = "https://www.youtube.com/results?search_query=kurtjmac";
+var playlist ="https://www.youtube.com/playlist?list=PLvxoDthI6hljEr8upu4XycKEIyvdCCgtP";
+
 describe("yti.Utils", function() {
 	
 	describe("contains", function() {
@@ -52,7 +62,7 @@ describe("yti.Utils", function() {
 		});
 	});
 	
-	xdescribe("deleteElements", function() {
+	describe("deleteElements", function() {
 		var elements;
 		var el1;
 		var el2;
@@ -74,19 +84,19 @@ describe("yti.Utils", function() {
 			el2.parentElement.removeChild(el2);
 		});
 		
-		it("deletes all elements in an array of dom elements", function(){
+		xit("deletes all elements in an array of dom elements", function(){
 			yti.Utils.deleteElements(elements);
 			expect(document.getElementById("testingDiv")).toBeNull();
 			expect(document.getElementById("testingH1")).toBeNull();
 		});
-		it("doesnt fail if an element doesnt exist", function(){
+		xit("doesnt fail if an element doesnt exist", function(){
 			el1.parentElement.removeChild(el1);
 			el2.parentElement.removeChild(el2);
 			yti.Utils.deleteElements(elements);
 		});
 	});
 	
-	xdescribe("deleteElementById", function() {
+	describe("deleteElementById", function() {
 		var el1;
 		
 		beforeEach(function() {
@@ -100,27 +110,36 @@ describe("yti.Utils", function() {
 			el1.parentElement.removeChild(el1);
 		});
 		
-		it("deletes a single element", function(){
+		xit("deletes a single element", function(){
 			yti.Utils.deleteElements(elements);
 			expect(document.getElementById("testingDiv")).toBeNull();
 		});
-		it("doesnt fail if an element doesnt exist", function(){
+		xit("doesnt fail if an element doesnt exist", function(){
 			el1.parentElement.removeChild(el1);
 			yti.Utils.deleteElements(elements);
+		});
+	});
+	
+	describe("getUrl", function(){
+		xit("gets window.location.href", function(){
+			
+		});
+	});
+	
+	describe("addScriptToPage", function(){
+		xit("adds a script to the page, given content", function(){
+			
+		});
+	});
+	
+	describe("addScriptWebSourceToPage", function(){
+		xit("adds a script to the page, given content", function(){
+			
 		});
 	});
 });
 
 describe("yti.YTUtils", function(){
-	var user = "https://www.youtube.com/user/kurtjmac";
-	var channel = "https://www.youtube.com/channel/UC1Un5592U9mFx5n6j2HyXow";
-	var userid = "kurtjmac";
-	var channelid = "UC1Un5592U9mFx5n6j2HyXow";
-	var watch = "https://www.youtube.com/watch?v=BPCUWebOick";
-	var videoID = "BPCUWebOick";
-	var embeddedVideo = "https://www.youtube.com/embed/BPCUWebOick?autoplay=1";
-	var search = "https://www.youtube.com/results?search_query=kurtjmac";
-	var playlist = "https://www.youtube.com/playlist?list=PLvxoDthI6hljEr8upu4XycKEIyvdCCgtP";
 	
 	describe("isChannel", function(){
 		it("returns true if the url contains user", function(){
@@ -274,4 +293,119 @@ describe("yti.YTUtils", function(){
 			expect(yti.YTUtils.getChannelIDFromPlayer()).toEqual("");
 		});
 	});
+});
+
+describe("yti.PlayerManager", function(){
+	describe("preservePlaylist", function(){
+		xit("preserves a playlist", function(){
+			//this might be removed
+		});
+	});
+	
+	describe("insertAPIHandoff", function(){
+		xit("adds a script for the current video page", function(){
+			spyOn(yti.Utils, "getUrl").and.returnValue(watch);
+			spyOn(yti.Utils, "addScriptToPage");
+			yti.PlayerManager.insertAPIHandoff();
+			var expectedScript = 'var player;\
+		function onYouTubePlayerCreatedSetQuality(event) {\
+				event.target.setPlaybackQuality("hd1080");\
+		} \
+		function onYouTubePlayerAPIReady() {\
+			player = new YT.Player("player", {\
+				videoId: "'+videoID+'",\
+				playerVars: {\
+					autoplay: 1,\
+					modestbranding: 1,\
+				},\
+				events:{\
+					"onReady": onYouTubePlayerCreatedSetQuality\
+				},\
+			});\
+		}';
+			expect(yti.Utils.addScriptToPage).toHaveBeenCalledWith(expectedScript);
+		});
+	});
+	
+	describe("insertAPI", function(){
+		xit("adds a youtube api web source script to page", function(){
+			spyOn(yti.Utils, "addScriptWebSourceToPage");
+			yti.PlayerManager.insertAPI();
+			var expectedSrc = "https://www.youtube.com/player_api";
+			expect(yti.Utils.addScriptWebSourceToPage).toHaveBeenCalledWith(expectedSrc);
+		});
+	});
+	
+	describe("replacePlayer", function(){
+		xit("preserved the playlist", function(){
+			
+		});
+		xit("adds the API handoff", function(){
+			//just copy the other test methods
+		});
+		xit("adds the API", function(){
+			
+		});
+	});
+	
+	describe("setSize", function(){
+		it("sets the size of the player to be the current width of the window", function(){
+			var el1 = document.createElement('div');
+			el1.id = "player";
+			document.body.appendChild(el1);
+			el1 = document.getElementById("player");
+			
+			var expectedWidth = window.innerWidth;
+			var expectedHeight = window.innerHeight;
+			yti.PlayerManager.setSize();
+			expect(el1.style.position).toEqual("fixed");
+			expect(el1.style.width).toEqual(""+expectedWidth+"px");
+			expect(el1.style.height).toEqual(""+expectedHeight+"px");
+			expect(el1.style.top).toEqual("0px");
+			expect(el1.style.left).toEqual("0px");
+			
+			el1.parentElement.removeChild(el1);
+		});
+	});
+	
+	describe("initSizeManagement", function(){
+		var el1, mockWindow;
+		
+		beforeEach(function(){
+			el1 = document.createElement('div');
+			el1.id = "player";
+			document.body.appendChild(el1);
+			el1 = document.getElementById("player");
+			mockWindow = {};
+		});
+		
+		afterEach(function(){
+			el1.parentElement.removeChild(el1);
+		});
+		
+		it("resizes the player", function(){
+			var expectedWidth = window.innerWidth;
+			var expectedHeight = window.innerHeight;
+			yti.PlayerManager.initSizeManagement(mockWindow);
+			expect(el1.style.position).toEqual("fixed");
+			expect(el1.style.width).toEqual(""+expectedWidth+"px");
+			expect(el1.style.height).toEqual(""+expectedHeight+"px");
+			expect(el1.style.top).toEqual("0px");
+			expect(el1.style.left).toEqual("0px");
+		});
+		
+		xit("the listener will call setSize once, after 80ms", function(){
+			spyOn(yti.PlayerManager, "setSize");
+			jasmine.clock().install();
+			yti.PlayerManager.initSizeManagement(mockWindow);
+			mockWindow.onresize();
+			jasmine.clock().tick(40);
+			mockWindow.onresize();
+			jasmine.clock().tick(20);
+			expect(yti.PlayerManager.setSize).not.toHaveBeenCalled();
+			jasmine.clock().tick(21);
+			expect(yti.PlayerManager.setSize).calls.count.toEqual(1);
+			jasmine.clock().uninstall();
+		});
+	});	
 });

@@ -42,6 +42,20 @@ yti.Utils = {
 	getUrl: function(){
 		return window.location.href;
 	},
+	
+	addScriptToPage: function(scriptContent){
+		let tag = document.createElement('script');
+		tag.textContent = scriptContent;
+		let firstScriptTag = document.getElementsByTagName('script')[0];
+		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+	},
+	
+	addScriptWebSourceToPage: function(scriptSrc){
+		let tag = document.createElement('script');
+		tag.src = scriptSrc;
+		let firstScriptTag = document.getElementsByTagName('script')[0];
+		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+	},
 }
 
 
@@ -73,9 +87,6 @@ yti.YTUtils = {
 	
 	getVideoIDUrl: function(url){
 		url = url ? url : yti.Utils.getUrl();
-		if(url.indexOf("v=") == -1){
-			return "";
-		}
 		return url.substr(url.indexOf("v=")+2,11);
 	},
 
@@ -123,8 +134,7 @@ yti.PlayerManager = {
 	},
 	
 	insertAPIHandoff: function(){
-		let tag = document.createElement('script');
-		tag.textContent = 'var player;\
+		let apiFns = 'var player;\
 		function onYouTubePlayerCreatedSetQuality(event) {\
 				event.target.setPlaybackQuality("hd1080");\
 		} \
@@ -139,16 +149,12 @@ yti.PlayerManager = {
 					"onReady": onYouTubePlayerCreatedSetQuality\
 				},\
 			});\
-		}'; 
-		let firstScriptTag = document.getElementsByTagName('script')[0];
-		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+		}';
+		yti.Utils.addScriptToPage(apiFns);
 	},
 	
 	insertAPI: function(){
-		let tag = document.createElement('script');
-		tag.src = "https://www.youtube.com/player_api";
-		let firstScriptTag = document.getElementsByTagName('script')[0];
-		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+		yti.Utils.addScriptWebSourceToPage("https://www.youtube.com/player_api");
 	},
 	
 	replacePlayer: function(){
