@@ -345,6 +345,7 @@ yti.SPFHandler = {
 	},
 };
 
+//for mock: yti.window = window , document?
 
 if(yti.YTUtils.isWatch()){
 	yti.PlayerManager.replacePlayer();

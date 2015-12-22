@@ -7,6 +7,11 @@ var videoID = "BPCUWebOick";
 var embeddedVideo = "https://www.youtube.com/embed/BPCUWebOick?autoplay=1";
 var search = "https://www.youtube.com/results?search_query=kurtjmac";
 var playlist ="https://www.youtube.com/playlist?list=PLvxoDthI6hljEr8upu4XycKEIyvdCCgtP";
+var channelRss= 'https://www.youtube.com/feeds/videos.xml?channel_id=';
+var userRss= 'https://www.youtube.com/feeds/videos.xml?user=';
+var playerHeader= 'watch7-user-header';
+var channelHeader= 'c4-primary-header-contents';
+var buttonClass= "yt-uix-button-content";
 
 describe("yti.Utils", function() {
 	
@@ -416,5 +421,126 @@ describe("SPFHandler", function(){
 		yti.SPFHandler.handleSPF();
 		var thescript = 'if(typeof window.spf!="undefined"){window.spf.dispose();}';
 		expect(yti.Utils.addScriptToPage).toHaveBeenCalledWith(thescript);
+	});
+});
+
+describe("RSSFeedLinker", function(){
+	describe("addRSSFeed", function(){
+		beforeEach(function(){
+			spyOn(yti.RSSFeedLinker, "createFeedURL").and.returnValue(channelRss);
+		});
+		xit("if a channel, adds a feed to channel", function(){
+			spyOn(yti.YTUtils, "isChannel").and.returnValue(true);
+			spyOn(yti.YTUtils, "isListing").and.returnValue(false);
+			spyOn(yti.YTUtils, "isWatch").and.returnValue(false);
+			var testcontainer = document.createElement('div');
+			testcontainer.id = channelHeader;
+			document.body.appendChild(testcontainer);
+			testcontainer = document.getElementById(channelHeader);
+			var el1 = document.createElement('a');
+			el1.setAttribute("href", channelRss);
+			el1.innerHTML = "RSS Feed: Uploads";
+			el1.setAttribute("class", buttonClass);
+			spyOn(yti.RSSFeedLinker, "createFeedElement").and.returnValue(el1);
+			yti.RSSFeedLinker.addFeedElementToPlayer(channelRss);
+			testcontainer = document.getElementById(channelHeader);
+			expect(testcontainer.firstChild).toEqual(el1);
+			document.body.removeChild(testcontainer);
+			
+		});
+		xit("if a playlist, adds a feed to owning channel", function(){
+			spyOn(yti.YTUtils, "isChannel").and.returnValue(false);
+			spyOn(yti.YTUtils, "isListing").and.returnValue(true);
+			spyOn(yti.YTUtils, "isWatch").and.returnValue(false);
+			var testcontainer = document.createElement('div');
+			testcontainer.id = channelHeader;
+			document.body.appendChild(testcontainer);
+			testcontainer = document.getElementById(channelHeader);
+			var el1 = document.createElement('a');
+			el1.setAttribute("href", channelRss);
+			el1.innerHTML = "RSS Feed: Uploads";
+			el1.setAttribute("class", buttonClass);
+			spyOn(yti.RSSFeedLinker, "createFeedElement").and.returnValue(el1);
+			yti.RSSFeedLinker.addFeedElementToPlayer(channelRss);
+			testcontainer = document.getElementById(channelHeader);
+			expect(testcontainer.firstChild).toEqual(el1);
+			document.body.removeChild(testcontainer);
+			
+		});
+		xit("if a player page, adds a feed to subs box on player", function(){
+			spyOn(yti.YTUtils, "isChannel").and.returnValue(false);
+			spyOn(yti.YTUtils, "isListing").and.returnValue(false);
+			spyOn(yti.YTUtils, "isWatch").and.returnValue(true);
+			var testcontainer = document.createElement('div');
+			testcontainer.id = playerHeader;
+			document.body.appendChild(testcontainer);
+			testcontainer = document.getElementById(playerHeader);
+			var el1 = document.createElement('a');
+			el1.setAttribute("href", channelRss);
+			el1.innerHTML = "RSS Feed: Uploads";
+			el1.setAttribute("class", buttonClass);
+			spyOn(yti.RSSFeedLinker, "createFeedElement").and.returnValue(el1);
+			yti.RSSFeedLinker.addFeedElementToPlayer(channelRss);
+			testcontainer = document.getElementById(playerHeader);
+			expect(testcontainer.firstChild).toEqual(el1);
+			document.body.removeChild(testcontainer);
+			
+		});
+	});
+	describe("createFeedURL", function(){
+		it("creates an xml uri for channel ids", function(){
+			var result = yti.RSSFeedLinker.createFeedURL(channelid);
+			var expected = channelRss + channelid;
+			expect(result).toEqual(expected);
+		});
+		it("creates an xml uri for user ids", function(){
+			var result = yti.RSSFeedLinker.createFeedURL(userid);
+			var expected = userRss + userid;
+			expect(result).toEqual(expected);
+		});
+	});
+	describe("addFeedElementToPlayer", function(){
+		xit("adds a document element to a player description box", function(){
+			var testcontainer = document.createElement('div');
+			testcontainer.id = playerHeader;
+			document.body.appendChild(testcontainer);
+			testcontainer = document.getElementById(playerHeader);
+			var el1 = document.createElement('a');
+			el1.setAttribute("href", channelRss);
+			el1.innerHTML = "RSS Feed: Uploads";
+			el1.setAttribute("class", buttonClass);
+			spyOn(yti.RSSFeedLinker, "createFeedElement").and.returnValue(el1);
+			yti.RSSFeedLinker.addFeedElementToPlayer(channelRss);
+			testcontainer = document.getElementById(playerHeader);
+			expect(testcontainer.firstChild).toEqual(el1);
+			document.body.removeChild(testcontainer);
+		});
+	});
+	describe("addFeedElementToChannel", function(){
+		xit("adds a document element to a player description box", function(){
+			var testcontainer = document.createElement('div');
+			testcontainer.id = channelHeader;
+			document.body.appendChild(testcontainer);
+			testcontainer = document.getElementById(channelHeader);
+			var el1 = document.createElement('a');
+			el1.setAttribute("href", channelRss);
+			el1.innerHTML = "RSS Feed: Uploads";
+			el1.setAttribute("class", buttonClass);
+			spyOn(yti.RSSFeedLinker, "createFeedElement").and.returnValue(el1);
+			yti.RSSFeedLinker.addFeedElementToPlayer(channelRss);
+			testcontainer = document.getElementById(channelHeader);
+			expect(testcontainer.firstChild).toEqual(el1);
+			document.body.removeChild(testcontainer);
+		});
+	});
+	describe("createFeedElement", function(){
+		it("creates an rss link document element", function(){
+			var el1 = document.createElement('a');
+			el1.setAttribute("href", channelRss);
+			el1.innerHTML = "RSS Feed: Uploads";
+			el1.setAttribute("class", buttonClass);
+			var actual = yti.RSSFeedLinker.createFeedElement(channelRss);
+			expect(actual).toEqual(el1);
+		});
 	});
 });
