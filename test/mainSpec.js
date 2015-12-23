@@ -12,6 +12,15 @@ var userRss= 'https://www.youtube.com/feeds/videos.xml?user=';
 var playerHeader= 'watch7-user-header';
 var channelHeader= 'c4-primary-header-contents';
 var buttonClass= "yt-uix-button-content";
+var redirectUrl = "https://www.youtube.com/redirect?q=http%3A%2F%2Ffarlandsorbust.com%2F&redir_token=0DpfRQe1s6lEXh4IP7QwKtydHdt8MTQ1MDk2NDIxMEAxNDUwODc3ODEw";
+var expectedRedirectUrl = "http://farlandsorbust.com/";
+var thumbClass = 'yt-lockup-thumbnail';
+
+describe("yti", function(){
+	it("exists", function(){
+		expect(yti).toBeDefined();
+	});
+});
 
 describe("yti.Utils", function() {
 	
@@ -127,6 +136,12 @@ describe("yti.Utils", function() {
 	
 	describe("getUrl", function(){
 		xit("gets window.location.href", function(){
+			
+		});
+	});
+	
+	describe("setUrl", function(){
+		xit("sets a new window.location.href", function(){
 			
 		});
 	});
@@ -415,6 +430,152 @@ describe("yti.PlayerManager", function(){
 	});	
 });
 
+describe("yti.PageCleaner", function(){
+	describe("runElementDelete", function(){
+		xit("deletes elements according to globals", function(){
+			
+		});
+		xit("deletes elements according to channels / lists", function(){
+			
+		});
+		xit("deletes elements from search pages", function(){
+			
+		});
+		xit("deletes elements according to watch pages", function(){
+			
+		});
+	});
+});
+
+describe("yti.Redirector", function(){
+	describe("getBarrierUrl", function(){
+		it("decodes a destination from a redirect url", function(){
+			var actual = yti.Redirector.getBarrierUrl(redirectUrl);
+			expect(actual).toEqual(expectedRedirectUrl);
+		});
+	});
+	describe("executeBarrierRedirect", function(){
+		it("does nothing if current url doesnt contain a redirect", function(){
+			spyOn(yti.Utils, "getUrl").and.returnValue(watch);
+			spyOn(yti.Utils, "setUrl");
+			yti.Redirector.executeBarrierRedirect();
+			expect(yti.Utils.setUrl).not.toHaveBeenCalled();
+		});
+		it("redirects if current url doesnt contain a redirect", function(){
+			spyOn(yti.Utils, "getUrl").and.returnValue(redirectUrl);
+			spyOn(yti.Utils, "setUrl");
+			yti.Redirector.executeBarrierRedirect();
+			expect(yti.Utils.setUrl).toHaveBeenCalledWith(expectedRedirectUrl);
+		});
+	});
+});
+
+describe("yti.LiveThumbnailer", function(){
+	
+	var a1,a2,a3,el1,el2,el3;
+	
+	beforeEach(function(){
+		a1 = document.createElement('a');
+		a1.href = watch;
+		a2 = document.createElement('a');
+		a2.href = playlist;
+		a3 = document.createElement('a');
+		a3.href = watch;
+		
+		el1 = document.createElement('div');
+		el1.className = thumbClass;
+		el1.innerHTML = a1.outerHTML;
+		el1.id = "testThumb1";
+		
+		el2 = document.createElement('div');
+		el2.className = thumbClass;
+		el2.innerHTML = a2.outerHTML;
+		el2.id = "testThumb2";
+		
+		el3 = document.createElement('div');
+		el3.className = thumbClass;
+		el3.innerHTML = a3.outerHTML;
+		el3.id = "testThumb3";
+	});
+	
+	describe("initThumbs", function(){
+		it("creates a button for every valid thumb on page", function(){
+			document.body.appendChild(el1);
+			document.body.appendChild(el2);
+			document.body.appendChild(el3);
+			yti.LiveThumbnailer.initThumbs();
+			
+			var newThumb = document.getElementById("testThumb1");
+			var button = newThumb.getElementsByTagName('button')[0];
+			simulatedClick(button);
+			newThumb = document.getElementById("testThumb1");
+			var actual = newThumb.getElementsByTagName('iframe')[0];
+			expect(actual.src).toEqual(embeddedVideo);
+			newThumb.parentElement.removeChild(newThumb);
+			
+			newThumb = document.getElementById("testThumb2");
+			button = newThumb.getElementsByTagName('button')[0];
+			expect(button).toBeUndefined();
+			newThumb.parentElement.removeChild(newThumb);
+			
+			newThumb = document.getElementById("testThumb3");
+			button = newThumb.getElementsByTagName('button')[0];
+			simulatedClick(button);
+			newThumb = document.getElementById("testThumb3");
+			actual = newThumb.getElementsByTagName('iframe')[0];
+			expect(actual.src).toEqual(embeddedVideo);
+			newThumb.parentElement.removeChild(newThumb);
+		});
+	});
+	
+	describe("isActuallyAThumbnail", function(){
+		it("checks that videos should have a thumbnail", function(){
+			expect(yti.LiveThumbnailer.isActuallyAThumbnail(el1)).toBe(true);
+		});
+		it("checks that non-videos dont have a thumbnail", function(){
+			expect(yti.LiveThumbnailer.isActuallyAThumbnail(el2)).toBe(false);
+		});
+	});
+	
+	describe("changeThumb", function(){
+		it("appends a button to a thumb", function(){
+			document.body.appendChild(el1);
+			yti.LiveThumbnailer.changeThumb(el1);
+			var button = el1.getElementsByTagName('button')[0];
+			expect(button).toBeDefined();
+			simulatedClick(button);
+			var actual = el1.getElementsByTagName('iframe')[0];
+			expect(actual.src).toEqual(embeddedVideo);
+			el1.parentElement.removeChild(el1);
+		});
+	});
+	
+	describe("makeButton", function(){
+		it("make a documentElement for a button", function(){
+			var iframe = document.createElement('iframe');
+			var button = yti.LiveThumbnailer.makeButton(iframe);
+			expect(typeof button.onclick).toEqual("function");
+		});
+	});
+	
+	describe("getUrl", function(){
+		it("generates a url from a DOM thumb container", function(){
+			expect(yti.LiveThumbnailer.getUrl(el1)).toEqual(embeddedVideo);
+		});
+	});
+	
+	describe("makeIframe", function(){
+		it("make a documentElement iframe for a certain container", function(){
+			var expected = document.createElement("iframe");
+			expected.src = embeddedVideo;
+			expected.height = "100%";
+			expected.width = "100%";
+			var actual = yti.LiveThumbnailer.makeIframe(embeddedVideo);
+			expect(actual).toEqual(expected);
+		});
+	});
+});
+
 describe("SPFHandler", function(){
 	it("adds a script to the page that disposes the spf", function(){
 		spyOn(yti.Utils, "addScriptToPage");
@@ -544,3 +705,50 @@ describe("RSSFeedLinker", function(){
 		});
 	});
 });
+
+function simulatedClick(target, options) {
+
+    var event = target.ownerDocument.createEvent('MouseEvents'),
+        options = options || {};
+
+    //Set your default options to the right of ||
+    var opts = {
+        type: options.type                   || 'click',
+        canBubble:options.canBubble          || true,
+        cancelable:options.cancelable        || true,
+        view:options.view                    || target.ownerDocument.defaultView,
+        detail:options.detail                || 1,
+        screenX:options.screenX              || 0, //The coordinates within the entire page
+        screenY:options.screenY              || 0,
+        clientX:options.clientX              || 0, //The coordinates within the viewport
+        clientY:options.clientY              || 0,
+        ctrlKey:options.ctrlKey              || false,
+        altKey:options.altKey                || false,
+        shiftKey:options.shiftKey            || false,
+        metaKey:options.metaKey              || false, //I *think* 'meta' is 'Cmd/Apple' on Mac, and 'Windows key' on Win. Not sure, though!
+        button:options.button                || 0, //0 = left, 1 = middle, 2 = right
+        relatedTarget:options.relatedTarget  || null,
+    }
+
+    //Pass in the options
+    event.initMouseEvent(
+        opts.type,
+        opts.canBubble,
+        opts.cancelable,
+        opts.view,
+        opts.detail,
+        opts.screenX,
+        opts.screenY,
+        opts.clientX,
+        opts.clientY,
+        opts.ctrlKey,
+        opts.altKey,
+        opts.shiftKey,
+        opts.metaKey,
+        opts.button,
+        opts.relatedTarget
+    );
+
+    //Fire the event
+    target.dispatchEvent(event);
+}

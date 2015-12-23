@@ -43,6 +43,10 @@ yti.Utils = {
 		return window.location.href;
 	},
 	
+	setUrl: function(newLocation){
+		window.location.href = newLocation;
+	},
+	
 	addScriptToPage: function(scriptContent){
 		let tag = document.createElement('script');
 		tag.textContent = scriptContent;
@@ -220,10 +224,6 @@ yti.Redirector = {
 	REDIR_TOK: "&redir_token",
 	REDIR_URL: "/redirect?q=",
 	
-	doRedirect: function(newLocation){
-		yti.Utils.getUrl() = newLocation;
-	},
-	
 	getBarrierUrl: function(url){
 		url = url ? url : yti.Utils.getUrl();
 		let notoken = url.split(this.REDIR_TOK)[0];
@@ -231,15 +231,15 @@ yti.Redirector = {
 		return decodeURIComponent(encodedurl);
 	},
 
-	checkForBarrierRedirect: function(){
+	executeBarrierRedirect: function(){
 		if(yti.Utils.contains(yti.Utils.getUrl(), this.REDIR_URL)){
-			this.doRedirect(this.getBarrierUrl());
+			yti.Utils.setUrl(this.getBarrierUrl());
 		}
 	},
 }
 
 
-yti.LiveThumnailer = {	
+yti.LiveThumbnailer = {	
 	THUMB_CLASS: 'yt-lockup-thumbnail',
 	
 	initThumbs: function(){
@@ -257,11 +257,13 @@ yti.LiveThumnailer = {
 	},
 
 	changeThumb: function(thumb){
-	  let button = this.makeButton(thumb);
-	  thumb.appendChild(button);
+		let thumbUrl = this.getUrl(thumb);
+		let iframedom = this.makeIframe(thumbUrl).outerHTML;
+		let button = this.makeButton(iframedom);
+		thumb.appendChild(button);
 	},
 
-	makeButton: function(container){
+	makeButton: function(iframedom){
 		let button = document.createElement("button");
 		button.style.float = "left";
 		button.style.position = "relative";
@@ -269,7 +271,6 @@ yti.LiveThumnailer = {
 		button.style.background = "black";
 		button.style.color = "white";
 		button.innerHTML = "&gt;";
-		let iframedom = this.makeIframe(container).outerHTML;
 		button.onclick = function (){
 			button.parentElement.innerHTML = iframedom;
 		};
@@ -281,9 +282,9 @@ yti.LiveThumnailer = {
 	  return yti.YTUtils.newEmbeddedUrl(yti.YTUtils.getVideoIDUrl(bigUrl));
 	},
 
-	makeIframe: function(container) {
+	makeIframe: function(url) {
 	  let iframe = document.createElement("iframe");
-	  iframe.src = this.getUrl(container);
+	  iframe.src = url;
 	  iframe.height = "100%";
 	  iframe.width = "100%";
 	  return iframe;
@@ -345,14 +346,12 @@ yti.SPFHandler = {
 	},
 };
 
-//for mock: yti.window = window , document?
-
 if(yti.YTUtils.isWatch()){
 	yti.PlayerManager.replacePlayer();
 	yti.PlayerManager.initSizeManagement(window);
 }
-yti.Redirector.checkForBarrierRedirect();
+yti.Redirector.executeBarrierRedirect();
 yti.PageCleaner.runElementDelete();
 yti.RSSFeedLinker.addRSSFeed();
-yti.LiveThumnailer.initThumbs();
+yti.LiveThumbnailer.initThumbs();
 yti.SPFHandler.handleSPF();
