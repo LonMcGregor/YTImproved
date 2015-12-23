@@ -42,6 +42,24 @@ yti.Utils = {
 	getUrl: function(){
 		return window.location.href;
 	},
+	
+	setUrl: function(newLocation){
+		window.location.href = newLocation;
+	},
+	
+	addScriptToPage: function(scriptContent){
+		let tag = document.createElement('script');
+		tag.textContent = scriptContent;
+		let firstScriptTag = document.getElementsByTagName('script')[0];
+		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+	},
+	
+	addScriptWebSourceToPage: function(scriptSrc){
+		let tag = document.createElement('script');
+		tag.src = scriptSrc;
+		let firstScriptTag = document.getElementsByTagName('script')[0];
+		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+	},
 }
 
 
@@ -73,9 +91,6 @@ yti.YTUtils = {
 	
 	getVideoIDUrl: function(url){
 		url = url ? url : yti.Utils.getUrl();
-		if(url.indexOf("v=") == -1){
-			return "";
-		}
 		return url.substr(url.indexOf("v=")+2,11);
 	},
 
@@ -123,8 +138,7 @@ yti.PlayerManager = {
 	},
 	
 	insertAPIHandoff: function(){
-		let tag = document.createElement('script');
-		tag.textContent = 'var player;\
+		let apiFns = 'var player;\
 		function onYouTubePlayerCreatedSetQuality(event) {\
 				event.target.setPlaybackQuality("hd1080");\
 		} \
@@ -139,16 +153,12 @@ yti.PlayerManager = {
 					"onReady": onYouTubePlayerCreatedSetQuality\
 				},\
 			});\
-		}'; 
-		let firstScriptTag = document.getElementsByTagName('script')[0];
-		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+		}';
+		yti.Utils.addScriptToPage(apiFns);
 	},
 	
 	insertAPI: function(){
-		let tag = document.createElement('script');
-		tag.src = "https://www.youtube.com/player_api";
-		let firstScriptTag = document.getElementsByTagName('script')[0];
-		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+		yti.Utils.addScriptWebSourceToPage("https://www.youtube.com/player_api");
 	},
 	
 	replacePlayer: function(){
@@ -166,8 +176,8 @@ yti.PlayerManager = {
 		player.left = "0px";
 	},
 	
-	initSizeManagement: function(){
-		window.onresize = function (e) {
+	initSizeManagement: function(w){
+		w.onresize = function (e) {
 			util.waitForFinalEvent( function(){
 			  playerman.setSize();
 			}, 80, "resizeme");
@@ -214,10 +224,6 @@ yti.Redirector = {
 	REDIR_TOK: "&redir_token",
 	REDIR_URL: "/redirect?q=",
 	
-	doRedirect: function(newLocation){
-		yti.Utils.getUrl() = newLocation;
-	},
-	
 	getBarrierUrl: function(url){
 		url = url ? url : yti.Utils.getUrl();
 		let notoken = url.split(this.REDIR_TOK)[0];
@@ -225,15 +231,15 @@ yti.Redirector = {
 		return decodeURIComponent(encodedurl);
 	},
 
-	checkForBarrierRedirect: function(){
+	executeBarrierRedirect: function(){
 		if(yti.Utils.contains(yti.Utils.getUrl(), this.REDIR_URL)){
-			this.doRedirect(this.getBarrierUrl());
+			yti.Utils.setUrl(this.getBarrierUrl());
 		}
 	},
 }
 
 
-yti.LiveThumnailer = {	
+yti.LiveThumbnailer = {	
 	THUMB_CLASS: 'yt-lockup-thumbnail',
 	
 	initThumbs: function(){
@@ -251,11 +257,13 @@ yti.LiveThumnailer = {
 	},
 
 	changeThumb: function(thumb){
-	  let button = this.makeButton(thumb);
-	  thumb.appendChild(button);
+		let thumbUrl = this.getUrl(thumb);
+		let iframedom = this.makeIframe(thumbUrl).outerHTML;
+		let button = this.makeButton(iframedom);
+		thumb.appendChild(button);
 	},
 
-	makeButton: function(container){
+	makeButton: function(iframedom){
 		let button = document.createElement("button");
 		button.style.float = "left";
 		button.style.position = "relative";
@@ -263,7 +271,6 @@ yti.LiveThumnailer = {
 		button.style.background = "black";
 		button.style.color = "white";
 		button.innerHTML = "&gt;";
-		let iframedom = this.makeIframe(container).outerHTML;
 		button.onclick = function (){
 			button.parentElement.innerHTML = iframedom;
 		};
@@ -275,9 +282,9 @@ yti.LiveThumnailer = {
 	  return yti.YTUtils.newEmbeddedUrl(yti.YTUtils.getVideoIDUrl(bigUrl));
 	},
 
-	makeIframe: function(container) {
+	makeIframe: function(url) {
 	  let iframe = document.createElement("iframe");
-	  iframe.src = this.getUrl(container);
+	  iframe.src = url;
 	  iframe.height = "100%";
 	  iframe.width = "100%";
 	  return iframe;
@@ -335,20 +342,16 @@ yti.RSSFeedLinker = {
 
 yti.SPFHandler = {
 	handleSPF: function(){
-		let scriptText = 'if(typeof window.spf!="undefined"){window.spf.dispose();}';
-		let s = document.createElement('script');
-		s.textContent = scriptText;
-		document.documentElement.appendChild(s);
+		yti.Utils.addScriptToPage('if(typeof window.spf!="undefined"){window.spf.dispose();}');
 	},
 };
 
-
 if(yti.YTUtils.isWatch()){
 	yti.PlayerManager.replacePlayer();
-	yti.PlayerManager.initSizeManagement();
+	yti.PlayerManager.initSizeManagement(window);
 }
-yti.Redirector.checkForBarrierRedirect();
+yti.Redirector.executeBarrierRedirect();
 yti.PageCleaner.runElementDelete();
 yti.RSSFeedLinker.addRSSFeed();
-yti.LiveThumnailer.initThumbs();
+yti.LiveThumbnailer.initThumbs();
 yti.SPFHandler.handleSPF();

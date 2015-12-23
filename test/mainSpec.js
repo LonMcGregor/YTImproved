@@ -1,3 +1,27 @@
+var user = "https://www.youtube.com/user/kurtjmac";
+var channel = "https://www.youtube.com/channel/UC1Un5592U9mFx5n6j2HyXow";
+var userid = "kurtjmac";
+var channelid = "UC1Un5592U9mFx5n6j2HyXow";
+var watch = "https://www.youtube.com/watch?v=BPCUWebOick";
+var videoID = "BPCUWebOick";
+var embeddedVideo = "https://www.youtube.com/embed/BPCUWebOick?autoplay=1";
+var search = "https://www.youtube.com/results?search_query=kurtjmac";
+var playlist ="https://www.youtube.com/playlist?list=PLvxoDthI6hljEr8upu4XycKEIyvdCCgtP";
+var channelRss= 'https://www.youtube.com/feeds/videos.xml?channel_id=';
+var userRss= 'https://www.youtube.com/feeds/videos.xml?user=';
+var playerHeader= 'watch7-user-header';
+var channelHeader= 'c4-primary-header-contents';
+var buttonClass= "yt-uix-button-content";
+var redirectUrl = "https://www.youtube.com/redirect?q=http%3A%2F%2Ffarlandsorbust.com%2F&redir_token=0DpfRQe1s6lEXh4IP7QwKtydHdt8MTQ1MDk2NDIxMEAxNDUwODc3ODEw";
+var expectedRedirectUrl = "http://farlandsorbust.com/";
+var thumbClass = 'yt-lockup-thumbnail';
+
+describe("yti", function(){
+	it("exists", function(){
+		expect(yti).toBeDefined();
+	});
+});
+
 describe("yti.Utils", function() {
 	
 	describe("contains", function() {
@@ -52,7 +76,7 @@ describe("yti.Utils", function() {
 		});
 	});
 	
-	xdescribe("deleteElements", function() {
+	describe("deleteElements", function() {
 		var elements;
 		var el1;
 		var el2;
@@ -74,19 +98,19 @@ describe("yti.Utils", function() {
 			el2.parentElement.removeChild(el2);
 		});
 		
-		it("deletes all elements in an array of dom elements", function(){
+		xit("deletes all elements in an array of dom elements", function(){
 			yti.Utils.deleteElements(elements);
 			expect(document.getElementById("testingDiv")).toBeNull();
 			expect(document.getElementById("testingH1")).toBeNull();
 		});
-		it("doesnt fail if an element doesnt exist", function(){
+		xit("doesnt fail if an element doesnt exist", function(){
 			el1.parentElement.removeChild(el1);
 			el2.parentElement.removeChild(el2);
 			yti.Utils.deleteElements(elements);
 		});
 	});
 	
-	xdescribe("deleteElementById", function() {
+	describe("deleteElementById", function() {
 		var el1;
 		
 		beforeEach(function() {
@@ -100,27 +124,42 @@ describe("yti.Utils", function() {
 			el1.parentElement.removeChild(el1);
 		});
 		
-		it("deletes a single element", function(){
+		xit("deletes a single element", function(){
 			yti.Utils.deleteElements(elements);
 			expect(document.getElementById("testingDiv")).toBeNull();
 		});
-		it("doesnt fail if an element doesnt exist", function(){
+		xit("doesnt fail if an element doesnt exist", function(){
 			el1.parentElement.removeChild(el1);
 			yti.Utils.deleteElements(elements);
+		});
+	});
+	
+	describe("getUrl", function(){
+		xit("gets window.location.href", function(){
+			
+		});
+	});
+	
+	describe("setUrl", function(){
+		xit("sets a new window.location.href", function(){
+			
+		});
+	});
+	
+	describe("addScriptToPage", function(){
+		xit("adds a script to the page, given content", function(){
+			
+		});
+	});
+	
+	describe("addScriptWebSourceToPage", function(){
+		xit("adds a script to the page, given content", function(){
+			
 		});
 	});
 });
 
 describe("yti.YTUtils", function(){
-	var user = "https://www.youtube.com/user/kurtjmac";
-	var channel = "https://www.youtube.com/channel/UC1Un5592U9mFx5n6j2HyXow";
-	var userid = "kurtjmac";
-	var channelid = "UC1Un5592U9mFx5n6j2HyXow";
-	var watch = "https://www.youtube.com/watch?v=BPCUWebOick";
-	var videoID = "BPCUWebOick";
-	var embeddedVideo = "https://www.youtube.com/embed/BPCUWebOick?autoplay=1";
-	var search = "https://www.youtube.com/results?search_query=kurtjmac";
-	var playlist = "https://www.youtube.com/playlist?list=PLvxoDthI6hljEr8upu4XycKEIyvdCCgtP";
 	
 	describe("isChannel", function(){
 		it("returns true if the url contains user", function(){
@@ -275,3 +314,441 @@ describe("yti.YTUtils", function(){
 		});
 	});
 });
+
+describe("yti.PlayerManager", function(){
+	describe("preservePlaylist", function(){
+		xit("preserves a playlist", function(){
+			//this might be removed
+		});
+	});
+	
+	describe("insertAPIHandoff", function(){
+		xit("adds a script for the current video page", function(){
+			spyOn(yti.Utils, "getUrl").and.returnValue(watch);
+			spyOn(yti.Utils, "addScriptToPage");
+			yti.PlayerManager.insertAPIHandoff();
+			var expectedScript = 'var player;\
+		function onYouTubePlayerCreatedSetQuality(event) {\
+				event.target.setPlaybackQuality("hd1080");\
+		} \
+		function onYouTubePlayerAPIReady() {\
+			player = new YT.Player("player", {\
+				videoId: "'+videoID+'",\
+				playerVars: {\
+					autoplay: 1,\
+					modestbranding: 1,\
+				},\
+				events:{\
+					"onReady": onYouTubePlayerCreatedSetQuality\
+				},\
+			});\
+		}';
+			expect(yti.Utils.addScriptToPage).toHaveBeenCalledWith(expectedScript);
+		});
+	});
+	
+	describe("insertAPI", function(){
+		xit("adds a youtube api web source script to page", function(){
+			spyOn(yti.Utils, "addScriptWebSourceToPage");
+			yti.PlayerManager.insertAPI();
+			var expectedSrc = "https://www.youtube.com/player_api";
+			expect(yti.Utils.addScriptWebSourceToPage).toHaveBeenCalledWith(expectedSrc);
+		});
+	});
+	
+	describe("replacePlayer", function(){
+		xit("preserved the playlist", function(){
+			
+		});
+		xit("adds the API handoff", function(){
+			//just copy the other test methods
+		});
+		xit("adds the API", function(){
+			
+		});
+	});
+	
+	describe("setSize", function(){
+		it("sets the size of the player to be the current width of the window", function(){
+			var el1 = document.createElement('div');
+			el1.id = "player";
+			document.body.appendChild(el1);
+			el1 = document.getElementById("player");
+			
+			var expectedWidth = window.innerWidth;
+			var expectedHeight = window.innerHeight;
+			yti.PlayerManager.setSize();
+			expect(el1.style.position).toEqual("fixed");
+			expect(el1.style.width).toEqual(""+expectedWidth+"px");
+			expect(el1.style.height).toEqual(""+expectedHeight+"px");
+			expect(el1.style.top).toEqual("0px");
+			expect(el1.style.left).toEqual("0px");
+			
+			el1.parentElement.removeChild(el1);
+		});
+	});
+	
+	describe("initSizeManagement", function(){
+		var el1, mockWindow;
+		
+		beforeEach(function(){
+			el1 = document.createElement('div');
+			el1.id = "player";
+			document.body.appendChild(el1);
+			el1 = document.getElementById("player");
+			mockWindow = {};
+		});
+		
+		afterEach(function(){
+			el1.parentElement.removeChild(el1);
+		});
+		
+		it("resizes the player", function(){
+			var expectedWidth = window.innerWidth;
+			var expectedHeight = window.innerHeight;
+			yti.PlayerManager.initSizeManagement(mockWindow);
+			expect(el1.style.position).toEqual("fixed");
+			expect(el1.style.width).toEqual(""+expectedWidth+"px");
+			expect(el1.style.height).toEqual(""+expectedHeight+"px");
+			expect(el1.style.top).toEqual("0px");
+			expect(el1.style.left).toEqual("0px");
+		});
+		
+		xit("the listener will call setSize once, after 80ms", function(){
+			spyOn(yti.PlayerManager, "setSize");
+			jasmine.clock().install();
+			yti.PlayerManager.initSizeManagement(mockWindow);
+			mockWindow.onresize();
+			jasmine.clock().tick(40);
+			mockWindow.onresize();
+			jasmine.clock().tick(20);
+			expect(yti.PlayerManager.setSize).not.toHaveBeenCalled();
+			jasmine.clock().tick(21);
+			expect(yti.PlayerManager.setSize).calls.count.toEqual(1);
+			jasmine.clock().uninstall();
+		});
+	});	
+});
+
+describe("yti.PageCleaner", function(){
+	describe("runElementDelete", function(){
+		xit("deletes elements according to globals", function(){
+			
+		});
+		xit("deletes elements according to channels / lists", function(){
+			
+		});
+		xit("deletes elements from search pages", function(){
+			
+		});
+		xit("deletes elements according to watch pages", function(){
+			
+		});
+	});
+});
+
+describe("yti.Redirector", function(){
+	describe("getBarrierUrl", function(){
+		it("decodes a destination from a redirect url", function(){
+			var actual = yti.Redirector.getBarrierUrl(redirectUrl);
+			expect(actual).toEqual(expectedRedirectUrl);
+		});
+	});
+	describe("executeBarrierRedirect", function(){
+		it("does nothing if current url doesnt contain a redirect", function(){
+			spyOn(yti.Utils, "getUrl").and.returnValue(watch);
+			spyOn(yti.Utils, "setUrl");
+			yti.Redirector.executeBarrierRedirect();
+			expect(yti.Utils.setUrl).not.toHaveBeenCalled();
+		});
+		it("redirects if current url doesnt contain a redirect", function(){
+			spyOn(yti.Utils, "getUrl").and.returnValue(redirectUrl);
+			spyOn(yti.Utils, "setUrl");
+			yti.Redirector.executeBarrierRedirect();
+			expect(yti.Utils.setUrl).toHaveBeenCalledWith(expectedRedirectUrl);
+		});
+	});
+});
+
+describe("yti.LiveThumbnailer", function(){
+	
+	var a1,a2,a3,el1,el2,el3;
+	
+	beforeEach(function(){
+		a1 = document.createElement('a');
+		a1.href = watch;
+		a2 = document.createElement('a');
+		a2.href = playlist;
+		a3 = document.createElement('a');
+		a3.href = watch;
+		
+		el1 = document.createElement('div');
+		el1.className = thumbClass;
+		el1.innerHTML = a1.outerHTML;
+		el1.id = "testThumb1";
+		
+		el2 = document.createElement('div');
+		el2.className = thumbClass;
+		el2.innerHTML = a2.outerHTML;
+		el2.id = "testThumb2";
+		
+		el3 = document.createElement('div');
+		el3.className = thumbClass;
+		el3.innerHTML = a3.outerHTML;
+		el3.id = "testThumb3";
+	});
+	
+	describe("initThumbs", function(){
+		it("creates a button for every valid thumb on page", function(){
+			document.body.appendChild(el1);
+			document.body.appendChild(el2);
+			document.body.appendChild(el3);
+			yti.LiveThumbnailer.initThumbs();
+			
+			var newThumb = document.getElementById("testThumb1");
+			var button = newThumb.getElementsByTagName('button')[0];
+			simulatedClick(button);
+			newThumb = document.getElementById("testThumb1");
+			var actual = newThumb.getElementsByTagName('iframe')[0];
+			expect(actual.src).toEqual(embeddedVideo);
+			newThumb.parentElement.removeChild(newThumb);
+			
+			newThumb = document.getElementById("testThumb2");
+			button = newThumb.getElementsByTagName('button')[0];
+			expect(button).toBeUndefined();
+			newThumb.parentElement.removeChild(newThumb);
+			
+			newThumb = document.getElementById("testThumb3");
+			button = newThumb.getElementsByTagName('button')[0];
+			simulatedClick(button);
+			newThumb = document.getElementById("testThumb3");
+			actual = newThumb.getElementsByTagName('iframe')[0];
+			expect(actual.src).toEqual(embeddedVideo);
+			newThumb.parentElement.removeChild(newThumb);
+		});
+	});
+	
+	describe("isActuallyAThumbnail", function(){
+		it("checks that videos should have a thumbnail", function(){
+			expect(yti.LiveThumbnailer.isActuallyAThumbnail(el1)).toBe(true);
+		});
+		it("checks that non-videos dont have a thumbnail", function(){
+			expect(yti.LiveThumbnailer.isActuallyAThumbnail(el2)).toBe(false);
+		});
+	});
+	
+	describe("changeThumb", function(){
+		it("appends a button to a thumb", function(){
+			document.body.appendChild(el1);
+			yti.LiveThumbnailer.changeThumb(el1);
+			var button = el1.getElementsByTagName('button')[0];
+			expect(button).toBeDefined();
+			simulatedClick(button);
+			var actual = el1.getElementsByTagName('iframe')[0];
+			expect(actual.src).toEqual(embeddedVideo);
+			el1.parentElement.removeChild(el1);
+		});
+	});
+	
+	describe("makeButton", function(){
+		it("make a documentElement for a button", function(){
+			var iframe = document.createElement('iframe');
+			var button = yti.LiveThumbnailer.makeButton(iframe);
+			expect(typeof button.onclick).toEqual("function");
+		});
+	});
+	
+	describe("getUrl", function(){
+		it("generates a url from a DOM thumb container", function(){
+			expect(yti.LiveThumbnailer.getUrl(el1)).toEqual(embeddedVideo);
+		});
+	});
+	
+	describe("makeIframe", function(){
+		it("make a documentElement iframe for a certain container", function(){
+			var expected = document.createElement("iframe");
+			expected.src = embeddedVideo;
+			expected.height = "100%";
+			expected.width = "100%";
+			var actual = yti.LiveThumbnailer.makeIframe(embeddedVideo);
+			expect(actual).toEqual(expected);
+		});
+	});
+});
+
+describe("SPFHandler", function(){
+	it("adds a script to the page that disposes the spf", function(){
+		spyOn(yti.Utils, "addScriptToPage");
+		yti.SPFHandler.handleSPF();
+		var thescript = 'if(typeof window.spf!="undefined"){window.spf.dispose();}';
+		expect(yti.Utils.addScriptToPage).toHaveBeenCalledWith(thescript);
+	});
+});
+
+describe("RSSFeedLinker", function(){
+	describe("addRSSFeed", function(){
+		beforeEach(function(){
+			spyOn(yti.RSSFeedLinker, "createFeedURL").and.returnValue(channelRss);
+		});
+		xit("if a channel, adds a feed to channel", function(){
+			spyOn(yti.YTUtils, "isChannel").and.returnValue(true);
+			spyOn(yti.YTUtils, "isListing").and.returnValue(false);
+			spyOn(yti.YTUtils, "isWatch").and.returnValue(false);
+			var testcontainer = document.createElement('div');
+			testcontainer.id = channelHeader;
+			document.body.appendChild(testcontainer);
+			testcontainer = document.getElementById(channelHeader);
+			var el1 = document.createElement('a');
+			el1.setAttribute("href", channelRss);
+			el1.innerHTML = "RSS Feed: Uploads";
+			el1.setAttribute("class", buttonClass);
+			spyOn(yti.RSSFeedLinker, "createFeedElement").and.returnValue(el1);
+			yti.RSSFeedLinker.addFeedElementToPlayer(channelRss);
+			testcontainer = document.getElementById(channelHeader);
+			expect(testcontainer.firstChild).toEqual(el1);
+			document.body.removeChild(testcontainer);
+			
+		});
+		xit("if a playlist, adds a feed to owning channel", function(){
+			spyOn(yti.YTUtils, "isChannel").and.returnValue(false);
+			spyOn(yti.YTUtils, "isListing").and.returnValue(true);
+			spyOn(yti.YTUtils, "isWatch").and.returnValue(false);
+			var testcontainer = document.createElement('div');
+			testcontainer.id = channelHeader;
+			document.body.appendChild(testcontainer);
+			testcontainer = document.getElementById(channelHeader);
+			var el1 = document.createElement('a');
+			el1.setAttribute("href", channelRss);
+			el1.innerHTML = "RSS Feed: Uploads";
+			el1.setAttribute("class", buttonClass);
+			spyOn(yti.RSSFeedLinker, "createFeedElement").and.returnValue(el1);
+			yti.RSSFeedLinker.addFeedElementToPlayer(channelRss);
+			testcontainer = document.getElementById(channelHeader);
+			expect(testcontainer.firstChild).toEqual(el1);
+			document.body.removeChild(testcontainer);
+			
+		});
+		xit("if a player page, adds a feed to subs box on player", function(){
+			spyOn(yti.YTUtils, "isChannel").and.returnValue(false);
+			spyOn(yti.YTUtils, "isListing").and.returnValue(false);
+			spyOn(yti.YTUtils, "isWatch").and.returnValue(true);
+			var testcontainer = document.createElement('div');
+			testcontainer.id = playerHeader;
+			document.body.appendChild(testcontainer);
+			testcontainer = document.getElementById(playerHeader);
+			var el1 = document.createElement('a');
+			el1.setAttribute("href", channelRss);
+			el1.innerHTML = "RSS Feed: Uploads";
+			el1.setAttribute("class", buttonClass);
+			spyOn(yti.RSSFeedLinker, "createFeedElement").and.returnValue(el1);
+			yti.RSSFeedLinker.addFeedElementToPlayer(channelRss);
+			testcontainer = document.getElementById(playerHeader);
+			expect(testcontainer.firstChild).toEqual(el1);
+			document.body.removeChild(testcontainer);
+			
+		});
+	});
+	describe("createFeedURL", function(){
+		it("creates an xml uri for channel ids", function(){
+			var result = yti.RSSFeedLinker.createFeedURL(channelid);
+			var expected = channelRss + channelid;
+			expect(result).toEqual(expected);
+		});
+		it("creates an xml uri for user ids", function(){
+			var result = yti.RSSFeedLinker.createFeedURL(userid);
+			var expected = userRss + userid;
+			expect(result).toEqual(expected);
+		});
+	});
+	describe("addFeedElementToPlayer", function(){
+		xit("adds a document element to a player description box", function(){
+			var testcontainer = document.createElement('div');
+			testcontainer.id = playerHeader;
+			document.body.appendChild(testcontainer);
+			testcontainer = document.getElementById(playerHeader);
+			var el1 = document.createElement('a');
+			el1.setAttribute("href", channelRss);
+			el1.innerHTML = "RSS Feed: Uploads";
+			el1.setAttribute("class", buttonClass);
+			spyOn(yti.RSSFeedLinker, "createFeedElement").and.returnValue(el1);
+			yti.RSSFeedLinker.addFeedElementToPlayer(channelRss);
+			testcontainer = document.getElementById(playerHeader);
+			expect(testcontainer.firstChild).toEqual(el1);
+			document.body.removeChild(testcontainer);
+		});
+	});
+	describe("addFeedElementToChannel", function(){
+		xit("adds a document element to a player description box", function(){
+			var testcontainer = document.createElement('div');
+			testcontainer.id = channelHeader;
+			document.body.appendChild(testcontainer);
+			testcontainer = document.getElementById(channelHeader);
+			var el1 = document.createElement('a');
+			el1.setAttribute("href", channelRss);
+			el1.innerHTML = "RSS Feed: Uploads";
+			el1.setAttribute("class", buttonClass);
+			spyOn(yti.RSSFeedLinker, "createFeedElement").and.returnValue(el1);
+			yti.RSSFeedLinker.addFeedElementToPlayer(channelRss);
+			testcontainer = document.getElementById(channelHeader);
+			expect(testcontainer.firstChild).toEqual(el1);
+			document.body.removeChild(testcontainer);
+		});
+	});
+	describe("createFeedElement", function(){
+		it("creates an rss link document element", function(){
+			var el1 = document.createElement('a');
+			el1.setAttribute("href", channelRss);
+			el1.innerHTML = "RSS Feed: Uploads";
+			el1.setAttribute("class", buttonClass);
+			var actual = yti.RSSFeedLinker.createFeedElement(channelRss);
+			expect(actual).toEqual(el1);
+		});
+	});
+});
+
+function simulatedClick(target, options) {
+
+    var event = target.ownerDocument.createEvent('MouseEvents'),
+        options = options || {};
+
+    //Set your default options to the right of ||
+    var opts = {
+        type: options.type                   || 'click',
+        canBubble:options.canBubble          || true,
+        cancelable:options.cancelable        || true,
+        view:options.view                    || target.ownerDocument.defaultView,
+        detail:options.detail                || 1,
+        screenX:options.screenX              || 0, //The coordinates within the entire page
+        screenY:options.screenY              || 0,
+        clientX:options.clientX              || 0, //The coordinates within the viewport
+        clientY:options.clientY              || 0,
+        ctrlKey:options.ctrlKey              || false,
+        altKey:options.altKey                || false,
+        shiftKey:options.shiftKey            || false,
+        metaKey:options.metaKey              || false, //I *think* 'meta' is 'Cmd/Apple' on Mac, and 'Windows key' on Win. Not sure, though!
+        button:options.button                || 0, //0 = left, 1 = middle, 2 = right
+        relatedTarget:options.relatedTarget  || null,
+    }
+
+    //Pass in the options
+    event.initMouseEvent(
+        opts.type,
+        opts.canBubble,
+        opts.cancelable,
+        opts.view,
+        opts.detail,
+        opts.screenX,
+        opts.screenY,
+        opts.clientX,
+        opts.clientY,
+        opts.ctrlKey,
+        opts.altKey,
+        opts.shiftKey,
+        opts.metaKey,
+        opts.button,
+        opts.relatedTarget
+    );
+
+    //Fire the event
+    target.dispatchEvent(event);
+}
