@@ -5,8 +5,9 @@ See https://github.com/LonMcGregor/YTImproved/
 */
 "use strict";
 
-function Utils(){}
-Utils.prototype = {
+var yti = yti || {};
+
+yti.Utils = {
 	contains: function(haystack, needle) {
 		return (haystack.indexOf(needle) > -1);
 	},
@@ -25,44 +26,62 @@ Utils.prototype = {
 	
 	deleteElements: function(array){
 		for(let i = 0; i < array.length; i++){
-			try {
-				this.deleteElementById(array[i]);
-			} catch (Exception) {
-				//Element doesn't exist or was already deleted
-			}
+			this.deleteElementById(array[i]);
 		}
 	},
 	
 	deleteElementById: function(id){
-		let el = document.getElementById(id);
-		el.parentElement.removeChild(el);
+		try{
+			let el = document.getElementById(id);
+			el.parentElement.removeChild(el);
+		} catch (Exception) {
+			//Element doesn't exist or was already deleted
+		}
+	},
+	
+	getUrl: function(){
+		return window.location.href;
+	},
+	
+	setUrl: function(newLocation){
+		window.location.href = newLocation;
+	},
+	
+	addScriptToPage: function(scriptContent){
+		let tag = document.createElement('script');
+		tag.textContent = scriptContent;
+		let firstScriptTag = document.getElementsByTagName('script')[0];
+		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+	},
+	
+	addScriptWebSourceToPage: function(scriptSrc){
+		let tag = document.createElement('script');
+		tag.src = scriptSrc;
+		let firstScriptTag = document.getElementsByTagName('script')[0];
+		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 	},
 }
-var util = new Utils();
 
 
-function YTUtils(){}
-YTUtils.prototype = {
-	utils: new Utils(),
-	
+yti.YTUtils = {	
 	CHANNEL_TITLE: 'branded-page-header-title-link',
 	EMBED_URL: "https://www.youtube.com/embed/",
 	EMBED_PARAMS: "?autoplay=1",
 		
 	isChannel: function(url){
-		url = url ? url : window.location.href;
-		return (this.utils.contains(url, '/user/') || 
-		this.utils.contains(url, '/channel/'));
+		url = url ? url : yti.Utils.getUrl();
+		return (yti.Utils.contains(url, '/user/') || 
+		yti.Utils.contains(url, '/channel/'));
 	},
 	
 	isSearch: function(url){
-		url = url ? url : window.location.href;
-		return this.utils.contains(url, '/results');
+		url = url ? url : yti.Utils.getUrl();
+		return yti.Utils.contains(url, '/results');
 	},
 	
 	isWatch: function(url){
-		url = url ? url : window.location.href;
-		return this.utils.contains(url, '/watch');
+		url = url ? url : yti.Utils.getUrl();
+		return yti.Utils.contains(url, '/watch');
 	},
 	
 	isWatchWithList: function(url){
@@ -78,13 +97,13 @@ YTUtils.prototype = {
 	},
 	
 	isListing: function(url){
-		url = url ? url : window.location.href;
-		return this.utils.contains(url, '/playlist');
+		url = url ? url : yti.Utils.getUrl();
+		return yti.Utils.contains(url, '/playlist');
 	},
 	
 	getVideoIDUrl: function(url){
-		url = url ? url : window.location.href;
-		return url.substr(32,11);
+		url = url ? url : yti.Utils.getUrl();
+		return url.substr(url.indexOf("v=")+2,11);
 	},
 
 	getEmbedUrlForID: function(videoID){
@@ -93,15 +112,15 @@ YTUtils.prototype = {
 		    videoID+this.EMBED_PARAMS;
 	},
 	
-	getChannelIDFromChannelUrl: function(channelURL){
-		channelURL = channelURL ? channelURL : window.location.href;
+	extractChannelIDFromChannelUrl: function(channelURL){
+		channelURL = channelURL ? channelURL : yti.Utils.getUrl();
 		return channelURL.split("/")[4];
 	},
 	
 	getChannelIDFromChannelTitle: function(){
 		let channelTitle = document.getElementsByClassName(this.CHANNEL_TITLE)[0];
 		if(typeof channelTitle != "undefined"){
-			return this.getChannelIDFromChannelUrl(channelTitle.href);
+			return this.extractChannelIDFromChannelUrl(channelTitle.href);
 		}
 		return "";
 	},
@@ -169,20 +188,14 @@ YTUtils.prototype = {
 		return fulltime;
 	},
 }
-var ytutils = new YTUtils();
 
 
-function PlayerManager(){}
-PlayerManager.prototype = {
-	utils: new Utils(),
-	ytutils: new YTUtils(),
-	
+yti.PlayerManager = {
 	PLAYER_CONTAINER: "player-playlist",
 	PAGE_NAME: "page",
 		
 	insertAPIHandoff: function(){
-		let tag = document.createElement('script');
-		let script = 'var player;\
+		let apiFns = 'var player;\
 		function onYouTubePlayerCreatedSetQuality(event) {\
 				event.target.setPlaybackQuality("hd1080");\
 		}\
@@ -197,7 +210,7 @@ PlayerManager.prototype = {
 		}\
 		function onYouTubePlayerAPIReady() {\
 			player = new YT.Player("player", {\
-				videoId: "'+this.ytutils.getVideoIDUrl()+'",\
+				videoId: "'+yti.YTUtils.getVideoIDUrl()+'",\
 				playerVars: {\
 					autoplay: 1,\
 					modestbranding: 1,';
@@ -218,19 +231,14 @@ PlayerManager.prototype = {
 		script += '},\
 			});\
 		}';
-		tag.textContent = script;
-		let firstScriptTag = document.getElementsByTagName('script')[0];
-		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+		yti.Utils.addScriptToPage(apiFns);
 	},
 	
 	insertAPI: function(){
-		let tag = document.createElement('script');
-		tag.src = "https://www.youtube.com/player_api";
-		let firstScriptTag = document.getElementsByTagName('script')[0];
-		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+		yti.Utils.addScriptWebSourceToPage("https://www.youtube.com/player_api");
 	},
 	
-	playerReplacer: function(){
+	replacePlayer: function(){
 		this.insertAPIHandoff();
 		this.insertAPI();
 	},
@@ -244,8 +252,8 @@ PlayerManager.prototype = {
 		player.left = "0px";
 	},
 	
-	initManagement: function(){
-		window.onresize = function (e) {
+	initSizeManagement: function(w){
+		w.onresize = function (e) {
 			util.waitForFinalEvent( function(){
 			  playerman.setSize();
 			}, 80, "resizeme");
@@ -253,14 +261,9 @@ PlayerManager.prototype = {
 		this.setSize();
 	},
 }
-var playerman = new PlayerManager();
 
 
-function PageCleaner(){}
-PageCleaner.prototype = {
-	utils: new Utils(),
-	ytutils: new YTUtils(),
-	
+yti.PageCleaner = {
 	ELEMENTS_WATCH: [
 	  "watch7-hidden-extras",  "watch-discussion", "watch7-preview", "watch-dislike", "watch-like", "watch7-sidebar","masthead-positioner",
 	  "placeholder-player"
@@ -279,53 +282,40 @@ PageCleaner.prototype = {
 	],
 	
 	runElementDelete: function(){
-		if(this.ytutils.isChannel()||this.ytutils.isSearch()||this.ytutils.isWatch()){
-			this.utils.deleteElements(this.ELEMENTS_GLOBAL);
+		if(yti.YTUtils.isChannel()||yti.YTUtils.isSearch()||yti.YTUtils.isWatch()){
+			yti.Utils.deleteElements(this.ELEMENTS_GLOBAL);
 		}
-		if (this.ytutils.isChannel()||this.ytutils.isListing()){
-			this.utils.deleteElements(this.ELEMENTS_CHANNEL);
-		}else if(this.ytutils.isSearch()){
-			this.utils.deleteElements(this.ELEMENTS_SEARCH);
-		}else if(this.ytutils.isWatch()){
-			this.utils.deleteElements(this.ELEMENTS_WATCH);
+		if (yti.YTUtils.isChannel()||yti.YTUtils.isListing()){
+			yti.Utils.deleteElements(this.ELEMENTS_CHANNEL);
+		}else if(yti.YTUtils.isSearch()){
+			yti.Utils.deleteElements(this.ELEMENTS_SEARCH);
+		}else if(yti.YTUtils.isWatch()){
+			yti.Utils.deleteElements(this.ELEMENTS_WATCH);
 		}
 	},
 }
-var pagecleaner = new PageCleaner();
 
 
-function Redirector(){}
-Redirector.prototype = {
-	util: new Utils(),
-	ytutils: new YTUtils(),
-	
+yti.Redirector = {
 	REDIR_TOK: "&redir_token",
 	REDIR_URL: "/redirect?q=",
 	
-	doRedirect: function(newLocation){
-		window.location.href = newLocation;
-	},
-	
 	getBarrierUrl: function(url){
-		url = url ? url : window.location.href;
+		url = url ? url : yti.Utils.getUrl();
 		let notoken = url.split(this.REDIR_TOK)[0];
 		let encodedurl = notoken.split(this.REDIR_URL)[1];
 		return decodeURIComponent(encodedurl);
 	},
 
-	checkForBarrierRedirect: function(){
-		if(this.util.contains(window.location.href, this.REDIR_URL)){
-			this.doRedirect(this.getBarrierUrl());
+	executeBarrierRedirect: function(){
+		if(yti.Utils.contains(yti.Utils.getUrl(), this.REDIR_URL)){
+			yti.Utils.setUrl(this.getBarrierUrl());
 		}
 	},
 }
-var redirector = new Redirector();
 
 
-function LiveThumnailer(){}
-LiveThumnailer.prototype = {
-	ytutils: new YTUtils(),
-	
+yti.LiveThumbnailer = {	
 	THUMB_CLASS: 'yt-lockup-thumbnail',
 	
 	initThumbs: function(){
@@ -339,15 +329,17 @@ LiveThumnailer.prototype = {
 	
 	isActuallyAThumbnail: function(thumb){
 		let linkURL = thumb.getElementsByTagName('a')[0].href;
-		return this.ytutils.isWatch(linkURL);
+		return yti.YTUtils.isWatch(linkURL);
 	},
 
 	changeThumb: function(thumb){
-	  let button = this.makeButton(thumb);
-	  thumb.appendChild(button);
+		let thumbUrl = this.getUrl(thumb);
+		let iframedom = this.makeIframe(thumbUrl).outerHTML;
+		let button = this.makeButton(iframedom);
+		thumb.appendChild(button);
 	},
 
-	makeButton: function(container){
+	makeButton: function(iframedom){
 		let button = document.createElement("button");
 		button.style.float = "left";
 		button.style.position = "relative";
@@ -355,7 +347,6 @@ LiveThumnailer.prototype = {
 		button.style.background = "black";
 		button.style.color = "white";
 		button.innerHTML = "&gt;";
-		let iframedom = this.makeIframe(container).outerHTML;
 		button.onclick = function (){
 			button.parentElement.innerHTML = iframedom;
 		};
@@ -364,24 +355,20 @@ LiveThumnailer.prototype = {
 	 
 	getUrl: function(container){
 	  let bigUrl = container.getElementsByTagName('a')[0].href;
-	  return this.ytutils.getEmbedUrlForID(this.ytutils.getVideoIDUrl(bigUrl));
+	  return yti.YTUtils.getEmbedUrlForID(yti.YTUtils.getVideoIDUrl(bigUrl));
 	},
 
-	makeIframe: function(container) {
+	makeIframe: function(url) {
 	  let iframe = document.createElement("iframe");
-	  iframe.src = this.getUrl(container);
+	  iframe.src = url;
 	  iframe.height = "100%";
 	  iframe.width = "100%";
 	  return iframe;
 	},
 }
-var thumbs = new LiveThumnailer();
 
 
-function RSSFeedLinker(){}
-RSSFeedLinker.prototype = {
-	ytutils: new YTUtils(),
-	
+yti.RSSFeedLinker = {	
 	XML_CHANNEL: 'https://www.youtube.com/feeds/videos.xml?channel_id=',
 	XML_LEGACY_USER: 'https://www.youtube.com/feeds/videos.xml?user=',
 	PLAYER_HEADER: 'watch7-user-header',
@@ -389,12 +376,12 @@ RSSFeedLinker.prototype = {
 	BUTTON_CLASS: "yt-uix-button-content",
 	
 	addRSSFeed: function(){
-		if(this.ytutils.isChannel()||this.ytutils.isListing()){
-			let channelId = this.ytutils.getChannelIDFromChannelTitle();
+		if(yti.YTUtils.isChannel()||yti.YTUtils.isListing()){
+			let channelId = yti.YTUtils.getChannelIDFromChannelTitle();
 			let feedURL = this.createFeedURL(channelId)
 			this.addFeedElementToChannel(feedURL);
-		} else if(this.ytutils.isWatch()){
-			let channelId = this.ytutils.getChannelIDFromPlayer();
+		} else if(yti.YTUtils.isWatch()){
+			let channelId = yti.YTUtils.getChannelIDFromPlayer();
 			let feedURL = this.createFeedURL(channelId)
 			this.addFeedElementToPlayer(feedURL);
 		}
@@ -427,29 +414,20 @@ RSSFeedLinker.prototype = {
 	},
 
 }
-var rssfeeder = new RSSFeedLinker();
 
 
-//borrowed from https://github.com/klemens/ff-youtube-all-html5/
-//which was inspired by YePpHa's YouTubeCenter (https://github.com/YePpHa/YouTubeCenter)
-function SPFHandler(){}
-SPFHandler.prototype = {
+yti.SPFHandler = {
 	handleSPF: function(){
-		let scriptText = 'if(typeof window.spf!="undefined"){window.spf.dispose();}';
-		let s = document.createElement('script');
-		s.textContent = scriptText;
-		document.documentElement.appendChild(s);
+		yti.Utils.addScriptToPage('if(typeof window.spf!="undefined"){window.spf.dispose();}');
 	},
-}
-var spfhandler = new SPFHandler();
+};
 
-
-if(ytutils.isWatch()){
-	playerman.playerReplacer();
-	playerman.initManagement();
+if(yti.YTUtils.isWatch()){
+	yti.PlayerManager.replacePlayer();
+	yti.PlayerManager.initSizeManagement(window);
 }
-redirector.checkForBarrierRedirect();
-pagecleaner.runElementDelete();
-rssfeeder.addRSSFeed();
-thumbs.initThumbs();
-spfhandler.handleSPF();
+yti.Redirector.executeBarrierRedirect();
+yti.PageCleaner.runElementDelete();
+yti.RSSFeedLinker.addRSSFeed();
+yti.LiveThumbnailer.initThumbs();
+yti.SPFHandler.handleSPF();
