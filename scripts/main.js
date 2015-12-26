@@ -86,14 +86,14 @@ yti.YTUtils = {
 	
 	isWatchWithList: function(url){
 		url = url ? url : window.location.href;
-		return this.utils.contains(url, '/watch') &&
-			   this.utils.contains(url, '&list=');
+		return yti.Utils.contains(url, '/watch') &&
+			   yti.Utils.contains(url, '&list=');
 	},
 	
 	isWatchWithTime: function(url){
 		url = url ? url : window.location.href;
-		return this.utils.contains(url, '/watch') &&
-			   this.utils.contains(url, '&t=');
+		return yti.Utils.contains(url, '/watch') &&
+			   yti.Utils.contains(url, '&t=');
 	},
 	
 	isListing: function(url){
@@ -148,44 +148,36 @@ yti.YTUtils = {
 	
 	getTimeFromUrl: function(url){
 		url = url ? url : window.location.href;
-		let fulltime = url.substr(url.indexOf('t=')+2);
-		if(fulltime.indexOf('&') != -1){
-			fulltime = fulltime.substr(0, fulltime.indexOf('&'));
+		let fullUrlAtTime = url.substr(url.indexOf('t=')+2);
+		if(yti.Utils.contains(fullUrlAtTime, "&")){
+			fullUrlAtTime = fullUrlAtTime.substr(0, fullUrlAtTime.indexOf("&"));
+		}
+		let regNoTime = /\d+\b/g;
+		let regSec = /\d+?s/g;
+		let regMin = /\d+?m/g;
+		let regHr = /\d+?h/g;
+		let regResults = regNoTime.exec(fullUrlAtTime);
+		if(regResults != null){
+			console.log(parseInt(regResults[0]));
+			return parseInt(regResults[0]);
 		}
 		let time = 0;
-		let readableTime = false;
-		if(fulltime.indexOf("h") != -1){
-			let hrs = fulltime.substr(0, fulltime.indexOf("h"));
-			hrs++;
-			hrs--;
-			time += (hrs * 3600);
+		regResults = regSec.exec(fullUrlAtTime);
+		if(regResults != null){
+			console.log(parseInt(regResults[0]));
+			time += parseInt(regResults[0]);
 		}
-		if(fulltime.indexOf("m") != -1){
-			let mins = fulltime.substr(fulltime.indexOf("m")-2, fulltime.indexOf("m"));
-			mins++;
-			mins--;
-			if(isNaN(mins)){
-				let mins = fulltime.substr(fulltime.indexOf("m")-1, fulltime.indexOf("m"));
-				mins++;
-				mins--;
-			}
-			time += (mins * 60);
+		regResults = regMin.exec(fullUrlAtTime);
+		if(regResults != null){
+			console.log(parseInt(regResults[0]));
+			time += (parseInt(regResults[0]) * 60);
 		}
-		if(fulltime.indexOf("s") != -1){
-			let secs = fulltime.substr(fulltime.indexOf("s")-2, fulltime.indexOf("s"));
-			secs++;
-			secs--;
-			if(isNaN(sec)){
-				let secs = fulltime.substr(fulltime.indexOf("m")-1, fulltime.indexOf("m"));
-				secs++;
-				secs--;
-			}
-			time += (secs * 60);
-			return time;
+		regResults = regHr.exec(fullUrlAtTime);
+		if(regResults != null){
+			console.log(parseInt(regResults[0]));
+			time += (parseInt(regResults[0]) * 3600);
 		}
-		fulltime++;
-		fulltime--;
-		return fulltime;
+		return time;
 	},
 }
 
@@ -214,21 +206,21 @@ yti.PlayerManager = {
 				playerVars: {\
 					autoplay: 1,\
 					modestbranding: 1,';
-		if (this.ytutils.isWatchWithList()){
-			script += 'listType: "playlist", list: "' +
-					this.ytutils.getPlaylistFromUrl() + 
+		if (yti.YTUtils.isWatchWithList()){
+			apiFns += 'listType: "playlist", list: "' +
+					yti.YTUtils.getPlaylistFromUrl() + 
 					'",';
 		}
-		if (this.ytutils.isWatchWithTime()){
-			script += 'start: ' + this.ytutils.getTimeFromUrl();
+		if (yti.YTUtils.isWatchWithTime()){
+			apiFns += 'start: ' + yti.YTUtils.getTimeFromUrl();
 		}
-		script += '},\
+		apiFns += '},\
 				events:{\
 					"onReady": onYouTubePlayerCreatedSetQuality,';
-		if (this.ytutils.isWatchWithList()){
-			script += '"onStateChange": onYouTubePlayerStateChange';
+		if (yti.YTUtils.isWatchWithList()){
+			apiFns += '"onStateChange": onYouTubePlayerStateChange';
 		}
-		script += '},\
+		apiFns += '},\
 			});\
 		}';
 		yti.Utils.addScriptToPage(apiFns);
