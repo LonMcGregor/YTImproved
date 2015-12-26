@@ -316,11 +316,6 @@ describe("yti.YTUtils", function(){
 });
 
 describe("yti.PlayerManager", function(){
-	describe("preservePlaylist", function(){
-		xit("preserves a playlist", function(){
-			//this might be removed
-		});
-	});
 	
 	describe("insertAPIHandoff", function(){
 		xit("adds a script for the current video page", function(){
