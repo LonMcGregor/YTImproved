@@ -3,10 +3,16 @@ var channel = "https://www.youtube.com/channel/UC1Un5592U9mFx5n6j2HyXow";
 var userid = "kurtjmac";
 var channelid = "UC1Un5592U9mFx5n6j2HyXow";
 var watch = "https://www.youtube.com/watch?v=BPCUWebOick";
+var watchTime0 = "https://www.youtube.com/watch?v=BPCUWebOick&t=50";
+var time0 = 50;
+var watchTimeHMS = "https://www.youtube.com/watch?v=BPCUWebOick&t=1h42m3s";
+var timeHMS = 6123;
 var videoID = "BPCUWebOick";
+var watchList = "https://www.youtube.com/watch?v=BPCUWebOick&list=PLvxoDthI6hljEr8upu4XycKEIyvdCCgtP";
 var embeddedVideo = "https://www.youtube.com/embed/BPCUWebOick?autoplay=1";
 var search = "https://www.youtube.com/results?search_query=kurtjmac";
 var playlist ="https://www.youtube.com/playlist?list=PLvxoDthI6hljEr8upu4XycKEIyvdCCgtP";
+var playlistID = "PLvxoDthI6hljEr8upu4XycKEIyvdCCgtP";
 var channelRss= 'https://www.youtube.com/feeds/videos.xml?channel_id=';
 var userRss= 'https://www.youtube.com/feeds/videos.xml?user=';
 var playerHeader= 'watch7-user-header';
@@ -225,6 +231,55 @@ describe("yti.YTUtils", function(){
 		});
 	});
 	
+	describe("isWatchWithList", function(){
+		it("returns true if passed a watch url with a list", function(){
+			expect(yti.YTUtils.isWatchWithList(watchList)).toBe(true);
+		});
+		
+		it("returns false if not passed a watch url with a list", function(){
+			expect(yti.YTUtils.isWatchWithList(watch)).toBe(false);
+		});
+		
+		it("reads current url if none passed condition true", function(){
+			spyOn(yti.Utils, "getUrl").and.returnValue(watchList);
+			expect(yti.YTUtils.isWatchWithList()).toBe(true);
+		});
+		
+		it("reads current url if none passed condition false", function(){
+			spyOn(yti.Utils, "getUrl").and.returnValue(watch);
+			expect(yti.YTUtils.isWatchWithList()).toBe(false);
+		});
+	});
+	
+	describe("isWatchWithTime", function(){
+		it("returns true if passed a watch url with a xxx time", function(){
+			expect(yti.YTUtils.isWatchWithTime(watchTime0)).toBe(true);
+		});
+		
+		it("returns true if passed a watch url with a xhxmxs time", function(){
+			expect(yti.YTUtils.isWatchWithTime(watchTimeHMS)).toBe(true);
+		});
+		
+		it("returns false if not passed a watch url with a xxx time", function(){
+			expect(yti.YTUtils.isWatchWithTime(watch)).toBe(false);
+		});
+		
+		it("reads current url if none passed condition xxx true", function(){
+			spyOn(yti.Utils, "getUrl").and.returnValue(watchTime0);
+			expect(yti.YTUtils.isWatchWithTime()).toBe(true);
+		});
+		
+		it("reads current url if none passed condition xhxmxs true", function(){
+			spyOn(yti.Utils, "getUrl").and.returnValue(watchTimeHMS);
+			expect(yti.YTUtils.isWatchWithTime()).toBe(true);
+		});
+		
+		it("reads current url if none passed condition false", function(){
+			spyOn(yti.Utils, "getUrl").and.returnValue(watch);
+			expect(yti.YTUtils.isWatchWithTime()).toBe(false);
+		});
+	});
+	
 	describe("isListing", function(){
 		it("returns true if passed a playlist url", function(){
 			expect(yti.YTUtils.isListing(playlist)).toBe(true);
@@ -311,6 +366,43 @@ describe("yti.YTUtils", function(){
 		
 		it("returns empty string if meta tag not present", function(){
 			expect(yti.YTUtils.getChannelIDFromPlayer()).toEqual("");
+		});
+	});
+
+	describe("getPlaylistFromUrl", function(){
+		it("gets a playlist from passed watch url", function(){
+			var result = yti.YTUtils.getPlaylistFromUrl(watchList);
+			expect(result).toEqual(playlistID);
+		});
+		
+		it("if no urls passed gets a playlist from current href", function(){
+			spyOn(yti.Utils, "getUrl").and.returnValue(watchList);
+			var result = yti.YTUtils.getPlaylistFromUrl();
+			expect(result).toEqual(playlistID);
+		});
+	});
+	
+	describe("getTimeFromUrl", function(){
+		it("gets a xxx time from passed watch url", function(){
+			var result = yti.YTUtils.getTimeFromUrl(watchTime0);
+			expect(result).toEqual(time0);
+		});
+		
+		it("gets a xhxmxs time from passed watch url", function(){
+			var result = yti.YTUtils.getTimeFromUrl(watchTimeHMS);
+			expect(result).toEqual(timeHMS);
+		});
+		
+		it("if no urls passed gets a xxx time from current href", function(){
+			spyOn(yti.Utils, "getUrl").and.returnValue(watchTime0);
+			var result = yti.YTUtils.getTimeFromUrl();
+			expect(result).toEqual(time0);
+		});
+		
+		it("if no urls passed gets a xhxmxs time from current href", function(){
+			spyOn(yti.Utils, "getUrl").and.returnValue(watchTimeHMS);
+			var result = yti.YTUtils.getTimeFromUrl();
+			expect(result).toEqual(timeHMS);
 		});
 	});
 });

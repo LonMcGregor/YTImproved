@@ -85,13 +85,13 @@ yti.YTUtils = {
 	},
 	
 	isWatchWithList: function(url){
-		url = url ? url : window.location.href;
+		url = url ? url : yti.Utils.getUrl();
 		return yti.Utils.contains(url, '/watch') &&
 			   yti.Utils.contains(url, '&list=');
 	},
 	
 	isWatchWithTime: function(url){
-		url = url ? url : window.location.href;
+		url = url ? url : yti.Utils.getUrl();
 		return yti.Utils.contains(url, '/watch') &&
 			   yti.Utils.contains(url, '&t=');
 	},
@@ -139,15 +139,12 @@ yti.YTUtils = {
 	},
 	
 	getPlaylistFromUrl: function(url){
-		url = url ? url : window.location.href;
-		if(this.isWatchWithList() || this.isListing()){
-			return url.substr(url.indexOf('list=')+5, 34);
-		}
-		return "";
+		url = url ? url : yti.Utils.getUrl();
+		return url.substr(url.indexOf('list=')+5, 34);
 	},
 	
 	getTimeFromUrl: function(url){
-		url = url ? url : window.location.href;
+		url = url ? url : yti.Utils.getUrl();
 		let fullUrlAtTime = url.substr(url.indexOf('t=')+2);
 		if(yti.Utils.contains(fullUrlAtTime, "&")){
 			fullUrlAtTime = fullUrlAtTime.substr(0, fullUrlAtTime.indexOf("&"));
