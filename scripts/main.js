@@ -67,7 +67,7 @@ yti.YTUtils = {
 	CHANNEL_TITLE: 'branded-page-header-title-link',
 	EMBED_URL: "https://www.youtube.com/embed/",
 	EMBED_PARAMS: "?autoplay=1",
-	
+		
 	isChannel: function(url){
 		url = url ? url : yti.Utils.getUrl();
 		return (yti.Utils.contains(url, '/user/') || 
@@ -84,6 +84,18 @@ yti.YTUtils = {
 		return yti.Utils.contains(url, '/watch');
 	},
 	
+	isWatchWithList: function(url){
+		url = url ? url : yti.Utils.getUrl();
+		return yti.Utils.contains(url, '/watch') &&
+			   yti.Utils.contains(url, '&list=');
+	},
+	
+	isWatchWithTime: function(url){
+		url = url ? url : yti.Utils.getUrl();
+		return yti.Utils.contains(url, '/watch') &&
+			   yti.Utils.contains(url, '&t=');
+	},
+	
 	isListing: function(url){
 		url = url ? url : yti.Utils.getUrl();
 		return yti.Utils.contains(url, '/playlist');
@@ -94,7 +106,7 @@ yti.YTUtils = {
 		return url.substr(url.indexOf("v=")+2,11);
 	},
 
-	newEmbeddedUrl: function(videoID){
+	getEmbedUrlForID: function(videoID){
 		videoID = videoID ? videoID : this.getVideoIDUrl();
 		return this.EMBED_URL+
 		    videoID+this.EMBED_PARAMS;
@@ -125,33 +137,87 @@ yti.YTUtils = {
 		}
 		return "";
 	},
+	
+	getPlaylistFromUrl: function(url){
+		url = url ? url : yti.Utils.getUrl();
+		return url.substr(url.indexOf('list=')+5, 34);
+	},
+	
+	getTimeFromUrl: function(url){
+		url = url ? url : yti.Utils.getUrl();
+		let fullUrlAtTime = url.substr(url.indexOf('t=')+2);
+		if(yti.Utils.contains(fullUrlAtTime, "&")){
+			fullUrlAtTime = fullUrlAtTime.substr(0, fullUrlAtTime.indexOf("&"));
+		}
+		let regNoTime = /\d+\b/g;
+		let regSec = /\d+?s/g;
+		let regMin = /\d+?m/g;
+		let regHr = /\d+?h/g;
+		let regResults = regNoTime.exec(fullUrlAtTime);
+		if(regResults != null){
+			console.log(parseInt(regResults[0]));
+			return parseInt(regResults[0]);
+		}
+		let time = 0;
+		regResults = regSec.exec(fullUrlAtTime);
+		if(regResults != null){
+			console.log(parseInt(regResults[0]));
+			time += parseInt(regResults[0]);
+		}
+		regResults = regMin.exec(fullUrlAtTime);
+		if(regResults != null){
+			console.log(parseInt(regResults[0]));
+			time += (parseInt(regResults[0]) * 60);
+		}
+		regResults = regHr.exec(fullUrlAtTime);
+		if(regResults != null){
+			console.log(parseInt(regResults[0]));
+			time += (parseInt(regResults[0]) * 3600);
+		}
+		return time;
+	},
 }
 
 
 yti.PlayerManager = {
 	PLAYER_CONTAINER: "player-playlist",
 	PAGE_NAME: "page",
-	
-	preservePlaylist: function (){
-		let playlist = document.getElementById(this.PLAYER_CONTAINER);
-		document.getElementById(this.PAGE_NAME).appendChild(playlist);
-	},
-	
+		
 	insertAPIHandoff: function(){
 		let apiFns = 'var player;\
 		function onYouTubePlayerCreatedSetQuality(event) {\
 				event.target.setPlaybackQuality("hd1080");\
-		} \
+		}\
+		function onYouTubePlayerStateChange(event){\
+			if(event.data==1){\
+				var vidData = event.target.getVideoData();\
+				var newTitle = vidData.title + " - YouTube";\
+				var newUrl = "https://www.youtube.com/watch?v="+vidData.video_id+"&list="+vidData.list;\
+				history.pushState(vidData, newTitle, newUrl);\
+				document.title = newTitle;\
+			}\
+		}\
 		function onYouTubePlayerAPIReady() {\
 			player = new YT.Player("player", {\
 				videoId: "'+yti.YTUtils.getVideoIDUrl()+'",\
 				playerVars: {\
 					autoplay: 1,\
-					modestbranding: 1,\
-				},\
+					modestbranding: 1,';
+		if (yti.YTUtils.isWatchWithList()){
+			apiFns += 'listType: "playlist", list: "' +
+					yti.YTUtils.getPlaylistFromUrl() + 
+					'",';
+		}
+		if (yti.YTUtils.isWatchWithTime()){
+			apiFns += 'start: ' + yti.YTUtils.getTimeFromUrl();
+		}
+		apiFns += '},\
 				events:{\
-					"onReady": onYouTubePlayerCreatedSetQuality\
-				},\
+					"onReady": onYouTubePlayerCreatedSetQuality,';
+		if (yti.YTUtils.isWatchWithList()){
+			apiFns += '"onStateChange": onYouTubePlayerStateChange';
+		}
+		apiFns += '},\
 			});\
 		}';
 		yti.Utils.addScriptToPage(apiFns);
@@ -162,7 +228,6 @@ yti.PlayerManager = {
 	},
 	
 	replacePlayer: function(){
-		this.preservePlaylist();
 		this.insertAPIHandoff();
 		this.insertAPI();
 	},
@@ -279,7 +344,7 @@ yti.LiveThumbnailer = {
 	 
 	getUrl: function(container){
 	  let bigUrl = container.getElementsByTagName('a')[0].href;
-	  return yti.YTUtils.newEmbeddedUrl(yti.YTUtils.getVideoIDUrl(bigUrl));
+	  return yti.YTUtils.getEmbedUrlForID(yti.YTUtils.getVideoIDUrl(bigUrl));
 	},
 
 	makeIframe: function(url) {
