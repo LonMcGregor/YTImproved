@@ -1,10 +1,8 @@
 .branded-page-v2-secondary-col, #guide, #masthead-appbar,
 #appbar-guide-button, #footer-container, #watch-discussion,
 #watch7-sidebar, #share-services-container, .cookie-alert,
-#alerts, #masthead-positioner-height-offset,
-.yt-masthead-user-icon, #yt-masthead-signin, #yt-masthead #logo,
+#alerts, #masthead-positioner-height-offset, #yt-masthead #logo,
  .yt-uix-button-subscribe-branded,
- #watch-like:before, #watch-dislike:before, .yt-uix-clickcard-card,
- .ytp-button.ytp-size-toggle-large, .ytp-button.ytp-button-watch-later {
+ #watch-like:before, #watch-dislike:before, .yt-uix-clickcard-card {
 	 display: none !important; 
 }
