@@ -243,8 +243,8 @@ yti.PlayerManager = {
 	
 	initSizeManagement: function(w){
 		w.onresize = function (e) {
-			util.waitForFinalEvent( function(){
-			  playerman.setSize();
+			yti.Utils.waitForFinalEvent( function(){
+			  yti.PlayerManager.setSize();
 			}, 80, "resizeme");
 		};
 		this.setSize();
