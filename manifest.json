@@ -18,5 +18,5 @@
 		"js": ["scripts/contentScript.js"]
 	  }
 	],
-	"web_accessible_resources": ["main.js"]
+	"web_accessible_resources": ["scripts/main.js"]
 }
