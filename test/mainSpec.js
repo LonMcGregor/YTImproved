@@ -408,32 +408,7 @@ describe("yti.YTUtils", function(){
 });
 
 describe("yti.PlayerManager", function(){
-	
-	describe("insertAPIHandoff", function(){
-		xit("adds a script for the current video page", function(){
-			spyOn(yti.Utils, "getUrl").and.returnValue(watch);
-			spyOn(yti.Utils, "addScriptToPage");
-			yti.PlayerManager.insertAPIHandoff();
-			var expectedScript = 'var player;\
-		function onYouTubePlayerCreatedSetQuality(event) {\
-				event.target.setPlaybackQuality("hd1080");\
-		} \
-		function onYouTubePlayerAPIReady() {\
-			player = new YT.Player("player", {\
-				videoId: "'+videoID+'",\
-				playerVars: {\
-					autoplay: 1,\
-					modestbranding: 1,\
-				},\
-				events:{\
-					"onReady": onYouTubePlayerCreatedSetQuality\
-				},\
-			});\
-		}';
-			expect(yti.Utils.addScriptToPage).toHaveBeenCalledWith(expectedScript);
-		});
-	});
-	
+		
 	describe("insertAPI", function(){
 		xit("adds a youtube api web source script to page", function(){
 			spyOn(yti.Utils, "addScriptWebSourceToPage");
@@ -514,7 +489,7 @@ describe("yti.PlayerManager", function(){
 			expect(yti.PlayerManager.setSize).calls.count.toEqual(1);
 			jasmine.clock().uninstall();
 		});
-	});	
+	});
 });
 
 describe("yti.PageCleaner", function(){
