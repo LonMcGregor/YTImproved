@@ -207,7 +207,8 @@ yti.PlayerManager = {
 		}
 	},
 	
-	onYouTubePlayerAPIReady: function(){
+	onYouTubePlayerAPIReady: function(yt){
+		yt = yt ? yt : YT;
 		let apiParams = {};
 		let apiPlayerVars = {};
 		let apiEvents = {};
@@ -225,7 +226,7 @@ yti.PlayerManager = {
 		apiParams.videoId = yti.YTUtils.getVideoIDUrl();
 		apiParams.playerVars = apiPlayerVars;
 		apiParams.events = apiEvents;
-		yti.Player = new YT.Player("placeholder-player", apiParams);
+		yti.Player = new yt.Player("placeholder-player", apiParams);
 	},
 		
 	insertAPI: function(){

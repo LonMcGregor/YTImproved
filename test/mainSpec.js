@@ -22,6 +22,7 @@ var redirectUrl = "https://www.youtube.com/redirect?q=http%3A%2F%2Ffarlandsorbus
 var expectedRedirectUrl = "http://farlandsorbust.com/";
 var thumbClass = 'yt-lockup-thumbnail';
 var qualityString = "hd1080";
+var playerDomLocation = "placeholder-player";
 
 describe("yti", function(){
 	it("exists", function(){
@@ -522,14 +523,41 @@ describe("yti.PlayerManager", function(){
 	});
 	
 	describe("onYouTubePlayerAPIReady", function(){
-		xit("creates a player", function(){
+		var YT;
+		var expectedVars; 
+		beforeEach(function(){
+			YT = jasmine.createSpyObj("YT"	, ["Player"]);
+			expectedVars = {
+				videoId: videoID,
+				playerVars: {autoplay: 1, modestbranding: 1, },
+				events: {onReady: yti.PlayerManager.onYouTubePlayerCreatedSetQuality,},
+			};
+			spyOn(yti.YTUtils, "getVideoIDUrl").and.returnValue(videoID);
+			spyOn(yti.YTUtils, "getPlaylistFromUrl").and.returnValue(playlistID);
+			spyOn(yti.YTUtils, "getTimeFromUrl").and.returnValue(time0);
+		});
+		it("creates a player", function(){
+			spyOn(yti.YTUtils, "isWatchWithList").and.returnValue(false);
+			spyOn(yti.YTUtils, "isWatchWithTime").and.returnValue(false);
+			yti.PlayerManager.onYouTubePlayerAPIReady(YT);
+			expect(YT.Player).toHaveBeenCalledWith(playerDomLocation, expectedVars);
+		});
+		it("if needed it adds playlist param info and listeners", function(){
+			spyOn(yti.YTUtils, "isWatchWithList").and.returnValue(true);
+			spyOn(yti.YTUtils, "isWatchWithTime").and.returnValue(false);
+			expectedVars.playerVars.listType = "playlist";
+			expectedVars.playerVars.list = playlistID;
+			expectedVars.events.onStateChange =yti.PlayerManager.onYouTubePlayerStateChange;
+			yti.PlayerManager.onYouTubePlayerAPIReady(YT);
+			expect(YT.Player).toHaveBeenCalledWith(playerDomLocation, expectedVars);
 			
 		});
-		xit("if needed it adds time param info", function(){
-			
-		});
-		xit("if needed it adds playlist info and listeners", function(){
-			
+		it("if needed it adds time info", function(){
+			spyOn(yti.YTUtils, "isWatchWithList").and.returnValue(false);
+			spyOn(yti.YTUtils, "isWatchWithTime").and.returnValue(true);
+			expectedVars.playerVars.start = time0;
+			yti.PlayerManager.onYouTubePlayerAPIReady(YT);
+			expect(YT.Player).toHaveBeenCalledWith(playerDomLocation, expectedVars);
 		});
 	});	
 });
