@@ -490,6 +490,8 @@ describe("yti.PlayerManager", function(){
 			jasmine.clock().uninstall();
 		});
 	});
+	
+	
 });
 
 describe("yti.PageCleaner", function(){

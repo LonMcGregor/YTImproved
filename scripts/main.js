@@ -219,18 +219,13 @@ yti.PlayerManager = {
 		apiParams.events = apiEvents;
 		yti.Player = new YT.Player("placeholder-player", apiParams);
 	},
-	
-	insertAPIHandoff: function(){
-		yti.Utils.addScriptToPage("");
-	},
-	
+		
 	insertAPI: function(){
 		yti.Utils.addScriptWebSourceToPage("https://www.youtube.com/player_api");
 	},
 	
 	replacePlayer: function(){
 		yti.Utils.deleteElementById("player");
-		this.insertAPIHandoff();
 		this.insertAPI();
 	},
 	
