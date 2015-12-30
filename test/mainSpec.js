@@ -419,11 +419,8 @@ describe("yti.PlayerManager", function(){
 	});
 	
 	describe("replacePlayer", function(){
-		xit("preserved the playlist", function(){
+		xit("deletes the old player", function(){
 			
-		});
-		xit("adds the API handoff", function(){
-			//just copy the other test methods
 		});
 		xit("adds the API", function(){
 			
@@ -491,7 +488,32 @@ describe("yti.PlayerManager", function(){
 		});
 	});
 	
+	describe("onYouTubePlayerCreatedSetQuality", function(){
+		xit("sets quality of target video to 1080", function(){
+			
+		});
+	});
 	
+	describe("onYouTubePlayerStateChange", function(){
+		xit("if a new video starts it updates the page and history", function(){
+			
+		});
+		xit("if any other event fires it does nothing", function(){
+			
+		});
+	});
+	
+	describe("onYouTubePlayerAPIReady", function(){
+		xit("creates a player", function(){
+			
+		});
+		xit("if needed it adds time param info", function(){
+			
+		});
+		xit("if needed it adds playlist info and listeners", function(){
+			
+		});
+	});	
 });
 
 describe("yti.PageCleaner", function(){
