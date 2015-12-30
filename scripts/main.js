@@ -62,7 +62,7 @@ yti.Utils = {
 		let firstScriptTag = document.getElementsByTagName('script')[0];
 		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 	},
-}
+};
 
 
 yti.YTUtils = {	
@@ -178,7 +178,7 @@ yti.YTUtils = {
 		}
 		return time;
 	},
-}
+};
 
 
 yti.PlayerManager = {
@@ -251,7 +251,7 @@ yti.PlayerManager = {
 		};
 		this.setSize();
 	},
-}
+};
 
 
 yti.PageCleaner = {
@@ -284,7 +284,7 @@ yti.PageCleaner = {
 			yti.Utils.deleteElements(this.ELEMENTS_WATCH);
 		}
 	},
-}
+};
 
 
 yti.Redirector = {
@@ -303,7 +303,7 @@ yti.Redirector = {
 			yti.Utils.setUrl(this.getBarrierUrl());
 		}
 	},
-}
+};
 
 
 yti.LiveThumbnailer = {	
@@ -356,7 +356,7 @@ yti.LiveThumbnailer = {
 	  iframe.width = "100%";
 	  return iframe;
 	},
-}
+};
 
 
 yti.RSSFeedLinker = {	
@@ -404,14 +404,14 @@ yti.RSSFeedLinker = {
 		return link;
 	},
 
-}
+};
 
 
 yti.SPFHandler = {
 	handleSPF: function(){
 		yti.Utils.addScriptToPage('if(typeof window.spf!="undefined"){window.spf.dispose();}');
 	},
-}
+};
 
 function onYouTubePlayerAPIReady(){
 	yti.PlayerManager.onYouTubePlayerAPIReady();
