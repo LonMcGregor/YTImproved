@@ -499,11 +499,25 @@ describe("yti.PlayerManager", function(){
 	});
 	
 	describe("onYouTubePlayerStateChange", function(){
-		xit("if a new video starts it updates the page and history", function(){
-			
+		var data = {title: "test", video_id: "testid", list: "listid"};
+		var e = {data:0,target:{getVideoData:function(){return data;}}};
+		var expectedTitle = "test - YouTube";
+		var expectedurl = "https://www.youtube.com/watch?v=testid&list=listid";
+		beforeEach(function(){
+			spyOn(history, 'pushState');
+			spyOn(yti.Utils, 'setTitle');
 		});
-		xit("if any other event fires it does nothing", function(){
-			
+		it("if a new video starts it updates the page and history", function(){
+			e.data = 1;
+			yti.PlayerManager.onYouTubePlayerStateChange(e);
+			expect(history.pushState).toHaveBeenCalledWith(data, expectedTitle, expectedurl);
+			expect(yti.Utils.setTitle).toHaveBeenCalledWith(expectedTitle);
+		});
+		it("if any other event fires it does nothing", function(){
+			e.data = 0;
+			yti.PlayerManager.onYouTubePlayerStateChange(e);
+			expect(history.pushState).not.toHaveBeenCalled();
+			expect(yti.Utils.setTitle).not.toHaveBeenCalled();
 		});
 	});
 	

@@ -49,6 +49,14 @@ yti.Utils = {
 		window.location.href = newLocation;
 	},
 	
+	getTitle: function(){
+		return document.title;
+	},
+	
+	setTitle: function(newTitle){
+		document.title = newTitle;
+	},
+	
 	addScriptToPage: function(scriptContent){
 		let tag = document.createElement('script');
 		tag.textContent = scriptContent;
@@ -195,7 +203,7 @@ yti.PlayerManager = {
 			let newTitle = vidData.title + " - YouTube";
 			let newUrl = "https://www.youtube.com/watch?v="+vidData.video_id+"&list="+vidData.list;
 			history.pushState(vidData, newTitle, newUrl);
-			document.title = newTitle;
+			yti.Utils.setTitle(newTitle);
 		}
 	},
 	
