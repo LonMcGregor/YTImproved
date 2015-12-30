@@ -21,6 +21,7 @@ var buttonClass= "yt-uix-button-content";
 var redirectUrl = "https://www.youtube.com/redirect?q=http%3A%2F%2Ffarlandsorbust.com%2F&redir_token=0DpfRQe1s6lEXh4IP7QwKtydHdt8MTQ1MDk2NDIxMEAxNDUwODc3ODEw";
 var expectedRedirectUrl = "http://farlandsorbust.com/";
 var thumbClass = 'yt-lockup-thumbnail';
+var qualityString = "hd1080";
 
 describe("yti", function(){
 	it("exists", function(){
@@ -489,8 +490,11 @@ describe("yti.PlayerManager", function(){
 	});
 	
 	describe("onYouTubePlayerCreatedSetQuality", function(){
-		xit("sets quality of target video to 1080", function(){
-			
+		it("sets quality of target video to 1080", function(){
+			var e = {target:{setPlaybackQuality:function(){}}};
+			spyOn(e.target, 'setPlaybackQuality');
+			yti.PlayerManager.onYouTubePlayerCreatedSetQuality(e);
+			expect(e.target.setPlaybackQuality).toHaveBeenCalledWith(qualityString);
 		});
 	});
 	
