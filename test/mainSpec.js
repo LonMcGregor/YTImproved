@@ -22,7 +22,7 @@ var redirectUrl = "https://www.youtube.com/redirect?q=http%3A%2F%2Ffarlandsorbus
 var expectedRedirectUrl = "http://farlandsorbust.com/";
 var thumbClass = 'yt-lockup-thumbnail';
 var qualityString = "hd1080";
-var playerDomLocation = "placeholder-player";
+var playerDomLocation = "player";
 
 describe("yti", function(){
 	it("exists", function(){
@@ -391,9 +391,9 @@ describe("yti.PlayerManager", function(){
 	describe("setSize", function(){
 		it("sets the size of the player to be the current width of the window", function(){
 			var el1 = document.createElement('div');
-			el1.id = "player";
+			el1.id = playerDomLocation;
 			document.body.appendChild(el1);
-			el1 = document.getElementById("player");
+			el1 = document.getElementById(playerDomLocation);
 			
 			var expectedWidth = window.innerWidth;
 			var expectedHeight = window.innerHeight;
@@ -415,7 +415,7 @@ describe("yti.PlayerManager", function(){
 			el1 = document.createElement('div');
 			el1.id = "player";
 			document.body.appendChild(el1);
-			el1 = document.getElementById("player");
+			el1 = document.getElementById(playerDomLocation);
 			mockWindow = {};
 		});
 		
