@@ -41,49 +41,7 @@ describe("yti.Utils", function() {
 			expect(yti.Utils.contains("haystack", "needle")).toBe(false);
 		});
 	});
-	
-	describe("timers", function() {
-		it("should exist", function(){
-			expect(yti.Utils.timers).toBeDefined();
-		});
-	});
-	
-	describe("waitForFinalEvent", function(){
-		var timerCallback;
 		
-		beforeEach(function() {
-			timerCallback = jasmine.createSpy("timerCallback");
-			jasmine.clock().install();
-		});
-		
-		afterEach(function() {
-			jasmine.clock().uninstall();
-		});
-		
-		it("calls a single callback after a time limit", function(){
-			yti.Utils.waitForFinalEvent(timerCallback, 50, "thing");
-			expect(timerCallback).not.toHaveBeenCalled();
-			jasmine.clock().tick(51);
-			expect(timerCallback).toHaveBeenCalled();
-		});
-		
-		it("calls a single callback after many calls creating them", function(){
-			yti.Utils.waitForFinalEvent(timerCallback, 50, "thing");
-			expect(timerCallback).not.toHaveBeenCalled();
-			yti.Utils.waitForFinalEvent(timerCallback, 50, "thing");
-			yti.Utils.waitForFinalEvent(timerCallback, 50, "thing");
-			jasmine.clock().tick(51);
-			expect(timerCallback.calls.count()).toEqual(1);
-		});
-		
-		it("allows multiple calls from different unique ids", function(){
-			yti.Utils.waitForFinalEvent(timerCallback, 50, "thing");
-			yti.Utils.waitForFinalEvent(timerCallback, 50, "thing2");
-			jasmine.clock().tick(51);
-			expect(timerCallback.calls.count()).toEqual(2);
-		});
-	});
-	
 	describe("deleteElements", function() {
 		var elements;
 		var el1;
@@ -476,21 +434,13 @@ describe("yti.PlayerManager", function(){
 			expect(el1.style.left).toEqual("0px");
 		});
 		
-		xit("the listener will call setSize once, after 80ms", function(){
+		it("the listener will call setSize once, after 80ms", function(){
 			//might not even need the waitforfinalevent
 			spyOn(yti.PlayerManager, "setSize");
-			jasmine.clock().install();
 			yti.PlayerManager.initSizeManagement(mockWindow);
-			expect(yti.PlayerManager.setSize.calls.count()).toEqual(0);
-			mockWindow.onresize();
-			jasmine.clock().tick(40);
-			expect(yti.PlayerManager.setSize.calls.count()).toEqual(0);
-			mockWindow.onresize();
-			jasmine.clock().tick(19);
-			expect(yti.PlayerManager.setSize.calls.count()).toEqual(0);
-			jasmine.clock().tick(21);
 			expect(yti.PlayerManager.setSize.calls.count()).toEqual(1);
-			jasmine.clock().uninstall();
+			mockWindow.onresize();
+			expect(yti.PlayerManager.setSize.calls.count()).toEqual(2);
 		});
 	});
 	

@@ -14,18 +14,6 @@ yti.Utils = {
 		return (haystack.indexOf(needle) > -1);
 	},
 	
-	timers: {},
-	
-	waitForFinalEvent: function (callback, ms, uniqueId) {
-		if (!uniqueId) {
-		  //uniqueId = "Don't call this twice without a uniqueId";
-		}
-		if (this.timers[uniqueId]) {
-		  clearTimeout(this.timers[uniqueId]);
-		}
-		this.timers[uniqueId] = setTimeout(callback, ms);
-	  }, //brahn on stackoverflow
-	
 	deleteElements: function(array){
 		for(let i = 0; i < array.length; i++){
 			this.deleteElementById(array[i]);
@@ -251,9 +239,7 @@ yti.PlayerManager = {
 	
 	initSizeManagement: function(w){
 		w.onresize = function (e) {
-			yti.Utils.waitForFinalEvent( function(){
-			  yti.PlayerManager.setSize();
-			}, 80, "resizeme");
+			yti.PlayerManager.setSize();
 		};
 		this.setSize();
 	},
