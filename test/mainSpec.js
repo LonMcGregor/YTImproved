@@ -64,21 +64,23 @@ describe("yti.Utils", function() {
 			el2.parentElement.removeChild(el2);
 		});
 		
-		xit("deletes all elements in an array of dom elements", function(){
+		it("deletes all elements in an array of dom elements", function(){
 			yti.Utils.deleteElements(elements);
 			expect(document.getElementById("testingDiv")).toBeNull();
 			expect(document.getElementById("testingH1")).toBeNull();
+			pending("DOM modification");
 		});
 		
-		xit("doesnt fail if an element doesnt exist", function(){
+		it("doesnt fail if an element doesnt exist", function(){
 			el1.parentElement.removeChild(el1);
 			el2.parentElement.removeChild(el2);
 			yti.Utils.deleteElements(elements);
+			pending("DOM modification");
 		});
 	});
 	
 	describe("deleteElementById", function() {
-		var el1;
+		var el1, elementlist;
 		
 		beforeEach(function() {
 			el1 = document.createElement('div');
@@ -91,37 +93,41 @@ describe("yti.Utils", function() {
 			el1.parentElement.removeChild(el1);
 		});
 		
-		xit("deletes a single element", function(){
-			yti.Utils.deleteElements(elements);
+		it("deletes a single element", function(){
+			elementlist = [el1];
+			yti.Utils.deleteElements(elementlist);
 			expect(document.getElementById("testingDiv")).toBeNull();
+			pending("DOM modification");
 		});
-		xit("doesnt fail if an element doesnt exist", function(){
+		
+		it("doesnt fail if an element doesnt exist", function(){
 			el1.parentElement.removeChild(el1);
-			yti.Utils.deleteElements(elements);
+			yti.Utils.deleteElements(elementlist);
+			pending("DOM modification");
 		});
 	});
 	
 	describe("getUrl", function(){
-		xit("gets window.location.href", function(){
-			
+		it("gets window.location.href", function(){
+			pending("global window access");
 		});
 	});
 	
 	describe("setUrl", function(){
-		xit("sets a new window.location.href", function(){
-			
+		it("sets a new window.location.href", function(){
+			pending("global window access");
 		});
 	});
 	
 	describe("addScriptToPage", function(){
-		xit("adds a script to the page, given content", function(){
-			
+		it("adds a script to the page, given content", function(){
+			pending("DOM modification");
 		});
 	});
 	
 	describe("addScriptWebSourceToPage", function(){
-		xit("adds a script to the page, given content", function(){
-			
+		it("adds a script to the page, given content", function(){
+			pending("DOM modification");
 		});
 	});
 });
@@ -371,22 +377,22 @@ describe("yti.YTUtils", function(){
 describe("yti.PlayerManager", function(){
 		
 	describe("insertAPI", function(){
-		xit("adds a youtube api web source script to page", function(){
+		it("adds a youtube api web source script to page", function(){
 			spyOn(yti.Utils, "addScriptWebSourceToPage");
 			yti.PlayerManager.insertAPI();
 			var expectedSrc = "https://www.youtube.com/player_api";
 			expect(yti.Utils.addScriptWebSourceToPage).toHaveBeenCalledWith(expectedSrc);
-			//requries dom modification to be testable
+			pending("DOM modification");
 		});
 	});
 	
 	describe("replacePlayer", function(){
-		xit("deletes the old player", function(){
-			//requries dom modification to be testable
+		it("deletes the old player", function(){
+			pending("DOM modification");
 		});
 		
-		xit("adds the API", function(){
-			//requries dom modification to be testable
+		it("adds the API", function(){
+			pending("DOM modification");
 		});
 	});
 	
@@ -532,20 +538,20 @@ describe("yti.PlayerManager", function(){
 
 describe("yti.PageCleaner", function(){
 	describe("runElementDelete", function(){
-		xit("deletes elements according to globals", function(){
-			
+		it("deletes elements according to globals", function(){
+			pending("DOM modification");
 		});
 		
-		xit("deletes elements according to channels / lists", function(){
-			
+		it("deletes elements according to channels / lists", function(){
+			pending("DOM modification");
 		});
 		
-		xit("deletes elements from search pages", function(){
-			
+		it("deletes elements from search pages", function(){
+			pending("DOM modification");
 		});
 		
-		xit("deletes elements according to watch pages", function(){
-			
+		it("deletes elements according to watch pages", function(){
+			pending("DOM modification");
 		});
 	});
 });
@@ -681,7 +687,7 @@ describe("yti.LiveThumbnailer", function(){
 	});
 });
 
-describe("SPFHandler", function(){
+describe("yti.SPFHandler", function(){
 	it("adds a script to the page that disposes the spf", function(){
 		spyOn(yti.Utils, "addScriptToPage");
 		yti.SPFHandler.handleSPF();
@@ -690,70 +696,22 @@ describe("SPFHandler", function(){
 	});
 });
 
-describe("RSSFeedLinker", function(){
+describe("yti.RSSFeedLinker", function(){
 	describe("addRSSFeed", function(){
 		beforeEach(function(){
 			spyOn(yti.RSSFeedLinker, "createFeedURL").and.returnValue(channelRss);
 		});
 		
-		xit("if a channel, adds a feed to channel", function(){
-			spyOn(yti.YTUtils, "isChannel").and.returnValue(true);
-			spyOn(yti.YTUtils, "isListing").and.returnValue(false);
-			spyOn(yti.YTUtils, "isWatch").and.returnValue(false);
-			var testcontainer = document.createElement('div');
-			testcontainer.id = channelHeader;
-			document.body.appendChild(testcontainer);
-			testcontainer = document.getElementById(channelHeader);
-			var el1 = document.createElement('a');
-			el1.setAttribute("href", channelRss);
-			el1.innerHTML = "RSS Feed: Uploads";
-			el1.setAttribute("class", buttonClass);
-			spyOn(yti.RSSFeedLinker, "createFeedElement").and.returnValue(el1);
-			yti.RSSFeedLinker.addFeedElementToPlayer(channelRss);
-			testcontainer = document.getElementById(channelHeader);
-			expect(testcontainer.firstChild).toEqual(el1);
-			document.body.removeChild(testcontainer);
-			
+		it("if a channel, adds a feed to channel", function(){
+			pending("DOM modification");
 		});
 		
-		xit("if a playlist, adds a feed to owning channel", function(){
-			spyOn(yti.YTUtils, "isChannel").and.returnValue(false);
-			spyOn(yti.YTUtils, "isListing").and.returnValue(true);
-			spyOn(yti.YTUtils, "isWatch").and.returnValue(false);
-			var testcontainer = document.createElement('div');
-			testcontainer.id = channelHeader;
-			document.body.appendChild(testcontainer);
-			testcontainer = document.getElementById(channelHeader);
-			var el1 = document.createElement('a');
-			el1.setAttribute("href", channelRss);
-			el1.innerHTML = "RSS Feed: Uploads";
-			el1.setAttribute("class", buttonClass);
-			spyOn(yti.RSSFeedLinker, "createFeedElement").and.returnValue(el1);
-			yti.RSSFeedLinker.addFeedElementToPlayer(channelRss);
-			testcontainer = document.getElementById(channelHeader);
-			expect(testcontainer.firstChild).toEqual(el1);
-			document.body.removeChild(testcontainer);
-			
+		it("if a playlist, adds a feed to owning channel", function(){
+			pending("DOM modification");
 		});
 		
-		xit("if a player page, adds a feed to subs box on player", function(){
-			spyOn(yti.YTUtils, "isChannel").and.returnValue(false);
-			spyOn(yti.YTUtils, "isListing").and.returnValue(false);
-			spyOn(yti.YTUtils, "isWatch").and.returnValue(true);
-			var testcontainer = document.createElement('div');
-			testcontainer.id = playerHeader;
-			document.body.appendChild(testcontainer);
-			testcontainer = document.getElementById(playerHeader);
-			var el1 = document.createElement('a');
-			el1.setAttribute("href", channelRss);
-			el1.innerHTML = "RSS Feed: Uploads";
-			el1.setAttribute("class", buttonClass);
-			spyOn(yti.RSSFeedLinker, "createFeedElement").and.returnValue(el1);
-			yti.RSSFeedLinker.addFeedElementToPlayer(channelRss);
-			testcontainer = document.getElementById(playerHeader);
-			expect(testcontainer.firstChild).toEqual(el1);
-			document.body.removeChild(testcontainer);
-			
+		it("if a player page, adds a feed to subs box on player", function(){
+			pending("DOM modification");
 		});
 	});
 	
@@ -772,7 +730,7 @@ describe("RSSFeedLinker", function(){
 	});
 	
 	describe("addFeedElementToPlayer", function(){
-		xit("adds a document element to a player description box", function(){
+		it("adds a document element to a player description box", function(){
 			var testcontainer = document.createElement('div');
 			testcontainer.id = playerHeader;
 			document.body.appendChild(testcontainer);
@@ -786,24 +744,13 @@ describe("RSSFeedLinker", function(){
 			testcontainer = document.getElementById(playerHeader);
 			expect(testcontainer.firstChild).toEqual(el1);
 			document.body.removeChild(testcontainer);
+			pending("DOM modification");
 		});
 	});
 	
 	describe("addFeedElementToChannel", function(){
-		xit("adds a document element to a player description box", function(){
-			var testcontainer = document.createElement('div');
-			testcontainer.id = channelHeader;
-			document.body.appendChild(testcontainer);
-			testcontainer = document.getElementById(channelHeader);
-			var el1 = document.createElement('a');
-			el1.setAttribute("href", channelRss);
-			el1.innerHTML = "RSS Feed: Uploads";
-			el1.setAttribute("class", buttonClass);
-			spyOn(yti.RSSFeedLinker, "createFeedElement").and.returnValue(el1);
-			yti.RSSFeedLinker.addFeedElementToPlayer(channelRss);
-			testcontainer = document.getElementById(channelHeader);
-			expect(testcontainer.firstChild).toEqual(el1);
-			document.body.removeChild(testcontainer);
+		it("adds a document element to a player description box", function(){
+			pending("DOM modification");
 		});
 	});
 	
