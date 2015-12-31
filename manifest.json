@@ -15,7 +15,8 @@
 	  {
 		"matches": ["*://*.youtube.com/*"],
 		"css": ["css/hidden.css", "css/colours.css", "css/watch.css", "css/masthead.css"],
-		"js": ["scripts/main.js"]
+		"js": ["scripts/contentScript.js"]
 	  }
-	]
+	],
+	"web_accessible_resources": ["scripts/main.js"]
 }

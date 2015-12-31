@@ -7,22 +7,12 @@ See https://github.com/LonMcGregor/YTImproved/
 
 var yti = yti || {};
 
+yti.Player = {};
+
 yti.Utils = {
 	contains: function(haystack, needle) {
 		return (haystack.indexOf(needle) > -1);
 	},
-	
-	timers: {},
-	
-	waitForFinalEvent: function (callback, ms, uniqueId) {
-		if (!uniqueId) {
-		  //uniqueId = "Don't call this twice without a uniqueId";
-		}
-		if (this.timers[uniqueId]) {
-		  clearTimeout(this.timers[uniqueId]);
-		}
-		this.timers[uniqueId] = setTimeout(callback, ms);
-	  }, //brahn on stackoverflow
 	
 	deleteElements: function(array){
 		for(let i = 0; i < array.length; i++){
@@ -47,6 +37,14 @@ yti.Utils = {
 		window.location.href = newLocation;
 	},
 	
+	getTitle: function(){
+		return document.title;
+	},
+	
+	setTitle: function(newTitle){
+		document.title = newTitle;
+	},
+	
 	addScriptToPage: function(scriptContent){
 		let tag = document.createElement('script');
 		tag.textContent = scriptContent;
@@ -60,7 +58,7 @@ yti.Utils = {
 		let firstScriptTag = document.getElementsByTagName('script')[0];
 		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 	},
-}
+};
 
 
 yti.YTUtils = {	
@@ -176,64 +174,62 @@ yti.YTUtils = {
 		}
 		return time;
 	},
-}
+};
 
 
 yti.PlayerManager = {
 	PLAYER_CONTAINER: "player-playlist",
 	PAGE_NAME: "page",
-		
-	insertAPIHandoff: function(){
-		let apiFns = 'var player;\
-		function onYouTubePlayerCreatedSetQuality(event) {\
-				event.target.setPlaybackQuality("hd1080");\
-		}\
-		function onYouTubePlayerStateChange(event){\
-			if(event.data==1){\
-				var vidData = event.target.getVideoData();\
-				var newTitle = vidData.title + " - YouTube";\
-				var newUrl = "https://www.youtube.com/watch?v="+vidData.video_id+"&list="+vidData.list;\
-				history.pushState(vidData, newTitle, newUrl);\
-				document.title = newTitle;\
-			}\
-		}\
-		function onYouTubePlayerAPIReady() {\
-			player = new YT.Player("player", {\
-				videoId: "'+yti.YTUtils.getVideoIDUrl()+'",\
-				playerVars: {\
-					autoplay: 1,\
-					modestbranding: 1,';
-		if (yti.YTUtils.isWatchWithList()){
-			apiFns += 'listType: "playlist", list: "' +
-					yti.YTUtils.getPlaylistFromUrl() + 
-					'",';
-		}
-		if (yti.YTUtils.isWatchWithTime()){
-			apiFns += 'start: ' + yti.YTUtils.getTimeFromUrl();
-		}
-		apiFns += '},\
-				events:{\
-					"onReady": onYouTubePlayerCreatedSetQuality,';
-		if (yti.YTUtils.isWatchWithList()){
-			apiFns += '"onStateChange": onYouTubePlayerStateChange';
-		}
-		apiFns += '},\
-			});\
-		}';
-		yti.Utils.addScriptToPage(apiFns);
+	PLAYER_OBJECT: "player",
+	PLAYER_OBJ_DEF: "player",
+	
+	onYouTubePlayerCreatedSetQuality: function(e){
+		e.target.setPlaybackQuality("hd1080");
 	},
 	
+	onYouTubePlayerStateChange: function(e){
+		if(e.data==1){
+			let vidData = e.target.getVideoData();
+			let newTitle = vidData.title + " - YouTube";
+			let newUrl = "https://www.youtube.com/watch?v="+vidData.video_id+"&list="+vidData.list;
+			history.pushState(vidData, newTitle, newUrl);
+			yti.Utils.setTitle(newTitle);
+		}
+	},
+	
+	onYouTubePlayerAPIReady: function(yt){
+		yt = yt ? yt : YT;
+		let apiParams = {};
+		let apiPlayerVars = {};
+		let apiEvents = {};
+		apiPlayerVars.autoplay = 1;
+		apiPlayerVars.modestbranding = 1;
+		apiEvents.onReady = yti.PlayerManager.onYouTubePlayerCreatedSetQuality;
+		if (yti.YTUtils.isWatchWithList()){
+			apiPlayerVars.listType = "playlist";
+			apiPlayerVars.list = yti.YTUtils.getPlaylistFromUrl();
+			apiEvents.onStateChange = yti.PlayerManager.onYouTubePlayerStateChange;
+		}
+		if (yti.YTUtils.isWatchWithTime()){
+			apiPlayerVars.start = yti.YTUtils.getTimeFromUrl();
+		}
+		apiParams.videoId = yti.YTUtils.getVideoIDUrl();
+		apiParams.playerVars = apiPlayerVars;
+		apiParams.events = apiEvents;
+		yti.Player = new yt.Player(this.PLAYER_OBJECT, apiParams);
+	},
+		
 	insertAPI: function(){
 		yti.Utils.addScriptWebSourceToPage("https://www.youtube.com/player_api");
 	},
 	
 	replacePlayer: function(){
-		this.insertAPIHandoff();
+		//yti.Utils.deleteElementById(this.PLAYER_OBJ_DEF);
 		this.insertAPI();
 	},
 	
 	setSize: function(){
-		let player = document.getElementById("player").style;
+		let player = document.getElementById(this.PLAYER_OBJECT).style;
 		player.position = "fixed";
 		player.width = ""+window.innerWidth+"px";
 		player.height = ""+window.innerHeight+"px";
@@ -243,13 +239,11 @@ yti.PlayerManager = {
 	
 	initSizeManagement: function(w){
 		w.onresize = function (e) {
-			yti.Utils.waitForFinalEvent( function(){
-			  yti.PlayerManager.setSize();
-			}, 80, "resizeme");
+			yti.PlayerManager.setSize();
 		};
 		this.setSize();
 	},
-}
+};
 
 
 yti.PageCleaner = {
@@ -282,7 +276,7 @@ yti.PageCleaner = {
 			yti.Utils.deleteElements(this.ELEMENTS_WATCH);
 		}
 	},
-}
+};
 
 
 yti.Redirector = {
@@ -301,7 +295,7 @@ yti.Redirector = {
 			yti.Utils.setUrl(this.getBarrierUrl());
 		}
 	},
-}
+};
 
 
 yti.LiveThumbnailer = {	
@@ -354,7 +348,7 @@ yti.LiveThumbnailer = {
 	  iframe.width = "100%";
 	  return iframe;
 	},
-}
+};
 
 
 yti.RSSFeedLinker = {	
@@ -402,7 +396,7 @@ yti.RSSFeedLinker = {
 		return link;
 	},
 
-}
+};
 
 
 yti.SPFHandler = {
@@ -410,6 +404,10 @@ yti.SPFHandler = {
 		yti.Utils.addScriptToPage('if(typeof window.spf!="undefined"){window.spf.dispose();}');
 	},
 };
+
+function onYouTubePlayerAPIReady(){
+	yti.PlayerManager.onYouTubePlayerAPIReady();
+}
 
 if(yti.YTUtils.isWatch()){
 	yti.PlayerManager.replacePlayer();

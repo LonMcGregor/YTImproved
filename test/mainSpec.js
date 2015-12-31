@@ -21,6 +21,8 @@ var buttonClass= "yt-uix-button-content";
 var redirectUrl = "https://www.youtube.com/redirect?q=http%3A%2F%2Ffarlandsorbust.com%2F&redir_token=0DpfRQe1s6lEXh4IP7QwKtydHdt8MTQ1MDk2NDIxMEAxNDUwODc3ODEw";
 var expectedRedirectUrl = "http://farlandsorbust.com/";
 var thumbClass = 'yt-lockup-thumbnail';
+var qualityString = "hd1080";
+var playerDomLocation = "player";
 
 describe("yti", function(){
 	it("exists", function(){
@@ -39,49 +41,7 @@ describe("yti.Utils", function() {
 			expect(yti.Utils.contains("haystack", "needle")).toBe(false);
 		});
 	});
-	
-	describe("timers", function() {
-		it("should exist", function(){
-			expect(yti.Utils.timers).toBeDefined();
-		});
-	});
-	
-	describe("waitForFinalEvent", function(){
-		var timerCallback;
 		
-		beforeEach(function() {
-			timerCallback = jasmine.createSpy("timerCallback");
-			jasmine.clock().install();
-		});
-		
-		afterEach(function() {
-			jasmine.clock().uninstall();
-		});
-		
-		it("calls a single callback after a time limit", function(){
-			yti.Utils.waitForFinalEvent(timerCallback, 50, "thing");
-			expect(timerCallback).not.toHaveBeenCalled();
-			jasmine.clock().tick(51);
-			expect(timerCallback).toHaveBeenCalled();
-		});
-		
-		it("calls a single callback after many calls creating them", function(){
-			yti.Utils.waitForFinalEvent(timerCallback, 50, "thing");
-			expect(timerCallback).not.toHaveBeenCalled();
-			yti.Utils.waitForFinalEvent(timerCallback, 50, "thing");
-			yti.Utils.waitForFinalEvent(timerCallback, 50, "thing");
-			jasmine.clock().tick(51);
-			expect(timerCallback.calls.count()).toEqual(1);
-		});
-		
-		it("allows multiple calls from different unique ids", function(){
-			yti.Utils.waitForFinalEvent(timerCallback, 50, "thing");
-			yti.Utils.waitForFinalEvent(timerCallback, 50, "thing2");
-			jasmine.clock().tick(51);
-			expect(timerCallback.calls.count()).toEqual(2);
-		});
-	});
-	
 	describe("deleteElements", function() {
 		var elements;
 		var el1;
@@ -104,20 +64,23 @@ describe("yti.Utils", function() {
 			el2.parentElement.removeChild(el2);
 		});
 		
-		xit("deletes all elements in an array of dom elements", function(){
+		it("deletes all elements in an array of dom elements", function(){
 			yti.Utils.deleteElements(elements);
 			expect(document.getElementById("testingDiv")).toBeNull();
 			expect(document.getElementById("testingH1")).toBeNull();
+			pending("DOM modification");
 		});
-		xit("doesnt fail if an element doesnt exist", function(){
+		
+		it("doesnt fail if an element doesnt exist", function(){
 			el1.parentElement.removeChild(el1);
 			el2.parentElement.removeChild(el2);
 			yti.Utils.deleteElements(elements);
+			pending("DOM modification");
 		});
 	});
 	
 	describe("deleteElementById", function() {
-		var el1;
+		var el1, elementlist;
 		
 		beforeEach(function() {
 			el1 = document.createElement('div');
@@ -130,37 +93,41 @@ describe("yti.Utils", function() {
 			el1.parentElement.removeChild(el1);
 		});
 		
-		xit("deletes a single element", function(){
-			yti.Utils.deleteElements(elements);
+		it("deletes a single element", function(){
+			elementlist = [el1];
+			yti.Utils.deleteElements(elementlist);
 			expect(document.getElementById("testingDiv")).toBeNull();
+			pending("DOM modification");
 		});
-		xit("doesnt fail if an element doesnt exist", function(){
+		
+		it("doesnt fail if an element doesnt exist", function(){
 			el1.parentElement.removeChild(el1);
-			yti.Utils.deleteElements(elements);
+			yti.Utils.deleteElements(elementlist);
+			pending("DOM modification");
 		});
 	});
 	
 	describe("getUrl", function(){
-		xit("gets window.location.href", function(){
-			
+		it("gets window.location.href", function(){
+			pending("global window access");
 		});
 	});
 	
 	describe("setUrl", function(){
-		xit("sets a new window.location.href", function(){
-			
+		it("sets a new window.location.href", function(){
+			pending("global window access");
 		});
 	});
 	
 	describe("addScriptToPage", function(){
-		xit("adds a script to the page, given content", function(){
-			
+		it("adds a script to the page, given content", function(){
+			pending("DOM modification");
 		});
 	});
 	
 	describe("addScriptWebSourceToPage", function(){
-		xit("adds a script to the page, given content", function(){
-			
+		it("adds a script to the page, given content", function(){
+			pending("DOM modification");
 		});
 	});
 });
@@ -356,10 +323,10 @@ describe("yti.YTUtils", function(){
 	});
 	
 	describe("getChannelIDFromPlayer", function(){
-		xit("gets a channel id if meta tag on player", function(){
+		it("gets a channel id if meta tag on player", function(){
 			var el = document.createElement("meta")
-			el.itemprop = "channelId";
-			el.content = channelid;
+			el.setAttribute("itemprop", "channelId");
+			el.setAttribute("content", channelid);
 			spyOn(document, "getElementsByTagName").and.returnValue([el]);
 			expect(yti.YTUtils.getChannelIDFromPlayer()).toEqual(channelid);
 		});
@@ -408,59 +375,33 @@ describe("yti.YTUtils", function(){
 });
 
 describe("yti.PlayerManager", function(){
-	
-	describe("insertAPIHandoff", function(){
-		xit("adds a script for the current video page", function(){
-			spyOn(yti.Utils, "getUrl").and.returnValue(watch);
-			spyOn(yti.Utils, "addScriptToPage");
-			yti.PlayerManager.insertAPIHandoff();
-			var expectedScript = 'var player;\
-		function onYouTubePlayerCreatedSetQuality(event) {\
-				event.target.setPlaybackQuality("hd1080");\
-		} \
-		function onYouTubePlayerAPIReady() {\
-			player = new YT.Player("player", {\
-				videoId: "'+videoID+'",\
-				playerVars: {\
-					autoplay: 1,\
-					modestbranding: 1,\
-				},\
-				events:{\
-					"onReady": onYouTubePlayerCreatedSetQuality\
-				},\
-			});\
-		}';
-			expect(yti.Utils.addScriptToPage).toHaveBeenCalledWith(expectedScript);
-		});
-	});
-	
+		
 	describe("insertAPI", function(){
-		xit("adds a youtube api web source script to page", function(){
+		it("adds a youtube api web source script to page", function(){
 			spyOn(yti.Utils, "addScriptWebSourceToPage");
 			yti.PlayerManager.insertAPI();
 			var expectedSrc = "https://www.youtube.com/player_api";
 			expect(yti.Utils.addScriptWebSourceToPage).toHaveBeenCalledWith(expectedSrc);
+			pending("DOM modification");
 		});
 	});
 	
 	describe("replacePlayer", function(){
-		xit("preserved the playlist", function(){
-			
+		it("deletes the old player", function(){
+			pending("DOM modification");
 		});
-		xit("adds the API handoff", function(){
-			//just copy the other test methods
-		});
-		xit("adds the API", function(){
-			
+		
+		it("adds the API", function(){
+			pending("DOM modification");
 		});
 	});
 	
 	describe("setSize", function(){
 		it("sets the size of the player to be the current width of the window", function(){
 			var el1 = document.createElement('div');
-			el1.id = "player";
+			el1.id = playerDomLocation;
 			document.body.appendChild(el1);
-			el1 = document.getElementById("player");
+			el1 = document.getElementById(playerDomLocation);
 			
 			var expectedWidth = window.innerWidth;
 			var expectedHeight = window.innerHeight;
@@ -482,7 +423,7 @@ describe("yti.PlayerManager", function(){
 			el1 = document.createElement('div');
 			el1.id = "player";
 			document.body.appendChild(el1);
-			el1 = document.getElementById("player");
+			el1 = document.getElementById(playerDomLocation);
 			mockWindow = {};
 		});
 		
@@ -501,35 +442,116 @@ describe("yti.PlayerManager", function(){
 			expect(el1.style.left).toEqual("0px");
 		});
 		
-		xit("the listener will call setSize once, after 80ms", function(){
+		it("the listener will call setSize once, after 80ms", function(){
 			spyOn(yti.PlayerManager, "setSize");
-			jasmine.clock().install();
 			yti.PlayerManager.initSizeManagement(mockWindow);
+			expect(yti.PlayerManager.setSize.calls.count()).toEqual(1);
 			mockWindow.onresize();
-			jasmine.clock().tick(40);
-			mockWindow.onresize();
-			jasmine.clock().tick(20);
-			expect(yti.PlayerManager.setSize).not.toHaveBeenCalled();
-			jasmine.clock().tick(21);
-			expect(yti.PlayerManager.setSize).calls.count.toEqual(1);
-			jasmine.clock().uninstall();
+			expect(yti.PlayerManager.setSize.calls.count()).toEqual(2);
+		});
+	});
+	
+	describe("onYouTubePlayerCreatedSetQuality", function(){
+		it("sets quality of target video to 1080", function(){
+			var e = {target:{setPlaybackQuality:function(){}}};
+			spyOn(e.target, 'setPlaybackQuality');
+			yti.PlayerManager.onYouTubePlayerCreatedSetQuality(e);
+			expect(e.target.setPlaybackQuality).toHaveBeenCalledWith(qualityString);
+		});
+	});
+	
+	describe("onYouTubePlayerStateChange", function(){
+		var data = {title: "test", video_id: "testid", list: "listid"};
+		var e = {data:0,target:{getVideoData:function(){return data;}}};
+		var expectedTitle = "test - YouTube";
+		var expectedurl = "https://www.youtube.com/watch?v=testid&list=listid";
+		
+		beforeEach(function(){
+			spyOn(history, 'pushState');
+			spyOn(yti.Utils, 'setTitle');
+		});
+		
+		it("if a new video starts it updates the page and history", function(){
+			e.data = 1;
+			yti.PlayerManager.onYouTubePlayerStateChange(e);
+			expect(history.pushState).toHaveBeenCalledWith(data, expectedTitle, expectedurl);
+			expect(yti.Utils.setTitle).toHaveBeenCalledWith(expectedTitle);
+		});
+		
+		it("if any other event fires it does nothing", function(){
+			e.data = 0;
+			yti.PlayerManager.onYouTubePlayerStateChange(e);
+			expect(history.pushState).not.toHaveBeenCalled();
+			expect(yti.Utils.setTitle).not.toHaveBeenCalled();
+		});
+	});
+	
+	describe("onYouTubePlayerAPIReady", function(){
+		var YT;
+		var expectedVars;
+		
+		beforeEach(function(){
+			YT = jasmine.createSpyObj("YT"	, ["Player"]);
+			expectedVars = {
+				videoId: videoID,
+				playerVars: {autoplay: 1, modestbranding: 1, },
+				events: {onReady: yti.PlayerManager.onYouTubePlayerCreatedSetQuality,},
+			};
+			spyOn(yti.YTUtils, "getVideoIDUrl").and.returnValue(videoID);
+			spyOn(yti.YTUtils, "getPlaylistFromUrl").and.returnValue(playlistID);
+			spyOn(yti.YTUtils, "getTimeFromUrl").and.returnValue(time0);
+		});
+		
+		it("should be clled by the youtube api when ready", function(){
+			spyOn(yti.PlayerManager, "onYouTubePlayerAPIReady");
+			onYouTubePlayerAPIReady();
+			expect(yti.PlayerManager.onYouTubePlayerAPIReady).toHaveBeenCalled();
+		});
+		
+		it("creates a player", function(){
+			spyOn(yti.YTUtils, "isWatchWithList").and.returnValue(false);
+			spyOn(yti.YTUtils, "isWatchWithTime").and.returnValue(false);
+			yti.PlayerManager.onYouTubePlayerAPIReady(YT);
+			expect(YT.Player).toHaveBeenCalledWith(playerDomLocation, expectedVars);
+		});
+		
+		it("if needed it adds playlist param info and listeners", function(){
+			spyOn(yti.YTUtils, "isWatchWithList").and.returnValue(true);
+			spyOn(yti.YTUtils, "isWatchWithTime").and.returnValue(false);
+			expectedVars.playerVars.listType = "playlist";
+			expectedVars.playerVars.list = playlistID;
+			expectedVars.events.onStateChange =yti.PlayerManager.onYouTubePlayerStateChange;
+			yti.PlayerManager.onYouTubePlayerAPIReady(YT);
+			expect(YT.Player).toHaveBeenCalledWith(playerDomLocation, expectedVars);
+			
+		});
+		
+		it("if needed it adds time info", function(){
+			spyOn(yti.YTUtils, "isWatchWithList").and.returnValue(false);
+			spyOn(yti.YTUtils, "isWatchWithTime").and.returnValue(true);
+			expectedVars.playerVars.start = time0;
+			yti.PlayerManager.onYouTubePlayerAPIReady(YT);
+			expect(YT.Player).toHaveBeenCalledWith(playerDomLocation, expectedVars);
 		});
 	});	
 });
 
 describe("yti.PageCleaner", function(){
 	describe("runElementDelete", function(){
-		xit("deletes elements according to globals", function(){
-			
+		it("deletes elements according to globals", function(){
+			pending("DOM modification");
 		});
-		xit("deletes elements according to channels / lists", function(){
-			
+		
+		it("deletes elements according to channels / lists", function(){
+			pending("DOM modification");
 		});
-		xit("deletes elements from search pages", function(){
-			
+		
+		it("deletes elements from search pages", function(){
+			pending("DOM modification");
 		});
-		xit("deletes elements according to watch pages", function(){
-			
+		
+		it("deletes elements according to watch pages", function(){
+			pending("DOM modification");
 		});
 	});
 });
@@ -541,6 +563,7 @@ describe("yti.Redirector", function(){
 			expect(actual).toEqual(expectedRedirectUrl);
 		});
 	});
+	
 	describe("executeBarrierRedirect", function(){
 		it("does nothing if current url doesnt contain a redirect", function(){
 			spyOn(yti.Utils, "getUrl").and.returnValue(watch);
@@ -548,6 +571,7 @@ describe("yti.Redirector", function(){
 			yti.Redirector.executeBarrierRedirect();
 			expect(yti.Utils.setUrl).not.toHaveBeenCalled();
 		});
+		
 		it("redirects if current url doesnt contain a redirect", function(){
 			spyOn(yti.Utils, "getUrl").and.returnValue(redirectUrl);
 			spyOn(yti.Utils, "setUrl");
@@ -663,7 +687,7 @@ describe("yti.LiveThumbnailer", function(){
 	});
 });
 
-describe("SPFHandler", function(){
+describe("yti.SPFHandler", function(){
 	it("adds a script to the page that disposes the spf", function(){
 		spyOn(yti.Utils, "addScriptToPage");
 		yti.SPFHandler.handleSPF();
@@ -672,83 +696,41 @@ describe("SPFHandler", function(){
 	});
 });
 
-describe("RSSFeedLinker", function(){
+describe("yti.RSSFeedLinker", function(){
 	describe("addRSSFeed", function(){
 		beforeEach(function(){
 			spyOn(yti.RSSFeedLinker, "createFeedURL").and.returnValue(channelRss);
 		});
-		xit("if a channel, adds a feed to channel", function(){
-			spyOn(yti.YTUtils, "isChannel").and.returnValue(true);
-			spyOn(yti.YTUtils, "isListing").and.returnValue(false);
-			spyOn(yti.YTUtils, "isWatch").and.returnValue(false);
-			var testcontainer = document.createElement('div');
-			testcontainer.id = channelHeader;
-			document.body.appendChild(testcontainer);
-			testcontainer = document.getElementById(channelHeader);
-			var el1 = document.createElement('a');
-			el1.setAttribute("href", channelRss);
-			el1.innerHTML = "RSS Feed: Uploads";
-			el1.setAttribute("class", buttonClass);
-			spyOn(yti.RSSFeedLinker, "createFeedElement").and.returnValue(el1);
-			yti.RSSFeedLinker.addFeedElementToPlayer(channelRss);
-			testcontainer = document.getElementById(channelHeader);
-			expect(testcontainer.firstChild).toEqual(el1);
-			document.body.removeChild(testcontainer);
-			
+		
+		it("if a channel, adds a feed to channel", function(){
+			pending("DOM modification");
 		});
-		xit("if a playlist, adds a feed to owning channel", function(){
-			spyOn(yti.YTUtils, "isChannel").and.returnValue(false);
-			spyOn(yti.YTUtils, "isListing").and.returnValue(true);
-			spyOn(yti.YTUtils, "isWatch").and.returnValue(false);
-			var testcontainer = document.createElement('div');
-			testcontainer.id = channelHeader;
-			document.body.appendChild(testcontainer);
-			testcontainer = document.getElementById(channelHeader);
-			var el1 = document.createElement('a');
-			el1.setAttribute("href", channelRss);
-			el1.innerHTML = "RSS Feed: Uploads";
-			el1.setAttribute("class", buttonClass);
-			spyOn(yti.RSSFeedLinker, "createFeedElement").and.returnValue(el1);
-			yti.RSSFeedLinker.addFeedElementToPlayer(channelRss);
-			testcontainer = document.getElementById(channelHeader);
-			expect(testcontainer.firstChild).toEqual(el1);
-			document.body.removeChild(testcontainer);
-			
+		
+		it("if a playlist, adds a feed to owning channel", function(){
+			pending("DOM modification");
 		});
-		xit("if a player page, adds a feed to subs box on player", function(){
-			spyOn(yti.YTUtils, "isChannel").and.returnValue(false);
-			spyOn(yti.YTUtils, "isListing").and.returnValue(false);
-			spyOn(yti.YTUtils, "isWatch").and.returnValue(true);
-			var testcontainer = document.createElement('div');
-			testcontainer.id = playerHeader;
-			document.body.appendChild(testcontainer);
-			testcontainer = document.getElementById(playerHeader);
-			var el1 = document.createElement('a');
-			el1.setAttribute("href", channelRss);
-			el1.innerHTML = "RSS Feed: Uploads";
-			el1.setAttribute("class", buttonClass);
-			spyOn(yti.RSSFeedLinker, "createFeedElement").and.returnValue(el1);
-			yti.RSSFeedLinker.addFeedElementToPlayer(channelRss);
-			testcontainer = document.getElementById(playerHeader);
-			expect(testcontainer.firstChild).toEqual(el1);
-			document.body.removeChild(testcontainer);
-			
+		
+		it("if a player page, adds a feed to subs box on player", function(){
+			pending("DOM modification");
 		});
 	});
+	
 	describe("createFeedURL", function(){
 		it("creates an xml uri for channel ids", function(){
 			var result = yti.RSSFeedLinker.createFeedURL(channelid);
 			var expected = channelRss + channelid;
 			expect(result).toEqual(expected);
 		});
+		
 		it("creates an xml uri for user ids", function(){
 			var result = yti.RSSFeedLinker.createFeedURL(userid);
 			var expected = userRss + userid;
 			expect(result).toEqual(expected);
 		});
 	});
+	
 	describe("addFeedElementToPlayer", function(){
-		xit("adds a document element to a player description box", function(){
+		it("adds a document element to a player description box", function(){
 			var testcontainer = document.createElement('div');
 			testcontainer.id = playerHeader;
 			document.body.appendChild(testcontainer);
@@ -762,25 +744,16 @@ describe("RSSFeedLinker", function(){
 			testcontainer = document.getElementById(playerHeader);
 			expect(testcontainer.firstChild).toEqual(el1);
 			document.body.removeChild(testcontainer);
+			pending("DOM modification");
 		});
 	});
+	
 	describe("addFeedElementToChannel", function(){
-		xit("adds a document element to a player description box", function(){
-			var testcontainer = document.createElement('div');
-			testcontainer.id = channelHeader;
-			document.body.appendChild(testcontainer);
-			testcontainer = document.getElementById(channelHeader);
-			var el1 = document.createElement('a');
-			el1.setAttribute("href", channelRss);
-			el1.innerHTML = "RSS Feed: Uploads";
-			el1.setAttribute("class", buttonClass);
-			spyOn(yti.RSSFeedLinker, "createFeedElement").and.returnValue(el1);
-			yti.RSSFeedLinker.addFeedElementToPlayer(channelRss);
-			testcontainer = document.getElementById(channelHeader);
-			expect(testcontainer.firstChild).toEqual(el1);
-			document.body.removeChild(testcontainer);
+		it("adds a document element to a player description box", function(){
+			pending("DOM modification");
 		});
 	});
+	
 	describe("createFeedElement", function(){
 		it("creates an rss link document element", function(){
 			var el1 = document.createElement('a');
@@ -797,27 +770,30 @@ function simulatedClick(target, options) {
 
     var event = target.ownerDocument.createEvent('MouseEvents'),
         options = options || {};
-
-    //Set your default options to the right of ||
+		
+	var LMB = 0;
+	var MMB = 1;
+	var RMB = 2;
+		
+	//value || default
     var opts = {
         type: options.type                   || 'click',
         canBubble:options.canBubble          || true,
         cancelable:options.cancelable        || true,
         view:options.view                    || target.ownerDocument.defaultView,
         detail:options.detail                || 1,
-        screenX:options.screenX              || 0, //The coordinates within the entire page
+        screenX:options.screenX              || 0,
         screenY:options.screenY              || 0,
-        clientX:options.clientX              || 0, //The coordinates within the viewport
+        clientX:options.clientX              || 0,
         clientY:options.clientY              || 0,
         ctrlKey:options.ctrlKey              || false,
         altKey:options.altKey                || false,
         shiftKey:options.shiftKey            || false,
-        metaKey:options.metaKey              || false, //I *think* 'meta' is 'Cmd/Apple' on Mac, and 'Windows key' on Win. Not sure, though!
-        button:options.button                || 0, //0 = left, 1 = middle, 2 = right
+        metaKey:options.metaKey              || false, //'Cmd/Apple' or 'Windows key'
+        button:options.button                || LMB,
         relatedTarget:options.relatedTarget  || null,
     }
 
-    //Pass in the options
     event.initMouseEvent(
         opts.type,
         opts.canBubble,
@@ -836,6 +812,5 @@ function simulatedClick(target, options) {
         opts.relatedTarget
     );
 
-    //Fire the event
     target.dispatchEvent(event);
 }
