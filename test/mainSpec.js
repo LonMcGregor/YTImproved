@@ -317,10 +317,10 @@ describe("yti.YTUtils", function(){
 	});
 	
 	describe("getChannelIDFromPlayer", function(){
-		xit("gets a channel id if meta tag on player", function(){
+		it("gets a channel id if meta tag on player", function(){
 			var el = document.createElement("meta")
-			el.itemprop = "channelId";
-			el.content = channelid;
+			el.setAttribute("itemprop", "channelId");
+			el.setAttribute("content", channelid);
 			spyOn(document, "getElementsByTagName").and.returnValue([el]);
 			expect(yti.YTUtils.getChannelIDFromPlayer()).toEqual(channelid);
 		});
