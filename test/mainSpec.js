@@ -496,6 +496,12 @@ describe("yti.PlayerManager", function(){
 			spyOn(yti.YTUtils, "getTimeFromUrl").and.returnValue(time0);
 		});
 		
+		it("should be clled by the youtube api when ready", function(){
+			spyOn(yti.PlayerManager, "onYouTubePlayerAPIReady");
+			onYouTubePlayerAPIReady();
+			expect(yti.PlayerManager.onYouTubePlayerAPIReady).toHaveBeenCalled();
+		});
+		
 		it("creates a player", function(){
 			spyOn(yti.YTUtils, "isWatchWithList").and.returnValue(false);
 			spyOn(yti.YTUtils, "isWatchWithTime").and.returnValue(false);
