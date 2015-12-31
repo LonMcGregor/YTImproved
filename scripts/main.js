@@ -192,6 +192,8 @@ yti.YTUtils = {
 yti.PlayerManager = {
 	PLAYER_CONTAINER: "player-playlist",
 	PAGE_NAME: "page",
+	PLAYER_OBJECT: "player",
+	PLAYER_OBJ_DEF: "player",
 	
 	onYouTubePlayerCreatedSetQuality: function(e){
 		e.target.setPlaybackQuality("hd1080");
@@ -226,7 +228,7 @@ yti.PlayerManager = {
 		apiParams.videoId = yti.YTUtils.getVideoIDUrl();
 		apiParams.playerVars = apiPlayerVars;
 		apiParams.events = apiEvents;
-		yti.Player = new yt.Player("placeholder-player", apiParams);
+		yti.Player = new yt.Player(this.PLAYER_OBJECT, apiParams);
 	},
 		
 	insertAPI: function(){
@@ -234,12 +236,12 @@ yti.PlayerManager = {
 	},
 	
 	replacePlayer: function(){
-		yti.Utils.deleteElementById("player");
+		//yti.Utils.deleteElementById(this.PLAYER_OBJ_DEF);
 		this.insertAPI();
 	},
 	
 	setSize: function(){
-		let player = document.getElementById("player").style;
+		let player = document.getElementById(this.PLAYER_OBJECT).style;
 		player.position = "fixed";
 		player.width = ""+window.innerWidth+"px";
 		player.height = ""+window.innerHeight+"px";
