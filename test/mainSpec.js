@@ -69,6 +69,7 @@ describe("yti.Utils", function() {
 			expect(document.getElementById("testingDiv")).toBeNull();
 			expect(document.getElementById("testingH1")).toBeNull();
 		});
+		
 		xit("doesnt fail if an element doesnt exist", function(){
 			el1.parentElement.removeChild(el1);
 			el2.parentElement.removeChild(el2);
@@ -383,6 +384,7 @@ describe("yti.PlayerManager", function(){
 		xit("deletes the old player", function(){
 			//requries dom modification to be testable
 		});
+		
 		xit("adds the API", function(){
 			//requries dom modification to be testable
 		});
@@ -435,7 +437,6 @@ describe("yti.PlayerManager", function(){
 		});
 		
 		it("the listener will call setSize once, after 80ms", function(){
-			//might not even need the waitforfinalevent
 			spyOn(yti.PlayerManager, "setSize");
 			yti.PlayerManager.initSizeManagement(mockWindow);
 			expect(yti.PlayerManager.setSize.calls.count()).toEqual(1);
@@ -458,16 +459,19 @@ describe("yti.PlayerManager", function(){
 		var e = {data:0,target:{getVideoData:function(){return data;}}};
 		var expectedTitle = "test - YouTube";
 		var expectedurl = "https://www.youtube.com/watch?v=testid&list=listid";
+		
 		beforeEach(function(){
 			spyOn(history, 'pushState');
 			spyOn(yti.Utils, 'setTitle');
 		});
+		
 		it("if a new video starts it updates the page and history", function(){
 			e.data = 1;
 			yti.PlayerManager.onYouTubePlayerStateChange(e);
 			expect(history.pushState).toHaveBeenCalledWith(data, expectedTitle, expectedurl);
 			expect(yti.Utils.setTitle).toHaveBeenCalledWith(expectedTitle);
 		});
+		
 		it("if any other event fires it does nothing", function(){
 			e.data = 0;
 			yti.PlayerManager.onYouTubePlayerStateChange(e);
@@ -478,7 +482,8 @@ describe("yti.PlayerManager", function(){
 	
 	describe("onYouTubePlayerAPIReady", function(){
 		var YT;
-		var expectedVars; 
+		var expectedVars;
+		
 		beforeEach(function(){
 			YT = jasmine.createSpyObj("YT"	, ["Player"]);
 			expectedVars = {
@@ -490,12 +495,14 @@ describe("yti.PlayerManager", function(){
 			spyOn(yti.YTUtils, "getPlaylistFromUrl").and.returnValue(playlistID);
 			spyOn(yti.YTUtils, "getTimeFromUrl").and.returnValue(time0);
 		});
+		
 		it("creates a player", function(){
 			spyOn(yti.YTUtils, "isWatchWithList").and.returnValue(false);
 			spyOn(yti.YTUtils, "isWatchWithTime").and.returnValue(false);
 			yti.PlayerManager.onYouTubePlayerAPIReady(YT);
 			expect(YT.Player).toHaveBeenCalledWith(playerDomLocation, expectedVars);
 		});
+		
 		it("if needed it adds playlist param info and listeners", function(){
 			spyOn(yti.YTUtils, "isWatchWithList").and.returnValue(true);
 			spyOn(yti.YTUtils, "isWatchWithTime").and.returnValue(false);
@@ -506,6 +513,7 @@ describe("yti.PlayerManager", function(){
 			expect(YT.Player).toHaveBeenCalledWith(playerDomLocation, expectedVars);
 			
 		});
+		
 		it("if needed it adds time info", function(){
 			spyOn(yti.YTUtils, "isWatchWithList").and.returnValue(false);
 			spyOn(yti.YTUtils, "isWatchWithTime").and.returnValue(true);
@@ -521,12 +529,15 @@ describe("yti.PageCleaner", function(){
 		xit("deletes elements according to globals", function(){
 			
 		});
+		
 		xit("deletes elements according to channels / lists", function(){
 			
 		});
+		
 		xit("deletes elements from search pages", function(){
 			
 		});
+		
 		xit("deletes elements according to watch pages", function(){
 			
 		});
@@ -540,6 +551,7 @@ describe("yti.Redirector", function(){
 			expect(actual).toEqual(expectedRedirectUrl);
 		});
 	});
+	
 	describe("executeBarrierRedirect", function(){
 		it("does nothing if current url doesnt contain a redirect", function(){
 			spyOn(yti.Utils, "getUrl").and.returnValue(watch);
@@ -547,6 +559,7 @@ describe("yti.Redirector", function(){
 			yti.Redirector.executeBarrierRedirect();
 			expect(yti.Utils.setUrl).not.toHaveBeenCalled();
 		});
+		
 		it("redirects if current url doesnt contain a redirect", function(){
 			spyOn(yti.Utils, "getUrl").and.returnValue(redirectUrl);
 			spyOn(yti.Utils, "setUrl");
@@ -676,6 +689,7 @@ describe("RSSFeedLinker", function(){
 		beforeEach(function(){
 			spyOn(yti.RSSFeedLinker, "createFeedURL").and.returnValue(channelRss);
 		});
+		
 		xit("if a channel, adds a feed to channel", function(){
 			spyOn(yti.YTUtils, "isChannel").and.returnValue(true);
 			spyOn(yti.YTUtils, "isListing").and.returnValue(false);
@@ -695,6 +709,7 @@ describe("RSSFeedLinker", function(){
 			document.body.removeChild(testcontainer);
 			
 		});
+		
 		xit("if a playlist, adds a feed to owning channel", function(){
 			spyOn(yti.YTUtils, "isChannel").and.returnValue(false);
 			spyOn(yti.YTUtils, "isListing").and.returnValue(true);
@@ -714,6 +729,7 @@ describe("RSSFeedLinker", function(){
 			document.body.removeChild(testcontainer);
 			
 		});
+		
 		xit("if a player page, adds a feed to subs box on player", function(){
 			spyOn(yti.YTUtils, "isChannel").and.returnValue(false);
 			spyOn(yti.YTUtils, "isListing").and.returnValue(false);
@@ -734,18 +750,21 @@ describe("RSSFeedLinker", function(){
 			
 		});
 	});
+	
 	describe("createFeedURL", function(){
 		it("creates an xml uri for channel ids", function(){
 			var result = yti.RSSFeedLinker.createFeedURL(channelid);
 			var expected = channelRss + channelid;
 			expect(result).toEqual(expected);
 		});
+		
 		it("creates an xml uri for user ids", function(){
 			var result = yti.RSSFeedLinker.createFeedURL(userid);
 			var expected = userRss + userid;
 			expect(result).toEqual(expected);
 		});
 	});
+	
 	describe("addFeedElementToPlayer", function(){
 		xit("adds a document element to a player description box", function(){
 			var testcontainer = document.createElement('div');
@@ -763,6 +782,7 @@ describe("RSSFeedLinker", function(){
 			document.body.removeChild(testcontainer);
 		});
 	});
+	
 	describe("addFeedElementToChannel", function(){
 		xit("adds a document element to a player description box", function(){
 			var testcontainer = document.createElement('div');
@@ -780,6 +800,7 @@ describe("RSSFeedLinker", function(){
 			document.body.removeChild(testcontainer);
 		});
 	});
+	
 	describe("createFeedElement", function(){
 		it("creates an rss link document element", function(){
 			var el1 = document.createElement('a');
@@ -796,27 +817,30 @@ function simulatedClick(target, options) {
 
     var event = target.ownerDocument.createEvent('MouseEvents'),
         options = options || {};
-
-    //Set your default options to the right of ||
+		
+	var LMB = 0;
+	var MMB = 1;
+	var RMB = 2;
+		
+	//value || default
     var opts = {
         type: options.type                   || 'click',
         canBubble:options.canBubble          || true,
         cancelable:options.cancelable        || true,
         view:options.view                    || target.ownerDocument.defaultView,
         detail:options.detail                || 1,
-        screenX:options.screenX              || 0, //The coordinates within the entire page
+        screenX:options.screenX              || 0,
         screenY:options.screenY              || 0,
-        clientX:options.clientX              || 0, //The coordinates within the viewport
+        clientX:options.clientX              || 0,
         clientY:options.clientY              || 0,
         ctrlKey:options.ctrlKey              || false,
         altKey:options.altKey                || false,
         shiftKey:options.shiftKey            || false,
-        metaKey:options.metaKey              || false, //I *think* 'meta' is 'Cmd/Apple' on Mac, and 'Windows key' on Win. Not sure, though!
-        button:options.button                || 0, //0 = left, 1 = middle, 2 = right
+        metaKey:options.metaKey              || false, //'Cmd/Apple' or 'Windows key'
+        button:options.button                || LMB,
         relatedTarget:options.relatedTarget  || null,
     }
 
-    //Pass in the options
     event.initMouseEvent(
         opts.type,
         opts.canBubble,
@@ -835,6 +859,5 @@ function simulatedClick(target, options) {
         opts.relatedTarget
     );
 
-    //Fire the event
     target.dispatchEvent(event);
 }
