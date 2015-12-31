@@ -417,15 +417,16 @@ describe("yti.PlayerManager", function(){
 			yti.PlayerManager.insertAPI();
 			var expectedSrc = "https://www.youtube.com/player_api";
 			expect(yti.Utils.addScriptWebSourceToPage).toHaveBeenCalledWith(expectedSrc);
+			//requries dom modification to be testable
 		});
 	});
 	
 	describe("replacePlayer", function(){
 		xit("deletes the old player", function(){
-			
+			//requries dom modification to be testable
 		});
 		xit("adds the API", function(){
-			
+			//requries dom modification to be testable
 		});
 	});
 	
@@ -476,16 +477,19 @@ describe("yti.PlayerManager", function(){
 		});
 		
 		xit("the listener will call setSize once, after 80ms", function(){
+			//might not even need the waitforfinalevent
 			spyOn(yti.PlayerManager, "setSize");
 			jasmine.clock().install();
 			yti.PlayerManager.initSizeManagement(mockWindow);
+			expect(yti.PlayerManager.setSize.calls.count()).toEqual(0);
 			mockWindow.onresize();
 			jasmine.clock().tick(40);
+			expect(yti.PlayerManager.setSize.calls.count()).toEqual(0);
 			mockWindow.onresize();
-			jasmine.clock().tick(20);
-			expect(yti.PlayerManager.setSize).not.toHaveBeenCalled();
+			jasmine.clock().tick(19);
+			expect(yti.PlayerManager.setSize.calls.count()).toEqual(0);
 			jasmine.clock().tick(21);
-			expect(yti.PlayerManager.setSize).calls.count.toEqual(1);
+			expect(yti.PlayerManager.setSize.calls.count()).toEqual(1);
 			jasmine.clock().uninstall();
 		});
 	});
