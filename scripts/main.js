@@ -235,6 +235,7 @@ yti.PlayerManager = {
 		player.height = ""+window.innerHeight+"px";
 		player.top = "0px";
 		player.left = "0px";
+		player.maxWidth = "none";
 	},
 	
 	initSizeManagement: function(w){
