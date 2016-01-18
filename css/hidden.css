@@ -3,6 +3,7 @@
 #watch7-sidebar, #share-services-container, .cookie-alert,
 #alerts, #masthead-positioner-height-offset, #yt-masthead #logo,
  .yt-uix-button-subscribe-branded,
- #watch-like:before, #watch-dislike:before, .yt-uix-clickcard-card {
+ #watch-like:before, #watch-dislike:before, .yt-uix-clickcard-card,
+#yt-dialog-bg, #yt-consent-dialog {
 	 display: none !important; 
 }
