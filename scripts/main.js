@@ -107,7 +107,7 @@ yti.YTUtils = {
 	getEmbedUrlForID: function(videoID){
 		videoID = videoID ? videoID : this.getVideoIDUrl();
 		return this.EMBED_URL+
-		    videoID+this.EMBED_PARAMS;
+			videoID+this.EMBED_PARAMS;
 	},
 	
 	extractChannelIDFromChannelUrl: function(channelURL){
@@ -174,6 +174,12 @@ yti.YTUtils = {
 		}
 		return time;
 	},
+	
+	ytiEnabledOnUrl: function(url){
+		url = url ? url : yti.Utils.getUrl();
+		return !yti.Utils.contains(url, "&noyti=1");
+	},
+	
 };
 
 
@@ -283,6 +289,9 @@ yti.PageCleaner = {
 yti.Redirector = {
 	REDIR_TOK: "&redir_token",
 	REDIR_URL: "/redirect?q=",
+	BUTTON_LOC: "watch8-secondary-actions",
+	DISABLE_QUERY: "&noyti=1",
+	BUTTON_CLASS: "yti-redir-link yt-uix-button-opacity yt-uix-button-content",
 	
 	getBarrierUrl: function(url){
 		url = url ? url : yti.Utils.getUrl();
@@ -290,11 +299,34 @@ yti.Redirector = {
 		let encodedurl = notoken.split(this.REDIR_URL)[1];
 		return decodeURIComponent(encodedurl);
 	},
-
+	
 	executeBarrierRedirect: function(){
 		if(yti.Utils.contains(yti.Utils.getUrl(), this.REDIR_URL)){
 			yti.Utils.setUrl(this.getBarrierUrl());
 		}
+	},
+	
+	disableYTIButton: function(){
+		let newBtn = document.createElement('a');
+		newBtn.innerHTML = "Disable YTI";
+		let currentUrl = yti.Utils.getUrl();
+		newBtn.href = currentUrl + this.DISABLE_QUERY;
+		newBtn.className = this.BUTTON_CLASS;
+		return newBtn;
+	},
+	
+	embedRedirButton: function(){
+		let newBtn = document.createElement('a');
+		newBtn.innerHTML = "Embedded";
+		let currentUrl = yti.Utils.getUrl();
+		newBtn.href = yti.YTUtils.getEmbedUrlForID();
+		newBtn.className = this.BUTTON_CLASS;
+		return newBtn;
+	},
+	
+	addAllRedirButtons: function(){
+		document.getElementById(this.BUTTON_LOC).appendChild(yti.Redirector.disableYTIButton());
+		document.getElementById(this.BUTTON_LOC).appendChild(yti.Redirector.embedRedirButton());
 	},
 };
 
@@ -410,7 +442,8 @@ function onYouTubePlayerAPIReady(){
 	yti.PlayerManager.onYouTubePlayerAPIReady();
 }
 
-if(yti.YTUtils.isWatch()){
+
+if(yti.YTUtils.isWatch() && yti.YTUtils.ytiEnabledOnUrl()){
 	yti.PlayerManager.replacePlayer();
 	yti.PlayerManager.initSizeManagement(window);
 }
@@ -419,3 +452,6 @@ yti.PageCleaner.runElementDelete();
 yti.RSSFeedLinker.addRSSFeed();
 yti.LiveThumbnailer.initThumbs();
 yti.SPFHandler.handleSPF();
+if(yti.YTUtils.isWatch()){
+	yti.Redirector.addAllRedirButtons();
+}

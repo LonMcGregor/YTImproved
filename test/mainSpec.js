@@ -23,6 +23,8 @@ var expectedRedirectUrl = "http://farlandsorbust.com/";
 var thumbClass = 'yt-lockup-thumbnail';
 var qualityString = "hd1080";
 var playerDomLocation = "player";
+var disableQueryA = "https://www.youtube.com/watch?v=BPCUWebOick&noyti=1";
+var disableQueryB = "https://www.youtube.com/watch?v=BPCUWebOick&t=60s&noyti=1";
 
 describe("yti", function(){
 	it("exists", function(){
@@ -335,7 +337,7 @@ describe("yti.YTUtils", function(){
 			expect(yti.YTUtils.getChannelIDFromPlayer()).toEqual("");
 		});
 	});
-
+	
 	describe("getPlaylistFromUrl", function(){
 		it("gets a playlist from passed watch url", function(){
 			var result = yti.YTUtils.getPlaylistFromUrl(watchList);
@@ -372,10 +374,27 @@ describe("yti.YTUtils", function(){
 			expect(result).toEqual(timeHMS);
 		});
 	});
+	
+	describe("ytiEnabledOnUrl", function(){
+		it("is false if url has a noyti in url &get", function(){
+			expect(yti.YTUtils.ytiEnabledOnUrl(disableQueryB)).toBe(false);
+		});
+		
+		it("is true if url doesnt have a noyti in url", function(){
+			spyOn(yti.Utils, "getUrl").and.returnValue(watch);
+			expect(yti.YTUtils.ytiEnabledOnUrl()).toBe(true);
+		});
+	});
 });
 
 describe("yti.PlayerManager", function(){
-		
+	describe("NoYTI", function(){
+		it("Doesn't activate when the URL has a noYTI item in &GET", function(){
+			spyOn(yti.Utils, "getUrl").and.returnValue(disableQueryA);
+			pending("DOM modification");
+		});
+	});
+	
 	describe("insertAPI", function(){
 		it("adds a youtube api web source script to page", function(){
 			spyOn(yti.Utils, "addScriptWebSourceToPage");
@@ -579,6 +598,28 @@ describe("yti.Redirector", function(){
 			expect(yti.Utils.setUrl).toHaveBeenCalledWith(expectedRedirectUrl);
 		});
 	});
+
+	describe("disableYTIButton", function(){
+		it("makes a button with notyi & appended", function(){
+			spyOn(yti.Utils, "getUrl").and.returnValue(watch);
+			var btn = yti.Redirector.disableYTIButton().href;
+			expect(btn).toEqual(disableQueryA);
+		});
+	});
+	
+	describe("embedRedirButton", function(){
+		it("makes a button with notyi & appended", function(){
+			spyOn(yti.Utils, "getUrl").and.returnValue(watch);
+			var btn = yti.Redirector.embedRedirButton().href;
+			expect(btn).toEqual(embeddedVideo);
+		});
+	});
+	
+	describe("addAllRedirButtons", function(){
+		it("adds buttons", function(){
+			pending("DOM modification");
+		});
+	});
 });
 
 describe("yti.LiveThumbnailer", function(){
@@ -768,49 +809,49 @@ describe("yti.RSSFeedLinker", function(){
 
 function simulatedClick(target, options) {
 
-    var event = target.ownerDocument.createEvent('MouseEvents'),
-        options = options || {};
+	var event = target.ownerDocument.createEvent('MouseEvents'),
+		options = options || {};
 		
 	var LMB = 0;
 	var MMB = 1;
 	var RMB = 2;
 		
 	//value || default
-    var opts = {
-        type: options.type                   || 'click',
-        canBubble:options.canBubble          || true,
-        cancelable:options.cancelable        || true,
-        view:options.view                    || target.ownerDocument.defaultView,
-        detail:options.detail                || 1,
-        screenX:options.screenX              || 0,
-        screenY:options.screenY              || 0,
-        clientX:options.clientX              || 0,
-        clientY:options.clientY              || 0,
-        ctrlKey:options.ctrlKey              || false,
-        altKey:options.altKey                || false,
-        shiftKey:options.shiftKey            || false,
-        metaKey:options.metaKey              || false, //'Cmd/Apple' or 'Windows key'
-        button:options.button                || LMB,
-        relatedTarget:options.relatedTarget  || null,
-    }
+	var opts = {
+		type: options.type				   || 'click',
+		canBubble:options.canBubble		  || true,
+		cancelable:options.cancelable		|| true,
+		view:options.view					|| target.ownerDocument.defaultView,
+		detail:options.detail				|| 1,
+		screenX:options.screenX			  || 0,
+		screenY:options.screenY			  || 0,
+		clientX:options.clientX			  || 0,
+		clientY:options.clientY			  || 0,
+		ctrlKey:options.ctrlKey			  || false,
+		altKey:options.altKey				|| false,
+		shiftKey:options.shiftKey			|| false,
+		metaKey:options.metaKey			  || false, //'Cmd/Apple' or 'Windows key'
+		button:options.button				|| LMB,
+		relatedTarget:options.relatedTarget  || null,
+	}
 
-    event.initMouseEvent(
-        opts.type,
-        opts.canBubble,
-        opts.cancelable,
-        opts.view,
-        opts.detail,
-        opts.screenX,
-        opts.screenY,
-        opts.clientX,
-        opts.clientY,
-        opts.ctrlKey,
-        opts.altKey,
-        opts.shiftKey,
-        opts.metaKey,
-        opts.button,
-        opts.relatedTarget
-    );
+	event.initMouseEvent(
+		opts.type,
+		opts.canBubble,
+		opts.cancelable,
+		opts.view,
+		opts.detail,
+		opts.screenX,
+		opts.screenY,
+		opts.clientX,
+		opts.clientY,
+		opts.ctrlKey,
+		opts.altKey,
+		opts.shiftKey,
+		opts.metaKey,
+		opts.button,
+		opts.relatedTarget
+	);
 
-    target.dispatchEvent(event);
+	target.dispatchEvent(event);
 }
